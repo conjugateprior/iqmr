@@ -1,0 +1,418 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[charter]{mathdesign}
+\usepackage[scaled=.95]{inconsolata}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{color}
+
+\usepackage{hyperref}
+\usepackage{dcolumn,booktabs} %% for memisc
+
+\usepackage{stitchr} %% make me compile as latex when knitr is not applied
+
+\definecolor{darkblue}{rgb}{0,0,.6} % not really
+\definecolor{other}{rgb}{0,0,.5}
+\hypersetup{colorlinks=true, linkcolor=darkblue, citecolor=darkblue, 
+	filecolor=darkblue,urlcolor=other}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+
+\author{IQMR 2015}
+\title{2. Classification and Topic Models}
+\date{}
+
+\begin{document}
+\maketitle
+
+%%%%%%%% here's the R business from the previous lab
+
+%' \subsection*{Analyze Yoshikoder Output in R}
+%' 
+%' Open RStudio and change the working directory to the folder where you downloaded the lab materials. Change the working directory using the menu structure in RStudio or by typing
+%' <<eval=FALSE>>=
+%' setwd("~/IQMR/") ## or wherever
+%' @
+%' 
+%' For easy manipulation of Yoshikoder output in R it's convenient to load a few special functions.  Type
+%' <<>>=
+%' source('helpers.R')
+%' @
+%' at the beginning of your R session.
+%' 
+%' In the following we'll assume you saved the file as a CSV file (not an Excel file) and called it \texttt{ukabortiondebate}.  If you didn't, you might go back and do that.
+%' 
+%' You can load this file using the \texttt{text\_ykd\_report} function that we just sourced.  Yoshikoder will have slightly renamed it by appending '-utf8' on the end to remind you what encoding it is in.  Here we use the `drop.total' argument to remove the final column.
+%' <<>>=
+%' uk <- read_ykd_report("ukabortiondebate-utf8.csv", drop.total = TRUE)
+%' @
+%' by default the root category count will be dropped too, because we can reconstruct that by summing any row.
+%' 
+%' To recreate the table in R simply normalise the column sums
+%' <<>>=
+%' uk.emph <- colSums(uk) ## emphasis
+%' uk.prop.emph <- uk.emph / sum(uk.emph)*100 ## relative emphasis as a percentage
+%' @
+%' 
+%' Finally, we can plot the percentages
+%' <<>>=
+%' barplot(uk.prop.emph,main="Categories in 1966 UK Abortion Debate")
+%' @
+%' 
+%' 
+%' \subsection*{Speaking Time}
+%' 
+%' In this debate `Mr Speaker' (Dr Horace King) promised in his opening words to give equal floor time to those opposed to the abortion bill and those in favour.  But did he?
+%' 
+%' Let us first load a dataset that includes information whether a speaker eventually voted yes or no. 
+%' <<>>=
+%' load("votes.Rdata")
+%' head(votes)
+%' @
+%' But now we need that the word total column that we dropped earlier.  Let's load in the data again and pull it out
+%' <<>>=
+%' uk2 <- read_ykd_report('ukabortiondebate-utf8.csv')
+%' head(uk2)
+%' @
+%' Both datasets contain speaker names as row names. We can use this information to merge the two datasets into a new object. 
+%' <<>>=
+%' uk3 <- merge(uk2,votes,by="row.names")
+%' @
+%' Let's calculate the total number of words spoken by `yes' and `no' voting MP. 
+%' <<>>=
+%' aggregate(Total ~ vote, uk3, sum) 
+%' @ 
+%' Now, as it turns out, those that end up voting yes seem to get twice as much floor time though that's because the few `no' voters spoke a lot
+%' <<>>=
+%' aggregate(Total ~ vote, uk3, mean) 
+%' @
+%' 
+%' \subsection*{An Exploratory View: Topic Models}
+%' 
+%' This dictionary-based analysis relied on the intuitions of Bara et al. for its validity.  We can also consider how a completely unsupervised `topic model' would segment these documents into topics and assign them words.  You can find such a model at \url{http://dl.conjugateprior.org/jsLDA/jslda.html}.  
+%' 
+%' When you load that page it contains a collection of paragraphs from US State of the Union speeches.  In the field marked `Documents URL' you will see `sotu\_small.txt'.  This is the name of the source document that lives on the server.  
+%' 
+%' Replace that file by typing `abortion\_debate.txt' instead and press the `load' button. In a few moments the separate paragraphs of the abortion debate will appear.
+%' 
+%' To fit the topic model, set the number of topics and press the button on the top left of the page marked `Run 50 iterations'.  After these have completed the page will update with the new assignments of topics and words.  The split into paragraphs is necessary for the topic model because it relies on cross-document word variation to estimate the mixture of topics each document might contain.  Consequently we need to define document to be a smaller unit to provide enough of information.
+%' 
+%' Check the words that are most likely to have generated a topic. Do these topics make sense? Is the overlap with Bara's categories?
+%' 
+%' 
+%' %%%%%%% this needs updating to recent RTextTools code
+
+\subsection*{Text Classification: What's in the New York Times?}
+
+In this demonstration we will be using a corpus of article titles and description from
+the New York Times.  The classification task is to determine which of 27 subject categories
+a story is from.  You can find a list of these categories in the accompanying document.
+
+We begin by loading the library we will be using for classification 
+<<loading,results='hide',warning=FALSE,message=FALSE>>=
+library(RTextTools) ## may need to install.packages('RTextTools') first
+load('nytimes-sample.RData')
+@
+If that didn't work you probably don't have the library installed, so install it by typing 
+The documents we wil be using are bundled with the library so we load them directly
+
+This is a \texttt{data.matrix}, so we first see what sorts of variables we have available to us
+<<variables,comment=''>>=
+colnames(nytimes.sample)
+@
+We will be most interested in the text fields \texttt{Subject} and \texttt{Title} and the numerical subject category label \texttt{Topic.Code}, which is conveniently translated as \texttt{Topic}.
+For convenience the code to topic mapping is shown in Table~\ref{codes}.
+
+<<code-table,echo=FALSE,results='asis'>>=
+codes <- read.csv('topics-nyt.csv', row.names=1)
+library(xtable)
+xtable(codes, caption='New York Times Index topic codes and their descriptive names',
+label='codes')
+@
+
+Let's take a look at the first five `documents' (which are essentially NY Times headlines). Which topic would you assign to these?
+<<preview,comment=''>>=
+head(nytimes.sample[,c('Title', 'Subject')])
+@
+You can see whether your coding corresponds to the actual labels human coders assigned them
+<<preview2,comment=''>>=
+head(nytimes.sample[,c('Topic','Topic.Code')])
+@
+In order to build a document classifier we first 
+transform this nice readable dataset into a sparse matrix of word counts.
+
+As part of the process of doing that we'll take the opportunity to throw out number words, reduce 
+to word stems, and weight the resulting word counts using a standard term 
+frequency-inverse document frequency (tfidf) transformation.  
+<<make-matrix>>=
+matrix <- create_matrix(cbind(nytimes.sample$Title,nytimes.sample$Subject),
+                        language="english",
+                        removeNumbers=TRUE, 
+                        stemWords=TRUE)
+@
+where the \texttt{cbind} function ties together two columns from \texttt{nytimes.sample}.
+We handed in the \texttt{Title} and \texttt{Subject} fields together
+because we expect that they both provide information about the topic code.  We
+could have done more (or less) pre-processing as we counted and transformed the
+words.  See the help for \texttt{create\_matrix} for details.
+
+Now that we have a suitable representation for our documents we create a container object
+to hold both them and their category labels.  We'll use the container to train and
+also to test fitted classifiers
+<<make-corpus>>=
+set.seed(1234) ## so your cases will be mine
+training.cases <- 1:2000
+test.cases <- 2001:3104
+corpus <- create_container(matrix, nytimes.sample$Topic.Code, 
+                           trainSize=training.cases, 
+                           testSize=test.cases, 
+                           virgin=FALSE)
+  @
+ Here we specify the matrix we just made out of the documents as the first argument,
+ the column of category labels as the second, and then a division into training
+ and test documents.  The not-quite-accurately named \texttt{trainSize} parameter
+ contains the row numbers that we want to use to fit the classifiers, here the 
+ first thousand documents.  The similarly inaccurately names \texttt{testSize} 
+ parameters indicates that we want to test them on the remaining documents.  The
+ bizarrely named \texttt{virgin} parameter is false, indicating that we actually
+ do know the correct labels for the test documents.  This will not, of 
+ course, always be true.
+ 
+ The library is set up to run lots of classifiers and have them vote on each test 
+ document.  But for now let's just train one, regularised 
+ logistic regression which computational linguists (for reasons best known
+ to themselves) refer to as the maximum entropy classifier or `maxent'.
+ <<train>>=
+ models <- train_models(corpus, algorithms=c("MAXENT"))
+ @
+ Normally in R we would want to summarise a fitted model.  In this case however, the 
+ parameters are unlikely to be particularly illuminating (and there are several
+ hundred of them), so no such methods are provided.
+ 
+ If we had wanted to train more or different models, we would have had to put their 
+ names in the \texttt{algorithms} parameter.  The options are 
+ <<algorithms,comment=''>>=
+ print_algorithms()
+ @
+ and you can spend a happy afternoon reading about them on the internet.
+ 
+ Now that our single classifier is trained we would like to see how well it works
+ <<classify>>=
+ results <- classify_models(corpus, models)
+ @
+ This particular function hides a fair amount of detail about the model, which is 
+ usually what we want.  Looking at the first few results 
+ <<results,comment=''>>=
+ head(results)
+ @
+ we see the topic in the first column and the probability that the classifier
+ assigned this topic in the second column.  Despite more than 20 possible categories this model
+ seems rather confident.  This is not necessarily a good thing.  
+ 
+ As a first look at the 
+ performance of the model, let us see what how likely it is
+ to put a document in the right category, and then examine what sorts of errors are made.
+ 
+ The library comes with various forms of `analytics', 
+ that is: performance summaries.  Let's 
+ compute all of them for the corpus we trained with and the results we got
+ <<analytics>>=
+ analytics <- create_analytics(corpus, results) 
+ @
+ The analytics object is a vast sprawling thing that you can read about on its help page.
+ 
+ One summary we can make from it is the probability that the classifier puts a 
+ document in the right category (recall), which we might want to break down by category.  Another is the
+ probability that a document is in a category when the model says it is (precision).
+ Actually we want these things often enough that they get their own function, the idiosyncratically punctuated 
+ <<precision-recall>>=
+ pr <- create_precisionRecallSummary(corpus, results)
+ @
+ which we show in Table~\ref{pr}, including the F-measure which combines precision and recall.  The is useful if you like reducing vast amounts of disparate information to single number summaries.  We don't, so we'll ignore it.
+% 
+ 
+ <<pr-table,echo=FALSE,results='asis'>>=
+ colnames(pr) <- c('precision', 'recall', 'F') ## work around underscore bug in memisc's toLatex 
+xtable(pr, digits=2, caption="Precision, recall and the F measure for classifier performance", label="pr")
+ @
+ 
+What difference do these errors make?  One way to check this we can make a time series of Defense/International Affairs stories as a proportion of all New York Times stories and compare it to the time series we would have gotten if we had used our classifier's decisions instead.
+
+First, let's pull out the rows corresponding to test documents from the original
+data set
+<<truecats>>=
+testdata <- nytimes.sample[test.cases,]
+@
+and add the model's predictions about their topic as a new column
+<<modelests>>=
+testdata$Model.Topic.Code <- results[,1] ## just the topic code 
+@
+To make our time series we have to aggregate a bit, so let's add a monthly indicator variable.  This will allow us to aggregate documents that appear within the same month. This smooths the 
+data a bit.
+<<make-cut>>=
+testdata$month <- cut(testdata$Date, 'month')
+bigt <- with(testdata, table(Topic.Code, month))
+@
+The bigt cross tabulation has months as columns and aggregated topic code counts as rows.  It's
+a bit unwieldy to look at, so let us summarise the amount of attention given to 'International Affairs'
+and `Defense' (codes 19 and 16) as a proportion of all the different sorts of news.
+<<crosstab2>>=
+all.news <- colSums(bigt)
+foreigners <- colSums(bigt[c('19','16'),])  ## careful with the quotes
+time <- as.Date(colnames(bigt)) ## turn our indicator back into date
+@
+with these three quantities in hand, we get Figure~\ref{ts1}
+
+\begin{figure}[htbp]
+\begin{center}
+<<tsone>>=
+plot(time, foreigners/all.news, type='s')
+@
+\caption{Attention to international affairs as a proportion of all news.  Calculated using the
+true topic categories}
+\label{ts1}
+\end{center}
+\end{figure}
+
+Let's see how that \textit{would have} gone if we did not know the topic codes and had to use the classifier outputs. 
+
+We recompute with the model's 
+topic codes
+<<crosstab3>>=
+bigt.model <- with(testdata, table(Model.Topic.Code, month))
+foreigners.model <- colSums(bigt.model[c('19','16'),])
+@
+and replot, in Figure~\ref{ts2}.  
+
+Finally we can plot the differences.  These are shown in Figure~\ref{diff}
+
+\begin{figure}[htbp]
+\begin{center}
+<<tstwo>>=
+plot(time,  foreigners.model/all.news, type='s')
+@
+\caption{Attention to international affairs and defense as a proportion of all news.  Calculated using the
+estimated topic categories}
+\label{ts2}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+<<diff>>=
+plot(foreigners/all.news, foreigners.model/all.news)
+abline(a=0,b=1,col='red')
+@
+\caption{Measurement error on a substantive question}
+\label{diff}
+\end{center}
+\end{figure}
+
+
+
+%% dta <- transform(data, Date=as.Date(Date, format='%d-%b-%y'))
+
+
+%dd <- read.csv(nytimes.sample.csv)
+%dd$quarter <- cut(dd$Date, 'quarter')
+%dd$month <- cut(dd$Date, 'month')
+%bigt <- with(dd, table(Topic, quarter))
+%plot(as.Date(colnames(bigt)), bigt['International Affairs',]/colSums(bigt), type='h')
+%smallt <- with(dd, table(Topic, month))
+%plot(as.Date(colnames(bigt)), bigt['International Affairs',]/colSums(bigt), type='h')
+
+
+%## now do this with the classified ones and check the diffs
+
+
+%%%%%%%% now some topic modeling on the web
+
+
+% 
+% 
+%%%%% now the old topic model code that we still don't want...
+% 
+% \subsection*{Topics in the UK Abortion Debate}
+% 
+% We dont have very large numbers of speeches in the UK abortion debate, but we can do 
+% a topic analysis using paragraphs as documents.  A corpus of debate 
+% paragraphs is included in the materials, called \texttt{debate-paras} for this
+% purpose.  The first task is to use JFreq to get term document information in a suitable
+% format. Drag all the paragraphs into JFreq and as a first run
+% select the lowercase, no numbers, no currency, and English stemmer.  We've also included
+% a list of stop words `stops.txt' that you can remove before processing.  This is just a csv file
+% you can adjust if you feel the need.
+% 
+% Now choose an output folder name and make sure that the output format is `LDAC' and the gzip
+% compression is not selected.  Other output formats, e.g. CSV are fine, but they will with 
+% other corpora, make unnecessarily huge output files.
+% 
+% Shortly after you press the `Process' button, there will be a folder with the name you 
+% chose wherever you decided to put it.  Let's have a quick look inside that folder.
+% 
+% You should see a file called README.txt.  This is an instruction\footnote{c.f. Alice at 
+% the Mad Hatter's tea party.}.  It will explain the format of the files and how to use them.
+% 
+% Back at the R prompt, we can now make use of this information in the orginal topic models
+% package.  First we load it.
+% <<load-lda>>=
+% library(lda) ## may need to install.packages('lda') first
+% set.seed(1234) ## so results are replicable
+% @
+% Now we extract the word count data and the list of words
+% <<extract-info>>=
+% counts <- read.documents("barapara-stemmed-stops/data.ldac")
+% wds <- read.vocab("barapara-stemmed-stops/words.csv")
+% @
+% and although the package itself does not require it, we pull out
+% the document titles too
+% <<paras>>=
+% docs <- read.csv('barapara-stemmed-stops/docs.csv', header=FALSE, as.is=TRUE)
+% @
+% (Note that this file doesn't have a header row.)
+% Now fit an LDA model using some hopefully not unreasonable starting parameters
+% <<fit-lda-model>>=
+% mod <- lda.collapsed.gibbs.sampler(counts, 6, wds, 1000, alpha=0.01, eta=0.1)
+% @
+% Looking at the help page for the collapsed gibbs sampler function you can confirm that
+% we are fitting six topics, running for one thousand iterations with prior parameters
+% $\alpha$=0.01 and $\eta$=0.1.  The closer $\alpha$ is to 0 the more each document 
+% will tend to contain instances of fewer rather than more topics.  
+% The closer $\eta$ is to 0 the more a topic will
+% generate fewer words with high probability.  Altering $\alpha$ is often the primary 
+% determinant of the distribution of topics that are inferred.  You can, of course,
+% play around with this.  Alternatively, some topic model packages will allow you to
+% estimate it too (but not this one unfortunately).
+% 
+% Now we want to have a look at the topics we inferred.  Here we list the words most likely
+% to be generated on each topic.  We show the top fifteen
+% <<top-topics,comment=''>>=
+% top.topic.words(mod$topics, 15)
+% @
+% If we have a particular interest in some estiamted topic we can also see which documents
+% make most use of it.  Assume that we care about topic number 6
+% <<top-docs,comment=''>>=
+% topdocs <- top.topic.documents(mod$document_sums, 15)
+% docindexes <- topdocs[,6] 
+% docs[docindexes,] ## index into the documents
+% @
+% Notice that these are overwhelming paragraphs from the speakers that voted no 
+% in the debate.
+% 
+% In both these cases we are manipulating elements of the fitted topic model.
+% We could instead use them directly.  
+% 
+% If you want the topic assignments themselves then
+% the \texttt{mod\$document\_sums} part of the model contains them with documents as rows
+% and topic indexes as columns, pretty much how a Yoshikoder dictionary report would give them to you,
+% only without the labels.
+
+%\subsection*{Topics in the US Abortion Debate}
+%
+%If you're feeling adventurous you can try the same analysis on the US abortion debates, 
+%again split by paragraph.
+
+\end{document}
+
+

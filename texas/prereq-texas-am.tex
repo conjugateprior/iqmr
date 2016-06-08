@@ -1,0 +1,64 @@
+% Syracuse 2012
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[charter]{mathdesign}
+\usepackage[scaled=.95]{inconsolata}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{color}
+
+\usepackage{hyperref}
+\usepackage{dcolumn,booktabs} %% for memisc
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\usepackage{stitchr} %% make me compile as latex when knitr is not applied
+
+\definecolor{darkblue}{rgb}{0,0,.6} % not really
+\definecolor{other}{rgb}{0,0,.5}
+\hypersetup{colorlinks=true, linkcolor=darkblue, citecolor=darkblue, 
+	filecolor=darkblue,urlcolor=other}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+
+\author{Texas A\&M 2014}
+\title{Prerequisites: Software}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+We'll be using some software for this course.  It's all free, but you will want to download and install it.
+
+\begin{itemize}
+\item \textbf{Java}: Press the big red button at \url{http://www.java.com/en/} and follow the instructions.  If you are a Mac user you already have Java installed, although you may need to upgrade to get the latest version.  This will require administrator access on your computer. 
+\item \textbf{R}: Download by choosing a nearby location from \url{http://cran.r-project.org/mirrors.html} and selecting the distribution appropriate to your computer.  This may require administrator access to your computer.
+
+Mac and Linux users should have no problems with the procedure, although it may require an administrator password.  
+
+Windows users can have a harder time.  The following notes apply to them.  Let us start with a quote from the FAQ for R on Windows (\url{http://cran.r-project.org/bin/windows/base/rw-FAQ.html})
+\begin{quote}
+To install use `R-2.15.1-win.exe'. Just double-click on the icon and follow the instructions. If you have an account with Administrator privileges you will be able to install R in the Program Files area and to set all the optional registry entries; otherwise you will only be able to install R in your own file area. You may need to confirm that you want to proceed with installing a program from an `unknown' or `unidentified' publisher.
+\end{quote}
+Two particular notes:  If you get to any point during installation where you are given the option to install with `internet' or `internet2' options, choose the latter.  This will take internet settings from your browser.  Assuming this is set up right, this will guarantee internet access.  In theory this is no longer a concern. In practice\ldots
+
+\textbf{Testing 1, 2, 3} Launch R from the Desktop link (Windows) or otherwise.  Then type
+\begin{quote}
+\texttt{install.packages('austin', repos='http://r-forge.r-project.org')}
+\end{quote}
+If this succeeds, perhaps after requesting a mirror site from a list, then R is working properly.  If not, then re-installing is probably necessary.
+\item \textbf{R Packages: austin, RTextTools, and lda}.  Install these by selecting them from the install packages menu individually, or by typing, e.g. 
+\begin{quote}
+\texttt{install.packages('RTextTools')}
+\end{quote}
+at the prompt. 
+
+If you plan to make sweet music with R software in your academic career then you might also like RStudio \url{http://rstudio.org/download/desktop} as an alternative environment for using R once it has been installed.  We won't make use of this here.
+\end{itemize}
+
+
+\end{document}
+

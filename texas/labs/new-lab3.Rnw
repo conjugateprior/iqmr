@@ -1,0 +1,119 @@
+% Texas 2015
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[charter]{mathdesign}
+\usepackage[scaled=.95]{inconsolata}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{color}
+
+\usepackage{hyperref}
+\usepackage{dcolumn,booktabs} %% for memisc
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+%\usepackage{stitchr} %% make me compile as latex when knitr is not applied
+
+\definecolor{darkblue}{rgb}{0,0,.6} % not really
+\definecolor{other}{rgb}{0,0,.5}
+\hypersetup{colorlinks=true, linkcolor=darkblue, citecolor=darkblue, 
+	filecolor=darkblue,urlcolor=other}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+
+\author{Texas A\&M  2015}
+\title{Scaling lab}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\subsection*{US Senate Speeches}
+
+Let's take a look at US Senate debate on partial birth abortion. We want to use the speeches to estimate individual positions based on Senatorial rhetoric. 
+
+<<setup,include=FALSE>>=
+
+@
+
+Open $R$. Let's first start by installing and loading the package \texttt{austin} that allows us to run \textit{Wordscores} or \textit{Wordfish}: 
+<<load-library>>=
+library(austin)
+@
+If this did not work you may need to install it as follows:
+<<eval=FALSE>>=
+install.packages('austin', repos="http://r-forge.r-project.org", type="source")
+@
+Now change the working directory to the one with the csv file you just created. Now, read in the term document matrix (you might have called yours something else)
+<<reading>>=
+data <- read.csv('us-abortion-debate.csv', row.names=1)
+@
+
+First, let's check that we have the term document matrix correctly. First we chck the dimensions
+<<check-dimension,comment=''>>=
+dim(data)
+@
+The matrix should contain 12 documents (rows) and 2705 words (columns). Typing
+<<small-section,comment=''>>=
+data[1:5,1:5]
+@
+shows the first five documents and the first five words. It does indeed look like a term document matrix.
+
+Before fitting a \texttt{Wordfish}, we need to do some final processing of this matrix. First, we will tell the program that it is a word frequency matrix with the words in columns (it could also look the other way round, that is why we need to tell the computer).  Let's write this into a new object that we call \texttt{senate}. This way, we preserve the original \texttt{data} object in the memory, in case we want to go back.
+<<make-wfm>>=
+senate <- wfm(data, word.margin=2)
+@
+Now we fit the model. Remember that the scaling procedure is completely based on differences in word frequencies and generates estimates in one dimension. We simply need to fix two documents to tell the program how it should anchor this dimension (we can always aribitrarily rotate the dimension by multiplying all estimates by $-1$). 
+
+By default the first document will a smaller position value than the tenth document.  You can alter this by setting the \texttt{dir} parameter (see \texttt{?wordfish} for details).  
+We estimate and write the output into a new object:
+<<estimate-wf-model>>=
+senate.res <- wordfish(senate)
+@
+This should take not very long to estimate. Let's take a look at the estimation results: 
+<<summarise-model,comment=''>>=
+summary(senate.res)
+@
+This table shows an overview of the position estimates, the standard errors, and confidence intervals. This is hard to read, so we can plot it instead, as in Fig~\ref{senplot}.
+What story do the estimates tell about the debate? 
+
+\begin{figure}[htbp]
+\begin{center}
+<<plot-words>>=
+plot(senate.res)
+@
+\caption{A chart of speaker positions, with uncertainty.}
+\label{senplot}
+\end{center}
+\end{figure}
+
+The analysis suggests that there is a partisan divide, with Democrats having position estimates that are smaller than Republicans. Let's take a look at the word estimates and see how they line up on the dimension. Let's plot the slope estimates for some likely looking word stems.  But first we have to extract them from all the other parameters.
+<<get-words,comment=''>>=
+word.coefs <- coef(senate.res, 'poisson')$words ## just take the word parameters
+wds <- c("life","unborn", "choic","her","woman","health","born","babi","defenseless","gruesom","kill")
+word.coefs[wds,]
+@
+Do the estimates make sense?  Again, it's easier to see if we plot them, as in Fig.~\ref{wds}.
+
+\begin{figure}[htbp]
+\begin{center}
+<<plot-words-again>>=
+dotchart(word.coefs[wds, 'beta'], wds)
+@
+\caption{A chart of word slopes (sensitivity to ideological position) for the word stems.}
+\label{wds}
+\end{center}
+\end{figure}
+
+If we were being thorough about these words we'd check they do what we think they do by looking 
+at them in context.
+
+% We first construct a term-document matrix out of the speeches. We do this using the open-source program \texttt{JFreq}. The program allows us to perform some standard preprocessing of the texts prior to constructing the word frequency dataset. Drag and drop the speech text files into the window. Check the boxes \textit{lowercase}, \textit{no numbers}, \textit{no currency}, and \textit{stemmer} (choosing \textit{English}). The last option applies an algorithm that reduces inflected words to their root (stem), meaning that words like ``language'' and ``languages'' are counted as the same word and not twice (note the obvious caveat of such a procedure). 
+
+% Save the term document matrix as a ``csv'' file.  
+
+
+\end{document}

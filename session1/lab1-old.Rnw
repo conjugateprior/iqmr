@@ -1,0 +1,261 @@
+% Syracuse 2012
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[charter]{mathdesign}
+\usepackage[scaled=.95]{inconsolata}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{color}
+
+\usepackage{hyperref}
+\usepackage{dcolumn,booktabs} %% for memisc
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\usepackage{stitchr} %% make me compile as latex when knitr is not applied
+
+\definecolor{darkblue}{rgb}{0,0,.6} % not really
+\definecolor{other}{rgb}{0,0,.5}
+\hypersetup{colorlinks=true, linkcolor=darkblue, citecolor=darkblue, 
+	filecolor=darkblue,urlcolor=other}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+
+\author{IQMR 2015}
+\title{1. Dictionary-Based Content Analysis}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+%
+%\begin{center}
+%
+%{\large \bf IQMR Summer Institute 2012}\vspace*{1cm}
+%
+%
+%{\Large \bf  Content Analysis \\\vspace{0.5cm}  Exercise 1 }
+%
+%
+%\end{center}
+%
+
+%
+%
+%
+%\documentclass[a4paper,12pt]{article}
+%\usepackage[top=2.5cm, bottom= 2.5cm, left= 2.5cm, right= 2.5cm]{geometry} 
+% 
+% 
+%\usepackage{harvard}
+%\usepackage{setspace}
+%\usepackage{multirow, booktabs}
+%\usepackage{rotating}
+%\usepackage{lscape}
+%\usepackage{url}
+%\usepackage{longtable}
+%\usepackage{graphicx}
+%\usepackage{fancyhdr}
+%\setlength{\parindent}{0in}
+%\usepackage[usenames, dvipsnames]{color}
+%\pagestyle{fancy}
+%\fancyfoot{}
+%\fancyhead[CO,CE]{\footnotesize IQMR Summer Institute 2012}
+%
+%\fancyfoot[RO, LE] {\footnotesize \thepage}
+%\begin{document}
+%
+%\thispagestyle{empty}
+
+
+
+
+%\begin{center}
+%
+%{\large \bf IQMR Summer Institute 2012}\vspace*{1cm}
+%
+%
+%{\Large \bf  Content Analysis \\\vspace{0.5cm}  Exercise 1 }
+%
+%
+%\end{center}
+%
+     
+
+
+%\vspace{6mm}
+
+
+
+%\begin{enumerate}
+
+%\item 
+For this exercise, we will work with the free, cross-platform, multilingual content analysis program \href{http://www.yoshikoder.org/}{Yoshikoder}. 
+
+The Yoshikoder works with text documents, whether in plain ASCII, Unicode (e.g. UTF-8), or national encodings. You can construct, view, and save keywords-in-context. You can write content analysis dictionaries and apply them to documents. Yoshikoder provides summaries of documents, either as word frequency tables, according to a whole dictionary, or just some of its entries. You can also apply a dictionary analysis to the results of a concordance, which provides a way to study local word contexts. 
+There is online help, and of course, for two days only in-person help too.
+
+There are better commercial programs out there if you start doing this kind of things a lot, but this will do for now.
+
+\subsection*{Abortion Politics in the UK}
+
+%\item 
+We start the exercise by replicating the dictionary-based content analysis in Bara, Weale, and Biquelet (2007). To do so, first download the dictionary file to somewhere convenient and then use 'Open Dictionary' from the Dictionary menu to open it.
+
+Sometimes Windows likes to helpfully suffix these dictionary files with \texttt{.xml}\footnote{Annoying, isn't it?}.  Fear not -- it's still the right file.  Once loaded you can inspect the terms contained in the dictionary by clicking through the dictionary tree structure.
+
+Next, load the fourteen legislative speeches from the UK House of Commons.  The `Add Documents' function on the `Documents' menu will do this.  Locate the files, select them all, and add them.  They will appear in a list on the right side of the application.  We've bundled each speaker's contributions together and included their final vote in the filename for convenience.  Yoshikoder allows you to identify the contexts where dictionary matches appear in the documents. To make them visible, you can make a concordance or highlight the entries in each document.
+
+To create a dictionary report, select all the documents and the root of the dictionary tree.  From the `Report' menu select `Apply Dictionary' and then `Selected Documents'.  You can save the resulting dictionary report as an CSV or an Excel format file.  If you open the data you should have the raw materials to generate the table below.
+
+\vspace{0.25cm}
+
+\begin{table}[h]
+\begin{center}
+\includegraphics[scale=1]{baratable3.pdf}
+\end{center}
+\label{bara}
+\end{table}%
+
+The report has a distinctive format.  Documents are rows and all but the last column are counts of dictionary pattern matches in the categories of the dictionary.  The very first column is the root category which contains all the others, so the count here is the count of how many words matched any category at all.  The remaining columns are labeled according to their position in the tree.  The final column is a count of how many words were found in each document.  This gives a sense of what proportion of the word tokens apeeared in the dictionary.  
+
+It also allows you calculate category rates per N words.  For example, from this final column we see that Mr William Deedes says 1478 words, of which 28 appeared in the `medical' category, so this is a rate of $28/1478 \times 1000 \approx$ 19 per thouand words.  The same category registers 50 words for Norman St John Stevas, but his rate is not much different at about 22 per thousand.
+
+You should recover the category percentages to within about 1\% percent of the originals.  (Discrepancies are likely due to different software and -- regrettably -- are to be expected with text data.)  You can contruct the table from inside Excel, if you like that kind of thing.  
+
+Alternatively, you can do bring the output file into R for further manipulation.  So let's do that.
+\subsection*{Doing it in R}
+
+For easy manipulation of Yoshikoder output in R it's convenient to load a few special functions.  They're on the web so you can do this by typing
+<<>>=
+source('http://dl.conjugateprior.org/iqmr/helpers.R')
+@
+at the beginning of your R session.
+
+In the following we'll assume you saved the file as a CSV file (not an Excel file) and called it \texttt{ukabortiondebate}.
+
+You can load this file using the \texttt{text\_ykd\_report} function that we just sourced.  Yoshikoder will have slightly renamed it by appending '-utf8' on the end to remind you what encoding it is in.  Here we use the `drop.total' argument to remove the final column.
+<<>>=
+report1 <- read_ykd_report('ukabortiondebate-utf8.csv', 
+                           drop.total = TRUE)
+@
+by default the root category count will be dropped too, because we can reconstruct that by summing any row.
+
+To recreate the table in R simply normalise the column sums
+<<>>=
+emph <- colSums(report1) ## emphasis
+prop.emph <- emph / sum(emph)*100 ## relative emphasis as a percentage
+@
+
+Finally, we can plot the percentages
+<<>>=
+barplot(prop.emph,main="Categories in 1966 UK Abortion Debate")
+@
+
+
+\subsection*{Speaking Time}
+
+In this debate `Mr Speaker' (Dr Horace King) promised in his opening words to give equal floor time to those opposed to the abortion bill and those in favour.  But did he?
+
+Let us first make a variable representing whether a speaker eventually voted yes or no.  In the order of our data this is
+<<>>=
+vote <- c(rep(NA, 3), rep('no', 5), rep('yes', 16))
+@
+But now we need that the word total column that we dropped earlier.  Let's load in the data again and pull it out
+<<>>=
+report2 <- read_ykd_report('ukabortiondebate-utf8.csv')
+tot <- report2$Total ## just the last column
+@
+Now, as it turns out, those that end up voting yes seem to get twice as much floor time
+<<>>=
+aggregate(tot ~ vote, FUN=sum) 
+@
+though that's because the few `no' voters spoke a lot
+<<>>=
+aggregate(tot ~ vote, FUN=mean)
+@
+
+
+\subsection*{Abortion Politics in the US}
+
+Now we will compare this legislative debate with a similar one from the US Senate. This is the debate on the conference report for the Partial-Birth Abortion Ban Act of 2003. 
+
+Import the US speech documents into Yoshikoder, re-do the dictionary analysis
+<<>>=
+us<-read_ykd_report("usabortion-utf8.csv",drop.total=TRUE)
+@
+
+Calculate per speaker proportions
+<<>>=
+usprop<-us/rowSums(us)
+@
+
+Select Democrats and Republicans 
+<<>>=
+dems<-usprop[grep("DEM",rownames(usprop)),]
+reps<-usprop[grep("REP",rownames(usprop)),]
+@
+
+Calculate average proportions for Dems and Reps
+<<>>=
+demavg<-apply(dems,2,mean)
+repavg<-apply(reps,2,mean)
+@
+
+Create one object
+<<>>=
+usres<-rbind(demavg,repavg)
+rownames(usres)<-c("Dem","Rep")
+@
+and plot it
+<<>>=
+barplot(usres,beside=T,legend=T,ylim=c(0,0.4))
+@
+% 
+% \begin{itemize}
+% \item Do you find a similar or different distribution of keyword occurrences in the debate categories as defined by Bara et al.? 
+% \item Can you find a partisan pattern in the data? To do this, compute averages of the category percentages separately for Democrats and Republicans.
+% \item More generally, where do you see the benefits and/or limitations of applying this specific dictionary? Do you suspect that important terms are omitted? Notice that there is no ``gender politics'' category in the Bara et al. dictionary. Can you think of some terms that might reflect gender politics? Use Yoshikoder to add a gender category and appropriate patterns. Re-apply the dictionary  to the data. Do you find a partisan pattern?
+% \end{itemize}
+
+\newpage
+
+\subsection*{An Exploratory View}
+
+This dictionary-based analysis relied on the intuitions of Bara et al. for its validity.  We can also consider how a completely unsupervised `topic model' would segment these documents into topics and assign them words.  You can find such a model at \url{http://dl.conjugateprior.org/jsLDA/jslda.html}.  
+
+When you load that page it contains a collection of paragraphs from US State of the Union speeches.  In the field marked `Documents URL' you will see `sotu\_small.txt'.  This is the name of the source document that lives on the server.  
+
+Replace that file by typing `abortion\_debate.txt' instead and press the `load' button. In a few moments the separate paragraphs of the abortion debate will appear.
+
+To fit the topic model, set the number of topics and press the button on the top left of the page marked `Run 50 iterations'.  After these have completed the page will update with the new assignments of topics and words.  The split into paragraphs is necessary for the topic model because it relies on cross-document word variation to estimate the mixture of topics each document might contain.  Consequently we need to define document to be a smaller unit to provide enough of information.
+
+Check the words that are most likely to have generated a topic. Do these topics make sense? Is the overlap with Bara's categories?
+
+
+\end{document}
+
+
+
+% \subsection*{Party Politics in the UK}
+% 
+% Finally, we look at the manifesto policy dictionary constructed by Laver and Garry (2000) and the development of economic policy positions, in particular. First, load the dictionary and the British party manifestos for the elections 1992 to 2010. 
+% 
+% Our goal is twofold: first, we would like to replicate the result that the Labour Party moved towards a neoliberal economic policy position in 1997 under Tony Blair, and want to examine how stable this move was in the subsequent elections. 
+% 
+% Open the dictionary file in Excel and calculate the economic policy positions for the parties as follows:
+% \begin{equation*}
+%   \text{ECON} = \frac{\text{ECON}_R - \text{ECON}_L}{\text{ECON}_R + \text{ECON}_L}
+% \end{equation*}
+% where $\text{ECON}_L$ is the total counts in category ``increase role of state in the economy'' and 
+% $ECON_R$ is the total counts in category ``reduce role of state in the economy''. 
+% \begin{itemize}
+% \item Using Excel, plot the estimates for the parties over time (hint: you may need to re-arrange the data with parties in rows and years in columns).  Can you replicate the rightward move of Labour in 1997? Does Labour stay on the right in subsequent years?
+% \item Following the election in 2010, none of the parties could muster a majority in parliament. Subsequently, the Conservative and Liberal Democratic party formed a coalition government, and Labour went into the opposition. Based on your estimates of economic policy positions derived from the dictionary counts, does this coalition appear sensible from the Liberal Democratic party's perspective?
+% \end{itemize}
+
+%\end{enumerate}

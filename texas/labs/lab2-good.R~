@@ -1,0 +1,53 @@
+
+## ----loading,results='hide',warning=FALSE,message=FALSE------------------
+library(RTextTools) ## may need to install.packages('RTextTools') first
+
+
+## ----make-data-----------------------------------------------------------
+load("nytimes-sample.RData") ## object is called nytimes.sample
+
+
+## ----variables-----------------------------------------------------------
+colnames(nytimes.sample)
+
+
+## ----code-table----------------------------------------------------------
+codes <- read.csv('topics-nyt.csv', row.names=1)
+
+
+## ----code-table2,results='asis'------------------------------------------
+library(xtable)
+print(xtable(codes, caption='New York Times Index topic codes and their descriptive names', label='codes'), type='html')
+
+
+## ----preview-------------------------------------------------------------
+head(nytimes.sample[,c('Title', 'Subject')])
+@
+You can see whether your coding corresponds to the actual labels human coders assigned them
+
+## ----preview2------------------------------------------------------------
+head(nytimes.sample[,c('Topic','Topic.Code')])
+
+
+## ----make-matrix---------------------------------------------------------
+matrix <- create_matrix(cbind(nytimes.sample$Title,nytimes.sample$Subject),
+                        language="english",
+                        removeNumbers=TRUE, 
+                        stemWords=TRUE, 
+                        weighting=tm::weightTfIdf)
+
+
+## ----make-corpus---------------------------------------------------------
+set.seed(1234) ## so your cases will be mine
+training.cases <- 1:2000
+test.cases <- 2001:3104
+corpus <- create_container(matrix, nytimes.sample$Topic.Code, 
+                           trainSize=training.cases, 
+                           testSize=test.cases, 
+                           virgin=FALSE)
+
+
+## ----train---------------------------------------------------------------
+models <- train_models(corpus, algorithms=c("MAXENT"))
+
+

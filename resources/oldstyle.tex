@@ -1,0 +1,74 @@
+\documentclass[11pt,compress,professionalfonts]{beamer}
+\usetheme{metropolis}
+
+\usepackage[]{graphicx}
+\usepackage[]{color}
+
+\usepackage{ctable}
+\usepackage{hyperref}
+\usepackage{dcolumn}
+\usepackage{booktabs}
+
+\usepackage{mathspec}
+\setsansfont{Avenir Next}[BoldFont={* Demi Bold}]
+\setmonofont[Scale = MatchLowercase,Mapping=tex-ansi]{Inconsolata}
+\setmathfont(Digits,Latin,Greek){Avenir Next}
+\newfontface\fancy{Avenir Light}[Mapping=tex-ansi]
+
+\definecolor{darkgray}{rgb}{0.5,0.5,0.5}
+\definecolor{darkblue}{rgb}{0.000,0.251,0.502}
+\definecolor{bloodred}{rgb}{0.502,0.000,0.000}
+\definecolor{darkgreen}{rgb}{0.000,0.502,0.0}
+\definecolor{verylightgray}{rgb}{0.95,0.95,0.95}
+
+\setbeamerfont{frametitle}{size=\Large,family=\fancy}
+\setbeamercolor{frametitle}{fg=bloodred, bg=verylightgray}
+\setbeamerfont{title}{family=\fancy,size=\Large}
+\setbeamercolor{title}{fg=bloodred}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{title separator}{fg=darkgray}
+
+\metroset{progressbar=none,numbering=none}
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+%% bullet free bullet points
+\newcommand{\ita}{\begin{itemize}}
+\newcommand{\itm}{\item[]}
+\newcommand{\itz}{\end{itemize}}
+
+% graphics file in the pics subdirectory please
+\graphicspath{{./pics/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Computer-assisted content analysis}
+\author{Will Lowe ~~Princeton University\\James Lo ~~ University of Southern California}
+\date{Part 1}
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}[t]\frametitle{Menu}
+
+Session 1: Classical content analysis
+
+Session 2:
+\ita
+\item Classification for known categories: Supervised methods
+\item Evaluation
+\item Content analysis research design
+\itz
+
+Session 3: Topic and scaling models
+
+
+\end{frame}
+\begin{frame}[c]\frametitle{Text as data}
+
+\centerline{\includegraphics[scale=.6]{grimmerovreview.png}}
+\centerline{\footnotesize Source: Grimmer and Stewart (2013)}
+
+\end{frame}
+\end{document}

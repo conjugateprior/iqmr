@@ -11,6 +11,12 @@ Lab 3: Scraping and scaling SOTUs
 
 Session 1: TODO
 
+* Get SU NETID and student info
+* Draft preparation notes (also scp etc - monday night session)
+* Send out preparation notes
+* Fix references to materials in slide intro
+* 
+
 
 
 

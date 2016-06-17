@@ -1,0 +1,16 @@
+Session 0: How could this possibly work?
+
+Session 1: Dictionary-based `classical' content analysis and measurement error
+Lab 1: Data exploration and simple content dictionary-based analysis
+
+Session 2: Topic models and document classification
+Lab 2: Topic models and document classification
+
+Session 3: Scaling, visualization, and special topics
+Lab 3: Scraping and scaling SOTUs
+
+Session 1: TODO
+
+
+
+

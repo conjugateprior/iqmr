@@ -18,8 +18,10 @@
 \definecolor{darkgray}{rgb}{0.5,0.5,0.5}
 \definecolor{darkblue}{rgb}{0.000,0.251,0.502}
 \definecolor{bloodred}{rgb}{0.502,0.000,0.000}
+\definecolor{palered}{rgb}{0.7,0.000,0.000}
 \definecolor{darkgreen}{rgb}{0.000,0.502,0.0}
 \definecolor{verylightgray}{rgb}{0.95,0.95,0.95}
+\definecolor{lightgray}{rgb}{0.75,0.75,0.75}
 
 \setbeamerfont{frametitle}{size=\Large,family=\fancy}
 \setbeamercolor{frametitle}{fg=bloodred, bg=verylightgray}
@@ -37,6 +39,9 @@
 \newcommand{\ita}{\begin{itemize}}
 \newcommand{\itm}{\item[]}
 \newcommand{\itz}{\end{itemize}}
+\setbeamercolor{itemize item}{fg=lightgray}
+
+\usepackage{bayesnet} %% needs to be installed: ~/Library/texmf/tex/latex/bayesnet
 
 % graphics file in the pics subdirectory please
 \graphicspath{{./pics/}}
@@ -58,11 +63,9 @@ We have a website:
 \itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{Practicalities: Labs}
+\begin{frame}[plain]\frametitle{Labs}
 
-\centerline{\includegraphics[scale=0.25]{pictures/milgram-subject}}
-
-Worked examples (usually in the tools themselves and also in an R wrapper)
+\centerline{\includegraphics[scale=0.17]{pictures/milgram-subject}}
 
 \end{frame}
 \begin{frame}[t]\frametitle{Menu}
@@ -81,7 +84,7 @@ Session 3: Scaling Models
 
 Assumptions
 
-Mechanics
+Mechanics (in Lab)
 
 Interpretation
 
@@ -101,28 +104,33 @@ Pitfalls
 \begin{frame}[t]\frametitle{Topics}
 How to learn about
 \ita
-\itm party platforms
-\itm legislative agendas
-\itm parliamentary debates
-\itm bloggers
-\itm presidents
-\itm international terrorists
+\item party platforms
+\item legislative agendas
+\item parliamentary debates
+\item bloggers
+\item presidents
+\item international terrorists
 \itz
 by counting (lots of) words\ldots
 
-
-\centerline{\includegraphics[scale=4]{pictures/etinarcadiaego}}
-
 \end{frame}
-\begin{frame}[t]\frametitle{The Transcendental Question}
-~\\
+
+\begin{frame}[plain]
+\centerline{\includegraphics[scale=2.5]{pictures/etinarcadiaego}}
+\end{frame}
+
+\begin{frame}\frametitle{The transcendental question}
+
+\begin{quote}
 What are the \textit{conditions for the possibility} of learning about these things by counting words?
+\end{quote}
 
-\vfill
-a.k.a how could this possibly work?
+~\\
+\centerline{how could this possibly work?}
+
 
 \end{frame}
-\begin{frame}[t]\frametitle{Big Picture}
+\begin{frame}[t]\frametitle{Big picture}
 
 There is a \textsl{message} or \textit{content} that cannot be \textit{directly} observed, e.g.
 \ita
@@ -154,7 +162,19 @@ To \textsl{communicate} a message $\theta$ -- to inform, persuade, demand, threa
 
 
 \begin{center}
-\includegraphics[scale=.9]{pictures/gen-plate}
+\tikz{
+  \node[obs]                            (z) {$\theta$};
+  \node[latent, right=of z, yshift=+1cm] (a) {$w_1$};
+  \node[latent, right=of z, yshift=0cm]    (b) {$w_2$};
+  \node[latent, right=of z, yshift=-1cm] (c) {$w_3$};
+  \edge{z}{a,b,c};
+} ~~ 
+\tikz{
+  \node[obs]                            (z) {$\theta$};
+  \node[latent, right=of z, yshift=0cm] (a) {$w$};
+  \edge{z}{a};
+  \plate{za} {(z)(a)} {$V$} ;
+}
 \end{center}
 
 

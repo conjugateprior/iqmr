@@ -18,9 +18,14 @@ Session 1: TODO
 * stemming
 * collocations
 * concordances
-* simil structures
+* simil structures  <- in the lab?
 * categories
 
+* mechanical turk slides from session 3 into this one.
+
+* an exploratory lab with pictures
+collocs and categories with bara
+replicate a table from bara
 
 
 

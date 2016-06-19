@@ -15,7 +15,11 @@ Session 1: TODO
 * Draft preparation notes (also scp etc - monday night session)
 * Send out preparation notes
 * Fix references to materials in slide intro
-* 
+* stemming
+* collocations
+* concordances
+* simil structures
+* categories
 
 
 

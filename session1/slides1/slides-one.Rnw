@@ -47,8 +47,9 @@
 \graphicspath{{./pics/}}
 
 \title{Computer-assisted content analysis}
-\author{Will Lowe ~~Princeton University\\James Lo ~~ University of Southern California}
-\date{Part 1}
+\author{Will Lowe ~~\textcolor{gray}{Princeton University}\\
+        James Lo ~~ \textcolor{gray}{University of Southern California}}
+\date{}
 \begin{document}
 
 \maketitle
@@ -199,15 +200,14 @@ To \textsl{understand} a message the consumer (the hearer, reader, coder) uses t
 \end{frame}
 \begin{frame}[t]\frametitle{Communication}
 
-This is a stable (Searle, 1995) institutionally conventionalised (Lewis, 1969) but disruptable (Riker, 1996) communication process
-in which no finite set of words \textsl{uniquely} identifies any content (Quine, 1960; Davidson, 1977)
+This is a stable (Searle, 1995) conventional (Lewis, 1969) but disruptable (Riker, 1996) communication process in which no finite set of words \textsl{uniquely} identifies any content (Quine, 1960; Davidson, 1977)
 
 How to model this without having to solve the problems of linguistics (psychology, politics) first?
 
-Rely on: instrumentality, conventionalisation, randomness and reflexivity
+Rely on: instrumentality, randomness and reflexivity
 
 \end{frame}
-\begin{frame}[t]\frametitle{Instrumentality}
+\begin{frame}[t]\frametitle{Instrumentality from `them'}
 
 Language use is as a \textit{form of action} (Wittgenstein, 1953; Austin, 1975; Dawkins and Krebs, 1978)
 
@@ -218,12 +218,89 @@ Note the distinction between
 \itm `$W$ {is used to mean} $X$'
 \itz
 
-Content analyses to work better when language usage is \textit{stable} and \textit{instrumental}\ldots
-
 
 %%%% A few words about words
 
 \end{frame}
+
+\begin{frame}[t]\frametitle{Instrumentality from us}
+
+The secret of quantitative political text analysis:
+\ita
+\itm we aren't actually interested in words W
+\ita
+\itm that's for linguists\ldots
+\itz
+\itm we aren't actually interested in what's in your head $\theta$
+\ita
+\itm that's for psychologists\ldots
+\itz
+\itm
+\itm \textbf{except} as they help explain things we are interested in.  They are \textit{just data}.
+\itz
+
+\end{frame}
+\begin{frame}[t]\frametitle{Reflexivity}
+
+Politicians are often nice enough to talk as if they really do communicate this way
+
+\begin{quote}
+My theme here has, as it were, four heads. [\ldots] The first is articulated by the word ``opportunity'' [\ldots] the second is expressed by the word ``choice'' [\ldots] the third theme is summed up by the word ``strength'' [and] my fourth theme is expressed well by the word ``renewal''\\
+(M. Thatcher, 1979)
+\end{quote}
+
+[2, 7, 2, 8] in 4431 words
+
+\end{frame}
+
+\begin{frame}[t]\frametitle{Reflexivity}
+
+Or maybe just one theme\ldots
+
+\begin{quote}
+A couple months ago we weren't expected to win this one, you know that, right? We weren't\ldots Of course if you listen to the pundits, we weren't expected to win too much. And now we're winning, winning, winning the country -- and soon the country is going to start winning, winning, winning.
+\end{quote}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}[t]\frametitle{Scope conditions}
+
+Computer-assisted content analysis works best when language usage is \textit{institutionalized} 
+\ita
+\itm stable, conventionalized, and instrumental
+\itz
+Implicitly, we always condition on some institution, e.g.
+\ita
+\itm courts, legislatures, online political persuasion, sports or financial reporting, survey response
+\itz
+
+\pause
+(Notice that this inevitably creates a comparability problem)
+\pause
+
+In constrast to
+\ita
+\itm conversation, technical manuals
+\itz
+%\slide{Modeling}
+%
+%We will make use of formal models of the process from
+%\ita
+%\itm the computer sciences: via \textsl{information theory} as \textsl{noisy channel model}
+%\itm the social sciences: as an application of \textsl{measurement theory}
+%\itz
+%(and from British children as a game of `Chinese Whispers' a.k.a. Telephone)
+%
+%~\\
+%For data related reasons we actually \textit{have} to do something like this
+%
+
+\end{frame}
+
 \begin{frame}[t]\frametitle{Randomness}
 
 \textit{You} know the content of your beliefs (probably)
@@ -255,50 +332,8 @@ We treat this process as \textsl{random} because we don't know or care about all
 %
 
 \end{frame}
-\begin{frame}[t]\frametitle{Reflexivity}
 
-Politicians are often nice enough to talk as if they really communicate this way
-
-\ita
-\itm My theme here has, as it were, four heads. [\ldots] The first is articulated by the word ``opportunity'' [\ldots] the second is expressed by the word ``choice'' [\ldots] the third theme is summed up by the word ``strength'' [and] my fourth theme is expressed well by the word ``renewal''
-\itm (M. Thatcher, 1979)
-\itz
-
-[2, 7, 2, 8] in 4431 words
-
-\end{frame}
-\begin{frame}[t]\frametitle{More Instrumentality}
-
-The secret of quantitative political text analysis:
-\ita
-\itm we aren't actually interested in words W
-\ita
-\itm that's for linguists\ldots
-\itz
-\itm we aren't actually interested in what's in your head $\theta$
-\ita
-\itm that's for psychologists\ldots
-\itz
-\itm
-\itm \textbf{except} as they help explain things we are interested in.  They are \textit{just data}.
-\itz
-
-
-%\slide{Modeling}
-%
-%We will make use of formal models of the process from
-%\ita
-%\itm the computer sciences: via \textsl{information theory} as \textsl{noisy channel model}
-%\itm the social sciences: as an application of \textsl{measurement theory}
-%\itz
-%(and from British children as a game of `Chinese Whispers' a.k.a. Telephone)
-%
-%~\\
-%For data related reasons we actually \textit{have} to do something like this
-%
-
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Words as Data}
+\begin{frame}[t,fragile]\frametitle{Words as data}
 
 <<echo=FALSE>>=
 ## set up the UK manifestos as a corpus
@@ -312,14 +347,14 @@ The secret of quantitative political text analysis:
 load("data/uk-manifs-corpus.RData")
 @
 
-\begin{center}
-\includegraphics[scale=1.2]{pictures/obamawordle}
-\end{center}
+%\begin{center}
+%\includegraphics[scale=1.2]{pictures/obamawordle}
+%\end{center}
 
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Words as Data}
+\begin{frame}[t]\frametitle{Words as data}
 
 What do we know about words \textit{as data}?
 
@@ -332,20 +367,26 @@ They are \textit{difficult}
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Difficult Words}
+\begin{frame}[t,fragile]\frametitle{Difficult words}
 
+<<echo=FALSE,results="hide">>=
+subcorp <- subset(corp, year %in% c(2010, 2005) & party %in% c('Con', 'Lab', 'LD'))
+dfmsubcorp <- dfm(subcorp) 
+tab <- table(0==as.vector(dfmsubcorp["UK_natl_2010_en_Lab.txt",]))
+tab1 <- table(1==as.vector(dfmsubcorp["UK_natl_2010_en_Lab.txt",]))
+tab5 <- table(as.vector(dfmsubcorp["UK_natl_2010_en_Lab.txt",]) >= 5)
+@
 Example: Labour party (2010) manifesto compared to other parties in two elections\\
 ~\\
 \begin{tabular}{ll}
-High D. & 6343 word types in three manifestos \\
-Sparse & Of these, Labour only uses 3675 (58\%)\\
-Skewed &  Of these 1783 (49\%) words appear exactly once,\\
-&  and 2854 (78\%) appear <5 times
+High D. & \Sexpr{ncol(dfmsubcorp)} word types in two elections \\
+          & (adult native english speakers know $\sim$20-35,000) \\
+Sparse & Of these, Labour only uses \Sexpr{tab[2]}  
+  (\Sexpr{round(100*tab[2]/sum(tab), 2)}\%)\\
+Skewed &  Of these \Sexpr{tab1[2]} 
+  (\Sexpr{round(100*tab1[2]/sum(tab1), 2)}\%) words appear exactly once,\\
+&  and \Sexpr{tab5[2]} (\Sexpr{round(100*tab5[2]/sum(tab5), 2)}\%) appear <5 times
 \end{tabular}
-
-Average (non-academic) adult vocabulary contains about 10,000 words
-
-Labour manifesto uses about 37\% of commonly available types
 
 %\ite Need substantively-motivated exchangeability assumptions to get a grip
 
@@ -358,7 +399,7 @@ Labour manifesto uses about 37\% of commonly available types
 %\end{tabular}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Difficult Words}
+\begin{frame}[t]\frametitle{Difficult words}
 
 Words are not like your other data...
 
@@ -371,20 +412,98 @@ where $r_i$ is the frequency \textsl{rank} of word i and $\alpha\approx 1$
 Very fat tailed\ldots
 
 \end{frame}
-\begin{frame}[t]\frametitle{Zipf's Law}
+\begin{frame}[plain]
 
-\begin{center}
-\includegraphics[scale=1.2]{pictures/zipfy}
-\end{center}
+<<echo=FALSE,fig.height=4>>=
+csums <- sort(colSums(dfmsubcorp), decreasing=TRUE)
+par(mfrow=c(1,2))
+plot(csums, xlab="Rank", ylab="Count", pch=20, col="gray")
+plot(csums, xlab="Log rank", ylab="Log count", log="xy", pch=20, col="gray")
+par(mfrow=c(1,1))
+@
+
+%\begin{center}
+%\includegraphics[scale=1.2]{pictures/zipfy}
+%\end{center}
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Dealing with Difficult Words}
 
-For large amounts of text summaries are not enough. We need a \textit{model}.
+\begin{frame}[t,fragile]\frametitle{Dealing with difficult words}
 
-But we need to make some \textsl{exchangeability} assumptions or
-\textit{conditional independence} assumptions before we can even do that\ldots
+Frequency is inversely proportional to substantive interestingness
+
+<<t0,include=FALSE>>=
+library(xtable)
+options(xtable.floating = FALSE, latex.environments="center") ## not in a float
+@
+
+Bottom 10:
+
+{\footnotesize
+\begin{center}
+<<t1,echo=FALSE,results='asis'>>=
+tbl <- as.matrix(topfeatures(dfmsubcorp, decreasing=FALSE))
+colnames(tbl) <- "Count"
+print(autoformat(xtable(tbl)), booktabs=TRUE, latex.environments="center")
+@
+\end{center}
+}
+
+\end{frame}
+
+\begin{frame}[t,fragile]\frametitle{Dealing with difficult words}
+
+\centerline{Top 10}
+
+{\footnotesize
+\begin{center}
+<<t2,echo=FALSE,results='asis'>>=
+tbl <- as.matrix(topfeatures(dfmsubcorp))
+colnames(tbl) <- "Count"
+print(autoformat(xtable(tbl)), booktabs=TRUE)
+@
+\end{center}
+}
+
+\end{frame}
+
+\begin{frame}[t,fragile]\frametitle{Dealing with difficult words}
+
+\centerline{Top 10 minus the `standard' stopwords}
+
+{\footnotesize
+\begin{center}
+<<t3,echo=FALSE,results='asis'>>=
+tbl <- as.matrix(topfeatures(dfmsubcorp[,!(colnames(dfmsubcorp) %in% stopwords("english"))]))
+colnames(tbl) <- "Count"
+print(autoformat(xtable(tbl)), booktabs=TRUE)
+@
+\end{center}
+}
+
+\end{frame}
+
+\begin{frame}\frametitle{Dealing with difficult words}
+
+Removing stopwords, while standard in computer science, is not necessarily better\ldots 
+
+Example:
+\ita
+\itm Standard collections contain, `him`, `his`, `her' and `she'.
+\itm Words you'd want to keep when analyzing a abortion debates.
+\itz
+\end{frame}
+
+\begin{frame}[t]\frametitle{Dealing with difficult words}
+
+For large amounts of text summaries are not enough. 
+
+We need a \textit{model} to provide assumptions about 
+\ita
+\item \textit{equivalence}
+\itm \textit{exchangeability}
+\itz
 
 %Two words may
 %\begin{tabular}{ll}
@@ -394,22 +513,17 @@ But we need to make some \textsl{exchangeability} assumptions or
 %\textsl{express} hostility, identity, \ldots & (pragmatics)\\
 %\end{tabular}
 
-These are typically called the `bag of words'.  Specifically:
+The standard set of equivalence assumptions are the `bag of words'.  Specifically:
 
 \end{frame}
-\begin{frame}[t]\frametitle{Text As You Might Read or Hear It}
+\begin{frame}[t]\frametitle{Punctuation invariance}
 
-``As I look ahead I am filled with foreboding.  Like the Roman I seem to see `the river Tiber flowing with much blood'\ldots ''\\
+\begin{quote}As I look ahead I am filled with foreboding.  Like the Roman I seem to see `the river Tiber flowing with much blood'\ldots ''\\
 (E. Powell, 1968)
-
-
-\end{frame}
-\begin{frame}[t]\frametitle{Punctuation Invariance}
-
-``As I look ahead I am filled with foreboding.  Like the Roman I seem to see `the river Tiber flowing with much blood'\ldots ''\\
-(E. Powell, 1968)
+\end{quote}
+\pause
 \begin{center}
-\small
+{\small
 \begin{tabular}{ll}\toprule
 index & token\\ \midrule
 1 & as\\
@@ -431,15 +545,15 @@ index & token\\ \midrule
 6 & to\\
 7 & \ldots\\ \bottomrule
 \end{tabular}
-\normalsize
+}
 \end{center}
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Lexical Univocality}
+\begin{frame}[t]\frametitle{Lexical univocality}
 
 \begin{center}
-\small
+{\small
 \begin{tabular}{ll}\toprule
 type & count\\ \midrule
 as & 1\\
@@ -460,14 +574,14 @@ seem & 1\\
 to & 1\\
 \ldots & \ldots\\ \bottomrule
 \end{tabular}
-\normalsize
+}
 \end{center}
 
 \end{frame}
 \begin{frame}[t]\frametitle{Order invariance}
 
 \begin{center}
-\small
+{\small
 \begin{tabular}{rlll}\toprule
 &         & unit    & \\ \midrule
 &         & `doc' 1 & `doc' 2 \\ \midrule
@@ -483,137 +597,163 @@ type      & ahead   & 1    & 0 \\
 & to      & 0    & 1\\
 & \ldots  & \ldots & \ldots \\ \bottomrule
 \end{tabular}
-\normalsize
+}
 \end{center}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Count Data}
+\begin{frame}[t]\frametitle{Count data}
 
-Yes, we have turned a corpus into a contingency table.
+We have turned a corpus into a \textit{contingency table}.
+\ita
+\itm (Or a term-document / document-term / document-feature matrix, in the lingo)
+\itz
+
+\pause
 
 ~\\
 Everything you learned in your categorical data analysis course applies
 \ita
-\itm except that some variables of interest: $\theta$ are \textit{not observed}
+\itm except that the variables of interest: $\theta$ are \textit{not observed}
 \itz
 
 %%%%%%%%%%%
 
 \end{frame}
-\begin{frame}[t]\frametitle{Down To Business}
+\begin{frame}[t]\frametitle{What we want}
 
 \begin{center}
-\small
+{\small
 \begin{tabular}{rllllllllll}\toprule
-& ahead & am & am & i & like & look &  & \textcolor{gray}{content} \\ \midrule
-doc 1  & 1     & 1  & 1  & 2 & 0    & 1    & \ldots & \textcolor{gray}{$\theta_1$} \\
-doc 2  & 0     & 0  & 0  & 1 & 1    & 0    & \ldots & \textcolor{gray}{$\theta_2$} \\ \bottomrule
+      & ahead & am & i & like & look & & \\ \midrule
+doc 1 & 1     & 1  & 2 & 0    & 1    & \ldots & \textcolor{gray}{$\theta_{doc1}$} \\
+doc 2 & 0     & 0  & 1 & 1    & 0    & \ldots & \textcolor{gray}{$\theta_\text{doc2}$} \\ \midrule
+      & \textcolor{gray}{$\beta_\text{ahead}$}
+      & \textcolor{gray}{$\beta_\text{am}$}
+      & \textcolor{gray}{$\beta_\text{i}$}
+      & \textcolor{gray}{$\beta_\text{like}$}
+      & \textcolor{gray}{$\beta_\text{look}$} \\ \bottomrule
 \end{tabular}
-\normalsize
+}
 \end{center}
 ~\\\
 
-For each research problem involving content analysis we need to ask:
+%For each research problem involving content analysis we need to ask:
+%\ita
+%\itm What \textit{structure} $\theta$ has
+%\itm What is \textit{observed} vs what is inferred
+%\itm What the \textit{relationship} is between $\theta$ and the words i.e. the model
+%\itz
+
+\end{frame}
+\begin{frame}[t]\frametitle{What is this content $\theta$?}
+
+What is the content in content analysis?
 \ita
-\itm What \textit{structure} $\theta$ has
-\itm What \textit{modeling strategy} to take
-\itm What the \textit{relationship} is between $\theta$ and the words (i.e. the model)
+\item Documents are \textit{mixtures of categories}: policy agenda of a speech
+\item Documents have \textit{categories}: topic of a press release
+\item Documents have \textit{positions}: ideological position of a legal brief
 \itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{The Structure of $\theta$}
 
+\begin{frame}[plain]
+
+\centerline{\includegraphics[scale=.3]{pictures/tad-picture}}
+
+\end{frame}
+
+\begin{frame}[plain]
+
+\centerline{\includegraphics[scale=.3]{pictures/measurement-validity}}
+
+\end{frame}
+
+\begin{frame}[t]\frametitle{Commitment issues}
+
+What are we committing to in this quantitative content analysis framework?
+
+Probably less than you think\ldots
+
+Assumptions:
 \ita
-\itm \textsl{Categorical} structure: topics of newspaper articles or speeches\\Data type: nominal or ordinal (category labels)
-\itm \textsl{Dimensional} structure: In spatial politics well-ordered preferences imply distances in an ideological space\\Data type: Real numbers
-\itm \textsl{Network} structure: citation analyses, social network analysis\\Data type: nodes and arcs
-\itm \textsl{Predicative} structures: assertions about the beliefs of other political actors\\Data type: ??
+\itm $\theta$ is socially/institutionally constructed: only linguists care about the real thing
+\itm There are no differences in $\theta$ that make no verbal difference (basically Pragmatism)
 \itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{Statistical Models of Words: Poisson}
+
+\begin{frame}[t]\frametitle{Theory / measurement separation}
+
+Discourse analytic approaches tend to 
+\textit{tightly couple} theory and `measurement' components
+\ita
+\itm (This is contingent\ldots)
+\itz
+We will try as far as possible to separate them\ldots
+\ita
+\itm Our concerns: validity, stability
+\itm Rely on: transparency, reliability, replicability
+\itz
+\end{frame}
+
+%\begin{frame}[plain]
+%\centerline{\includegraphics[scale=.1]{pictures/distant-reading}}
+%\end{frame}
+
+\begin{frame}[t]\frametitle{Statistical models of words: Poisson}
 
 Word counts/rates are conditionally Poisson:
 \begin{align*}
-P(W_j) &~=~ \text{Poisson}(\textcolor{red}{\lambda_{j}})\\
-&~=~ \frac{\textcolor{red}{\lambda_{j}}^{W_{j}}~e^{-\textcolor{red}{\lambda}}}{W_{j}!}
+W_j &~\sim~ \text{Poisson}(\textcolor{bloodred}{\lambda_{j}})
 \end{align*}
 
 Expected $W_{j}$ (and its variance) is $\lambda_{j}$
 
-Models are mostly proportional because multiplicative
+Models are naturally \textit{multiplicative}.  Rates increase by 10\%, decrease by 20\% 
 ~\\
 Conditional on what?  Typically on $\theta$
 
 \end{frame}
-\begin{frame}[t]\frametitle{Statistical Models of Words: Poisson}
+\begin{frame}[plain]
 
-\centerline{\includegraphics[scale=.2]{pictures/geiger_counter}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Statistical Models of Words: Poisson}
-
-These models are going to think of content as anything that systematically alters word and topic rates
-
+\centerline{\includegraphics[scale=.4]{pictures/geiger-counter}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Statistical Models of Words: Multinomial}
 
-For fixed document length counts are conditionally Multinomial:
+\begin{frame}[t]\frametitle{Statistical models of words: Multinomial}
+
+For fixed document lengths, counts are conditionally Multinomial:
 \begin{align*}
-P(W_{1}\ldots W_{V}) &~=~ \text{Multinomial}(W_{1}\ldots W_{V}; \textcolor{red}{\pi_{1}}\ldots\textcolor{red}{\pi_{V}}, N_i)\\
-&~~~\frac{N!}{W_{1}!\ldots W_{V}!} \prod^{V}_{j} \textcolor{red}{\pi_{j}}^{W_{j}}
+W_{1}\ldots W_{V} &~\sim~ \text{Multinomial}(W_{1}\ldots W_{V}; \textcolor{bloodred}{\pi_{1}}\ldots\textcolor{bloodred}{\pi_{V}}, N_i)
 \end{align*}
+
 Expected $W_{i}$ is $N\pi_{i}$
 
 Covariance of $W_{i}$ and $W_{j}$ is $-N \pi_{i}\pi_{j}$ (budget constraint)
 
 \end{frame}
-\begin{frame}[t]\frametitle{Statistical Models of Words: Multinomial}
+\begin{frame}[plain]
 
-\centerline{\includegraphics[scale=1]{pictures/20-sided-die}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Statistical Models of Words: Multinomial}
-
-We are going to think about \textit{content topics} as like this
+\centerline{\includegraphics[scale=.6]{pictures/20-sided-die}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{We build measurement devices}
 
-\centerline{\includegraphics[scale=.2]{pictures/geiger_counter}}
+\begin{frame}[t]\frametitle{Implication: Absence is an observation}
 
+Don't be fooled\ldots
+\ita
+\itm Statistical models of text deal with \textit{absence} as well as presence: zeros count
+\itm Absence is informative \textit{to the extent it is surprising}
+\itm Surprise implies expectations; expectations imply a model.
+\itz
 \end{frame}
-\begin{frame}[t]\frametitle{(Almost) the big picture}
 
-\centerline{\includegraphics[scale=.5]{pictures/tad-picture}}
+%%%%%%
 
-\end{frame}
-\begin{frame}[t]\frametitle{Really the big picture}
 
-\centerline{\includegraphics[scale=.45]{pictures/measurement-validity}}
+\begin{frame}[t]\frametitle{Looking ahead: Modeling strategies}
 
-%\slide{Functional form}
-%
-%What function relates $\theta$ to the words?\\(via the $\lambda$s and $\pi$s)
-%
-%Depends on the modeling strategy\ldots
-%
-%Regression / classification style:
-%\begin{equation*}
-%\theta \Leftarrow W_1 \ldots W_V
-%\end{equation*}
-%
-%Measurement model style:
-%\begin{equation*}
-%W_1 \ldots W_V \Leftarrow  \theta
-%\end{equation*}
-%
-
-\end{frame}
-\begin{frame}[t]\frametitle{Modeling strategies}
-
-We can model the contents of a word frequency matrix in several ways
+We can model the content of a term-document matrix in several ways
 \ita
 \itm $\theta \longleftarrow \text{words}$: Go for $P(\theta \mid \text{words})$ \textit{directly}
 \ita
@@ -630,80 +770,12 @@ P(\theta \mid \text{words}) = \frac{P(\text{words} \mid \theta)P(\theta)}{\sum^\
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Modeling Strategies}
-
-These strategies correspond to classification, classical content analysis and topic models, and scaling models
-
-That is to say
-\ita
-\itm the next three days
-\itz
-
-\end{frame}
-\begin{frame}[t]\frametitle{Commitment issues}
-
-What are we committing to in this quantitative content analysis framework?
-
-Probably less than you think\ldots
-
-Assumptions:
-\ita
-\itm $\theta$ is socially / institutionally constructed: only linguists care about the `real' thing
-\ita
-\itm Note: this does not rule out being objectively correct -- there is a fact about the worth of money in my pocket
-\itz
-\itm There are no differences in $\theta$ that make no verbal difference (basically Pragmatism)
-\itz
-
-\end{frame}
-\begin{frame}[t]\frametitle{Absence is an observation}
-
-Don't be fooled\ldots
-\ita
-\itm Statistical models of text deal with absence as well as presence: zeros count
-\itm Absence is informative \textit{to the extent it is surprising}
-\itm Surprise implies expectations; expectations imply a model (Kant \textit{and} contemporary neuroscience)
-\itz
-
-\newpage
-
-\centerline{\includegraphics[scale=.12]{pictures/distant-reading}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Theory measurement separation}
-
-Discourse analytic approaches tend to \textit{tightly couple} theory and `measurement' components
-\ita
-\itm (This is contingent\ldots)
-\itz
-We will try as far as possible to separate them\ldots
-\ita
-\itm Our concerns: validity, stability
-\itm Can rely on: transparency, reliability, replicability
-\itz
 
 
-
-\end{frame}
-\begin{frame}[t]\frametitle{Menu}
-
-Session 0: How could this possibly work?
-
-Session 1: Dictionary-based `classical' content analysis and topic models
-\ita
-\itm Content analysis as a model
-\itm Applications
-\itm Measurement error and how to avoid it
-\itm Fun (and trouble) with topic models
-\itz
-
-Session 2: Classification and evaluation
-
-Session 3: Scaling Models
-
+\begin{frame}[plain]
 %%%%%% CCA here
-
 \end{frame}
+
 \begin{frame}[t]\frametitle{Classical content analysis}
 
 \textsl{Content} is, or is constructed from, \textsl{categories} e.g.
@@ -722,35 +794,35 @@ We are typically interested in them for
 \itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{Talking Like a Newspaper}
+\begin{frame}[t]\frametitle{Talking Like a newspaper}
 
-\centerline{\includegraphics[scale=.8]{pictures/gamson-modigliani-frames-opinion}}
+\centerline{\includegraphics[scale=.4]{pictures/gamson-modigliani-frames-opinion}}
 Gamson and Modigliani (1989)
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Talking like a Candidate}
+\begin{frame}[t]\frametitle{Talking like a candidate}
 
-\centerline{\includegraphics[scale=.7]{pictures/kerry-blogs}}
-Hopkins and King (2010)
+\centerline{\includegraphics[scale=.5]{pictures/kerry-blogs}}
+%Hopkins and King (2010)
 
 \end{frame}
-\begin{frame}[t]\frametitle{Talking like a Terrorist}
+\begin{frame}[t]\frametitle{Talking like a terrorist}
 
 \begin{center}
-\includegraphics[scale=.7]{pictures/binladen}
+\includegraphics[scale=.4]{pictures/binladen}
 \end{center}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Talking Like the Commission}
+\begin{frame}[t]\frametitle{Talking like the European Commission}
 
-\centerline{\includegraphics[scale=.75]{pictures/radulova-frames2}}
+\centerline{\includegraphics[scale=.3]{pictures/radulova-frames2}}
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Talking About Drugs}
+\begin{frame}[t]\frametitle{Talking About drugs}
 
-\centerline{\includegraphics[scale=.75]{pictures/drugs}}
+\centerline{\includegraphics[scale=.4]{pictures/drugs}}
 
 The Congressional Bills Project website (retrieved 2010)
 %
@@ -780,7 +852,7 @@ The Congressional Bills Project website (retrieved 2010)
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Classical Content Analysis}
+\begin{frame}[t]\frametitle{Classical content analysis}
 
 Categories are
 \ita
@@ -788,17 +860,26 @@ Categories are
 \itm representable as assignments of a K-valued category membership variable $Z$ to each word
 \itz
 
+\end{frame}
+\begin{frame}[plain]
+\centerline{\includegraphics[scale=.4]{pictures/topics2}}
+\end{frame}
+
+\begin{frame}[t]\frametitle{Classical content analysis}
+
+Every word $W$ has an category $W$ 
+
+The word to category mapping $\beta$ is provided by the researcher as a \textit{content analysis dictionary}
+
+The content of a document $\theta$ is the proportion (or count) of each category
+
 ~\\
-\centerline{\includegraphics[scale=.6]{pictures/topics2}}
+\centerline{\includegraphics[scale=.5]{pictures/new-topics-ca.png}}
 
-
-\end{frame}
-\begin{frame}[t]\frametitle{Classical Content Analysis}
-
-\centerline{\includegraphics[scale=.9]{pictures/new-topics-ca}}
+\centerline{How content is generated and what we claim to know}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Content Analysis Dictionary}
+\begin{frame}[t]\frametitle{Content analysis dictionary}
 
 \small
 
@@ -822,25 +903,31 @@ from Laver and Garry's (2000) dictionary
 \end{frame}
 \begin{frame}[t]\frametitle{As a posterior: P(Z | W)}
 
-Translation:  For each word:\\
+Dictionary is an explicit and very \textit{certain} statement of $P(Z \mid W)$
+
 \begin{center}
-\begin{tabular}{lcc} \toprule
-& $P(Z=\text{\textsl{state reg}}\mid \text W)$ & $P(Z=\text{\textsl{market econ}} \mid \text W)$ \\ \midrule
-\text{age} & 1 & 0 \\
-\text{benefit} & 1 & 0 \\
-\ldots & \ldots & \ldots\\
-\text{assets} & 0 & 1 \\
-\text{bid} & 0 & 1\\
-\ldots & \ldots & \ldots\\ \bottomrule
+\begin{tabular}{rlcc} \toprule
+ & Z
+ & state reg & market econ\\ \midrule
+W & \text{age} & 1 & 0 \\
+  & \text{benefit} & 1 & 0 \\
+  & \ldots & \ldots & \ldots\\
+  & \text{assets} & 0 & 1 \\
+  & \text{bid} & 0 & 1\\
+  & \ldots & \ldots & \ldots\\ \bottomrule
 \end{tabular}
 \end{center}
-
-
 \end{frame}
-\begin{frame}[t]\frametitle{\ldots from a underspecified likelihood: P(W | Z)}
 
-Note that the \textit{only} way this could be true is if
+\begin{frame}[t]\frametitle{\ldots from a underspecified likelihood}
+
+The \textit{only} way this could be true is if the data had been generated like 
+ 
+
 \begin{center}
+$P(W \mid Z)$
+~\\
+
 \begin{tabular}{rcc} \toprule
 & \textsl{state reg} & \textsl{market econ} \\ \midrule
 $P(\text{age} \mid \text{Z})$ & a & \textbf{0} \\
@@ -851,8 +938,6 @@ $P(\text{bid}  \mid  \text{Z})$& \textbf{0} & d\\
 \ldots & \ldots & \ldots\\ \bottomrule
 \end{tabular}
 \end{center}
-where a, b, c, and d > 0
-{and} all categories are equally likely: $P(k)=1/K$
 
 
 \end{frame}
@@ -867,8 +952,7 @@ and estimate category relative \textit{proportions} using
 \hat{\theta}_k &= \frac{Z_k}{\sum^K_{j} Z_j}
 \end{align*}
 
-When $\theta$ is a set of multinomial parameters, \textit{and the model assumptions are correct},
-this could be a reasonable estimator
+(When $\theta$ is a set of multinomial parameters, \textit{and the model assumptions are correct}, this could be a reasonable estimator)
 
 \end{frame}
 \begin{frame}[t]\frametitle{Reconstruction}
@@ -1020,8 +1104,7 @@ Different measures correspond to different choices of $B$.
 \end{frame}
 \begin{frame}[t]\frametitle{Ratios: How 'New' was New Labour?}
 
-Was the Conservative party in 1992 more or less for state intervention than 'New' Labour in
-1997?
+Was the Conservative party in 1992 more or less for state intervention than 'New' Labour in 1997?
 
 Compare instances of \textsl{state reg} and \textsl{market econ} in the manifestos\\
 \begin{center}
@@ -1089,10 +1172,9 @@ Conservative manifesto only generates 49\% as many \textsl{state reg} words as L
 Equivalently Labour generates them about \textsl{twice} as often
 
 \end{frame}
-\begin{frame}[t]\frametitle{Extensions: Regularised log odds}
+\begin{frame}[t]\frametitle{(Regularised) log ratios}
 
-\centerline{\includegraphics[scale=.2]{pictures/fightin1}}
-
+\centerline{\includegraphics[scale=.1]{pictures/fightin1}}
 
 
 %\slide{What not to do with counts: Drugs policy}
@@ -1105,58 +1187,38 @@ Equivalently Labour generates them about \textsl{twice} as often
 Example: district vs party focus
 
 ~\\
-\centerline{\includegraphics[scale=.8]{pictures/district-party-focus}}
+\centerline{\includegraphics[scale=.4]{pictures/district-party-focus}}
 
 Data: [\textsl{district words}, \textsl{party words}] (Kellerman \& Proksch, MS)
 
 Here, a \textit{logged ratio} of two categories
 
 \end{frame}
-\begin{frame}[t]\frametitle{Content as something to explain (Sullivan and Lowe 2007)}
+\begin{frame}[t]\frametitle{Content as something to explain}
 
-\centerline{\includegraphics[scale=.5]{pictures/indep-ref}}
+\centerline{\includegraphics[scale=.4]{pictures/indep-ref}}
 
 \textsl{independence words} $\leftarrow$ audience + offset(doc length)
 
 \end{frame}
-\begin{frame}[t]\frametitle{What to report?}
 
-Not all choices are constant or comparable\ldots
-
-{\small
-\begin{center}
-\begin{tabular}{ll} \toprule
-Quantity & Comparability\\ \midrule
-Count & No \\
-Proportion of words & Yes\\
-Proportion of category matches & Yes\\
-Rate per B words & Yes\\
-Rate per sentence / paragraph & No\\
-Difference of proportions & Yes\\
-(Logged) ratio of counts & Yes\\
-Significance of tests & No!\\
-\bottomrule
-\end{tabular}
-\end{center}
-\normalsize}
-
-(if length is uninformative \& category probability constant)
-
-
-\end{frame}
-\begin{frame}[t]\frametitle{OK, how do I make such an instrument?}
+\begin{frame}[t]\frametitle{OK, how do I make such a dictionary?}
 
 Maximise measurement validity
 
-Minimise \textsl{measurement error}
+Minimise \textit{measurement error}
 
 ~\\
+\pause
 (Sell high, buy low)
-\newpage
-\centerline{\includegraphics[scale=.7]{pictures/wickeroth-strategie-der-steine-3-2007}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+\begin{frame}[plain]
+
+\centerline{\includegraphics[scale=.4]{pictures/wickeroth-strategie-der-steine-3-2007}}
+\end{frame}
+
+\begin{frame}[t]\frametitle{The source of measurement error}
 
 Measurement error in classical content analysis is primarily failure of \textit{this} assumption:
 \begin{center}
@@ -1181,33 +1243,33 @@ Measurement error in classical content analysis is primarily failure of \textit{
 %\itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+\begin{frame}[t]\frametitle{Consequences of measurement error}
 
 What are the effects of measurement error in category counts?
 
 \ita
-\itm Being directly wrong, e.g.
+\item Being directly wrong, e.g.
 \ita
-\itm My estimated rates are too \textit{low} (bias)
-\itm Some of my estimates are more biased than others
+\itm Estimated rates are too \textit{low} (bias)
+\itm Some of estimates are more biased than others
 \itz
-\itm Being indirectly wrong, e.g.
+\item Being \textit{indirectly} wrong, e.g.
 \ita
-\itm My carefully constructed left-right measure is too \textit{centrist}
-\itm My effect sizes appear to be much too small
+\itm Subtractive or ratio left-right measures are too \textit{centrist}
 \itz
 \itz
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+\begin{frame}[t]\frametitle{Measurement error: example}
 
 Assume
 \ita
-\itm Vocabulary of only two words `benefit' and `assets'
+\itm a vocabulary of only two words `benefit' and `assets'
 \itm a \textit{subtractive} measure of position: $Z_{\text{\textsl{market econ}}} - Z_{\text{\textsl{state reg}}}$
 \itz
-Then
+
+Then we hope that
 \begin{center}
 \begin{tabular}{lcc} \toprule
 & $P(Z=\text{\textsl{state reg}}\mid \text W)$ & $P(Z=\text{\textsl{market econ}} \mid \text W)$ \\ \midrule
@@ -1218,26 +1280,26 @@ Then
 \end{center}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+% \begin{frame}[t]\frametitle{Measurement Error}
+% 
+% implies the \textbf{confusion matrix}
+% 
+% \begin{center}
+% \begin{tabular}{lrll} \toprule
+% & & True & \\\midrule
+% & & \textsl{state reg} & \textsl{market econ} \\ \midrule
+% Observed & \textsl{state reg}  & 1      & 0 \\
+% & \textsl{market econ}  & 0      & 1 \\ \bottomrule
+% \end{tabular}
+% \end{center}
+% 
+% 
+% 
+% 
+% \end{frame}
+\begin{frame}[t]\frametitle{Measurement error: example}
 
-implies the \textbf{confusion matrix}
-
-\begin{center}
-\begin{tabular}{lrll} \toprule
-& & True & \\\midrule
-& & \textsl{state reg} & \textsl{market econ} \\ \midrule
-Observed & \textsl{state reg}  & 1      & 0 \\
-& \textsl{market econ}  & 0      & 1 \\ \bottomrule
-\end{tabular}
-\end{center}
-
-
-
-
-\end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
-
-Example: What if $P(W \mid Z)$ slips to
+but what if\ldots
 \begin{center}
 \begin{tabular}{rcc} \toprule
 & \textsl{state reg} & \textsl{market econ} \\ \midrule
@@ -1247,38 +1309,54 @@ $P(\text{assets} \mid  \text{Z})$ & 0.3 & 0.8 \\ \bottomrule
 \end{center}
 
 ~\\
-P(W=`asset' | Z=\textsl{state reg}) > 0 so
+P(W=`asset' | Z=\textsl{state reg}) > 0 
+
+so
 
 P(Z=\textsl{state reg} | W=`asset') < 1
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+\begin{frame}[t]\frametitle{Measurement error: example}
 
-When $Z_{\text{\textsl{market econ}}}=10$ and $Z_{\text{\textsl{state reg}}}=20$ the true difference is
+Assume
 \ita
-\itm (10-20)/(10+20) = -0.33
+\itm $Z_{\text{\textsl{market econ}}} = 10$ 
+\itm $Z_{\text{\textsl{state reg}}}=20$ 
 \itz
-Under the perfect measurement model this would be realised (on average) as
+
+Then the \textit{true} difference is
+\begin{equation}
+\frac{(10-20)}{(10+20)} = -0.33
+\end{equation}
+
+Under perfect measurement this would be realised on average as
 \ita
-\itm 20 `benefit's and 10 `assets'
+\itm 20 `benefit'
+\itm 10 `assets'
 \itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+\begin{frame}[t]\frametitle{Measurement error: example}
 
-Under our \textit{imperfect} measurement it is realised (on average) as
+Under \textit{imperfect} measurement it is realised on average as
 \ita
-\itm 16 `benefit's (14 from \textsl{state reg} but 2 from \textsl{market econ}) and
-\itm 14 `assets' (8 from \textsl{market econ} but 6 from \textsl{state reg})
+\itm 16 `benefit'\\
+(14 from \textsl{state reg} but 2 from \textsl{market econ}) 
+\itm 14 `assets'\\ 
+(8 from \textsl{market econ} but 6 from \textsl{state reg})
 \itz
 
 \end{frame}
-\begin{frame}[t]\frametitle{Measurement Error}
+\begin{frame}[t]\frametitle{Measurement error: example}
 
-The proportional difference measure is now (14-16)/(14+16) = -0.07
-\ita
-\itm Apparently much closer to the centre, but only because of measurement error
-\itz
+The proportional difference measure is now 
+\begin{equation}
+\frac{(14-16)}{(14+16)} = -0.07
+\end{equation}
+
+Apparently much closer to the centre, but only because of measurement error
+
+\pause
 
 \textit{All} relative measures will have this problem
 
@@ -1286,101 +1364,111 @@ The proportional difference measure is now (14-16)/(14+16) = -0.07
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{In Action (Laver and Garry 2000)}
+\begin{frame}[t]\frametitle{In action (Laver and Garry 2000)}
+\centerline{\includegraphics[scale=.4]{pictures/lg-shrinkage}}
+\end{frame}
 
-\centerline{\includegraphics[scale=.7]{pictures/lg-shrinkage}}
+\begin{frame}[t]\frametitle{In action with people, not dictionaries}
 
+\centerline{\includegraphics[scale=.5]{pictures/slava-rile3}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{In Action (Mikhaylov et al. 2012)}
+% \begin{frame}[t]\frametitle{In action with people not dictionaries}
+% 
+% \centerline{\includegraphics[scale=.6]{pictures/slava-rile2}}
+% 
+% \end{frame}
+\begin{frame}[t]\frametitle{Attentuation (Mikhaylov et al. 2012)}
 
-\centerline{\includegraphics[scale=.9]{pictures/slava-rile3}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{In Action (Mikhaylov et al. 2012)}
-
-\centerline{\includegraphics[scale=.7]{pictures/slava-rile2}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{In Action (Mikhaylov et al. 2012)}
-
-\centerline{\includegraphics[scale=.6]{pictures/slava-rile}}
-
-
-\newpage
-\centerline{\includegraphics[scale=1]{pictures/confusionoftongues.png}}
-
+\centerline{\includegraphics[scale=.4]{pictures/slava-rile}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Solutions}
 
-\newpage
 
-\centerline{\includegraphics[scale=.7]{pictures/praying-skeleton}}
+%\centerline{\includegraphics[scale=1]{pictures/confusionoftongues.png}}
+
+\begin{frame}[t]\frametitle{Solutions: A quasi-theological approach}
+
+\pause
+
+\centerline{`Thoughts and prayers'}
+
+\centerline{\includegraphics[scale=.25]{pictures/praying-skeleton}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Solutions: Try to Avoid it}
+\begin{frame}[t]\frametitle{Solutions: avoid it}
 
-A non-intuitive fact about content dictionaries:
+An often non-obvious fact about content dictionaries:
 \ita
-\itm \textbf{Precision}: proportion of words used the way your dictionary assumes
-\itm \textbf{Recall}: proportion of words used that way that are in your dictionary
+\itm \textit{precision}: proportion of words used the way your dictionary assumes
+\itm \textit{recall}: proportion of words used that way that are in your dictionary
 \itz
 \textit{always} trade-off\ldots
 
 \end{frame}
-\begin{frame}[t]\frametitle{Intuition: Precision and Recall}
+\begin{frame}[t]\frametitle{Aside: precision and recall}
 
-\centerline{\includegraphics[scale=1.7]{pictures/schematic-vocab}}
+Every field reinvents this distinction:
+\ita
+\itm precision and recall
+\itm specificity and sensitivity
+\itm users and producer's accuracy
+\itm type 1 and type 2 error
+\itm sins of omission and sins of commission
+\itz
+
+
+
+%\centerline{\includegraphics[scale=1.7]{pictures/schematic-vocab}}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Solutions: Try to Avoid it}
+\begin{frame}[t]\frametitle{Tools to evaluate items}
 
-Keyword in context analyses allow you to scan all contexts of a word
+Keyword in context analyses (KWIC) allow you to scan all contexts of a word
 \ita
 \itm How many of them are the sense or usage you want?
 \itz
 
-Compromise: KWIC analyses allow you to scan all contexts of a word
-\ita
-\itm What proportion of tokens are the sense or usage you want?
-\itz
-
-\newpage
-
-\centerline{\includegraphics[scale=.7]{pictures/yk-measurement-error}}
-
 \end{frame}
-\begin{frame}[t]\frametitle{Recovering from Measurement Error: Model it (1)}
 
-We can recover from measurement error if we know enough about it (Hopkins and King 2010, King and Liu 2007)
+\begin{frame}[plain,fragile]
 
-Coder training provides information about how a category proportion estimate changes as coders get better
-
-Intuition:
-\ita
-\itm Model this trajectory, then extrapolate it forwards\ldots
-\itz
-
-In regression contexts this is called SIMEX (Cook and Stefanski, 1995).
-
+{\tiny
+<<echo=FALSE,results='asis'>>=
+kk <- kwic(subcorp, "benefit*", window=5)
+kk <- kk[grepl("2005", kk$docname),]
+xtable(as.data.frame(kk)[1:22,3:5])
+@
+}
 \end{frame}
-\begin{frame}[t]\frametitle{Recovering from Measurement Error: Model It (1)}
 
-\centerline{\includegraphics[scale=.8]{pictures/simex-proportion-hopkins-king}}
+%\centerline{\includegraphics[scale=.7]{pictures/yk-measurement-error}}
 
-\end{frame}
-\begin{frame}[t]\frametitle{Recovering from Measurement Error: Model It (2)}
+% \begin{frame}\frametitle{Attitudes towards (measurement) error}
+% \centerline{\includegraphics[scale=0.4]{pictures/beatings-will-continue}}
+% \end{frame}
+% 
+% \begin{frame}\frametitle{Attitudes towards (measurement) error}
+% 
+% \begin{quote}
+% The quality of mercy is not strained.
+% It droppeth as the gentle rain from heaven
+% Upon the place beneath. It is twice blessed:
+% It blesseth him that gives and him that takes.\\
+% (William Shakespeare)
+% \end{quote}
+% 
+% \end{frame}
+
+\begin{frame}[t]\frametitle{Measurement error: Confession and forgiveness}
 
 Under measurement error
 \ita
-\itm A observed category proportions are generated by a \textit{mixture} of categories
+\itm A observed category proportions are generated 
+by a \textit{mixture} of categories
 \itm The weights for this mixture are the true category proportions
 \itz
-Given the confusion matrix (or the true generation probabilities), we can \textit{infer} the true proportions
-
-\end{frame}
-\begin{frame}[t]\frametitle{Recovering from Measurement Error: Model It (2)}
+Given the error matrix, we can \textit{infer} the true proportions
 
 Intuition
 \[
@@ -1390,254 +1478,266 @@ has the form
 \[
 Y = X\theta
 \]
+
+\end{frame}
+\begin{frame}[t]\frametitle{Measurement error: model it}
+
+In our previous example
 \[
 \left[\begin{array}{c}0.53 \\0.46\end{array}\right] =
 \left[\begin{array}{cc}0.7 & 0.2 \\0.3 & 0.8\end{array}\right] \left[\begin{array}{c}\theta_1 \\\theta_2\end{array}\right]
 \]
 
-is solved as [0.67, 0.33]
+is solved exactly as [0.66, 0.33]
+
+by \textit{inverting} the error matrix
 
 \end{frame}
-\begin{frame}[t]\frametitle{Recovering from Measurement Error: Model It (2)}
+\begin{frame}[t]\frametitle{Measurement error: model it}
 
-Applied to Mikhaylov error data:
+Applied to Mikhaylov human error data:
 
-If $(P, T)$ is
-
+~\\
+{\small
+\centerline{
 \begin{tabular}{rrrr}
-\hline
+\toprule
 & L & N & R \\
-\hline
-L & 430.00 & 188.00 & 100.00 \\
-N & 254.00 & 712.00 & 193.00 \\
-R & 41.00 & 115.00 & 650.00 \\
-\hline
+\midrule
+L & 430 & 188 & 100 \\
+N & 254 & 712 & 193 \\
+R & 41 & 115 & 650 \\
+\bottomrule
 \end{tabular}
-
-\newpage
-
-So $P(C \mid T)$ is
-
+~~~~~$\Longrightarrow$~~~~~
 \begin{tabular}{rrrr}
-\hline
+\toprule
 & L & N & R \\
-\hline
+\midrule
 L & 0.59 & 0.19 & 0.11 \\
 N & 0.35 & 0.70 & 0.20 \\
 R & 0.06 & 0.11 & 0.69 \\
-\hline
+\bottomrule
 \end{tabular}
+}
+}
 
+~\\
 Implication:
 
-If [L, N, R] = [20, 0, 10]
-\ita
-\itm we would expect to see about [13, 9, 8]
-\itz
+If [L, N, R] were [20, 0, 10] we would \textit{expect} to see about [13, 9, 8]
 
-\newpage
+
+\end{frame}
+\begin{frame}[t]\frametitle{Measurement error: model it}
+
 Invert $P(C \mid T)$:
 
-\begin{tabular}{rrrr}
-\hline
+~\\
+{\small
+\centerline{\begin{tabular}{rrrr}
+\toprule
 & L & N & R \\
-\hline
+\midrule
 L & 2.00 & -0.50 & -0.16 \\
 N & -1.00 & 1.75 & -0.37 \\
 R & 0.00 & -0.25 & 1.52 \\
-\hline
-\end{tabular}
-
+\bottomrule
+\end{tabular}}
+}
 and multiply to get an estimate of the true counts\ldots
 
 Example:
 \ita
-\itm Given counts [13, 9, 8] we get
-\itm [L 20.19, -0.16,  9.98] $\approx$ [20, 0, 10]
+\itm [13, 9, 8] ~~$\longrightarrow$~~ [20.19, -0.16,  9.98] ~~$\approx$~~ [20, 0, 10]
 \itz
 
 \end{frame}
 \begin{frame}[t]\frametitle{Notes:}
 
+Some patterns of measurement error cannot be corrected for\ldots
+
+These results hold \textit{in expectation}.
 \ita
-\itm This is all \textit{in expectation}.
 \itm We are ignoring measurement error \textit{in the error matrix}
-\itm This method may violate sensible prior information
-\itm Works for anything that makes errors (human or machine)
 \itz
+This is a linear method that may violate prior constraints
+
+~\\
+
+Works for \textit{anything that makes errors} (human or machine)
 
 \end{frame}
-\begin{frame}[t]\frametitle{Recovering from Measurement Error: Model It (3)}
+\begin{frame}[t]\frametitle{Up next}
 
-Topic models, e.g. Latent Dirichlet Allocation (Blei et al.) \textbf{add}:
+Topic models, e.g. Latent Dirichlet Allocation (Blei et al.) we
 \ita
-\itm A \textit{probabilistic} view of the relationship between W, Z and $\theta$
-\itm Full statistical framework for learning most aspects of the relationship
+\itm Build this idea into a complete model
+\itm \textit{infer} rather than assert the relationship between W and Z by learning $\beta$.
 \itz
-
-\end{frame}
-\begin{frame}[t]\frametitle{Topic Models as Classical Content Analysis}
-
+\pause
 From
 
-\centerline{\includegraphics[scale=.8]{pictures/new-topics-ca}}
+\centerline{\includegraphics[scale=.3]{pictures/new-topics-ca.png}}
 
-(via pLSI) to
+to
 
-\centerline{\includegraphics[scale=.8]{pictures/lda-flat}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Generative probability model}
-
-Assumptions:
-\ita
-\itm W and Z are multinomial.
-\itm $\theta$ and $\beta$ are Dirichlet
-\itm $\alpha$ and $\eta$ are hyperparameters for Dirichlet parameters
-\ita
-\item Magnitude controls expected sparsity of words per topic and topics realised per document
-\item Often optimised directly (a la `Empirical Bayes') rather than integrated out
-\itz
-\itz
-%% Todo dirichlet parameters
-
-\end{frame}
-\begin{frame}[t]\frametitle{$\alpha=10$}
-
-\centerline{\includegraphics[scale=1]{pictures/dirichlet-alpha10}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{$\alpha=.1$}
-
-\centerline{\includegraphics[scale=1]{pictures/dirichlet-alpha-tenth}}
-
-%% todo correlated topic model next
-
-%% todo the hyperspace planar picture
-
-%% todo: measures of validity
-
-%% -----------------
-
-%\slide{Topic Models}
-%\centerline{\includegraphics[scale=.6]{pictures/topic-model}}
-%
-%\slide{Recovering from Measurement Error: Model It (3)}
-%
-%Topic models, e.g. Latent Dirichlet Allocation (Blei et al.) \textbf{take away}:
-%\ita
-%\itm Substantive control: You do not get to assert what the topics \textit{mean}
-%\itm This is inevitable when the Z and $\theta$ are both unobserved\ldots
-%\itz
-%
-%
-%Topic models (Blei, Ng and Jordan, 2003; Blei and Lafferty, 2009) are full probability models that
-%\ita
-%\itm weaken the constraints required in dictionary based content analysis
-%\itm may do what you want.  Or not\ldots
-%\itz
-%
-%These are \textit{exploratory} methods that work best
-%with \textit{large amounts} of text with a \textit{thematic} structure.
-%
-
-%\slide{Topic Models: LDA}
-%
-%Topic models represent documents as a mixture of topics.
-%
-%All documents in the text collection (e.g. Congressional bills) share the same set of topics, but each document (e.g. individual bill) exhibits a different proportion of topics.
-%
-%
-%
-%Documents are observed, the rest is not:
-%\ita
-%\itm topics
-%\itm the per-document topic distribution
-%\itm  the per-document per-word topic assignment.
-%\itz
-%%\centerline{\includegraphics[scale=.6]{pictures/topic-model2}}
-%
-%\slide{Topic Models: LDA}
-%
-%
-%\centerline{\includegraphics[scale=.6]{pictures/topics}}
-%
-%
-%\slide{Topic Models: LDA}
-%
-%\centerline{\includegraphics[scale=.6]{pictures/topics2}}
-%
-%
-%\slide{Topic Models: LDA}
-%
-%Latent Dirichlet Allocation (LDA):
-%
-%Dirichlet distribution describes knowledge about a vector of probabilities, here the probabilities of topics per document.
-%
-%A generative model:
-%
-%For example, with two topics, you may choose that a document is 1/3 about topic A and 2/3 about topic B.
-%
-%\slide{Topic Models: LDA}
-%
-%\centerline{\includegraphics[scale=.6]{pictures/topic-model}}
-%
-%
-%\slide{Topic Models: LDA}
-%
-%LDA reverses the generative process to find the hidden structure that is likely to have generated the observed documents (essentially using the co-occurrence of words across documents)
-%
-%
-%Topic models add:
-%\ita
-%\itm A \textit{probabilistic} view of the relationship between W (observed word), Z (per-word topic assignment) and $\theta$ (per-document topic proportions)
-%\itm Topics = distribution over a fixed vocabulary
-%\itm Full statistical framework for learning most aspects of the relationship
-%\itz
-%
-%\slide{Topic Models: LDA}
-%
-%But:
-%\ita
-%\itm topic models take away substantive control: you do not get to assert what the topics \textit{mean}
-%\itm they return only one single clustering
-%\itz
-
-%\slide{Applications: Policy Agenda}
+\centerline{\includegraphics[scale=.3]{pictures/lda-flat}}
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Interpretation}
 
-Topic assignment measurement process is modeled  (yay!)
-
-Topic meaning is no longer under your control (boo!)
-
-Topic modeling is (mostly) \textit{exploratory} rather than \textit{confirmatory}
-
-Upshot:
-\ita
-\itm \textit{You} have to make the case that your topic model is capturing the topic you want to be capturing and not others.
-\itm Topic \textit{number} is now an open question
-\itz
-
-\end{frame}
-\begin{frame}[t]\frametitle{What is this topic anyway?}
-
-\centerline{\includegraphics[scale=.8]{pictures/topic-words}}
-
-{\footnotesize (Quinn et al. 2010)}
-
-\end{frame}
-\begin{frame}[t]\frametitle{How is it related to others topics?}
-
-\centerline{\includegraphics[scale=.55]{pictures/topic-clustering}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{and other schemes?}
-
-\centerline{\includegraphics[scale=.5]{pictures/other-schemes}}
-
+% \begin{frame}[t]\frametitle{Generative probability model}
+% 
+% Assumptions:
+% \ita
+% \itm W and Z are multinomial.
+% \itm $\theta$ and $\beta$ are Dirichlet
+% \itm $\alpha$ and $\eta$ are hyperparameters for Dirichlet parameters
+% \ita
+% \item Magnitude controls expected sparsity of words per topic and topics realised per document
+% \item Often optimised directly (a la `Empirical Bayes') rather than integrated out
+% \itz
+% \itz
+% %% Todo dirichlet parameters
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{$\alpha=10$}
+% 
+% \centerline{\includegraphics[scale=1]{pictures/dirichlet-alpha10}}
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{$\alpha=.1$}
+% 
+% \centerline{\includegraphics[scale=1]{pictures/dirichlet-alpha-tenth}}
+% 
+% %% todo correlated topic model next
+% 
+% %% todo the hyperspace planar picture
+% 
+% %% todo: measures of validity
+% 
+% %% -----------------
+% 
+% %\slide{Topic Models}
+% %\centerline{\includegraphics[scale=.6]{pictures/topic-model}}
+% %
+% %\slide{Recovering from Measurement Error: Model It (3)}
+% %
+% %Topic models, e.g. Latent Dirichlet Allocation (Blei et al.) \textbf{take away}:
+% %\ita
+% %\itm Substantive control: You do not get to assert what the topics \textit{mean}
+% %\itm This is inevitable when the Z and $\theta$ are both unobserved\ldots
+% %\itz
+% %
+% %
+% %Topic models (Blei, Ng and Jordan, 2003; Blei and Lafferty, 2009) are full probability models that
+% %\ita
+% %\itm weaken the constraints required in dictionary based content analysis
+% %\itm may do what you want.  Or not\ldots
+% %\itz
+% %
+% %These are \textit{exploratory} methods that work best
+% %with \textit{large amounts} of text with a \textit{thematic} structure.
+% %
+% 
+% %\slide{Topic Models: LDA}
+% %
+% %Topic models represent documents as a mixture of topics.
+% %
+% %All documents in the text collection (e.g. Congressional bills) share the same set of topics, but each document (e.g. individual bill) exhibits a different proportion of topics.
+% %
+% %
+% %
+% %Documents are observed, the rest is not:
+% %\ita
+% %\itm topics
+% %\itm the per-document topic distribution
+% %\itm  the per-document per-word topic assignment.
+% %\itz
+% %%\centerline{\includegraphics[scale=.6]{pictures/topic-model2}}
+% %
+% %\slide{Topic Models: LDA}
+% %
+% %
+% %\centerline{\includegraphics[scale=.6]{pictures/topics}}
+% %
+% %
+% %\slide{Topic Models: LDA}
+% %
+% %\centerline{\includegraphics[scale=.6]{pictures/topics2}}
+% %
+% %
+% %\slide{Topic Models: LDA}
+% %
+% %Latent Dirichlet Allocation (LDA):
+% %
+% %Dirichlet distribution describes knowledge about a vector of probabilities, here the probabilities of topics per document.
+% %
+% %A generative model:
+% %
+% %For example, with two topics, you may choose that a document is 1/3 about topic A and 2/3 about topic B.
+% %
+% %\slide{Topic Models: LDA}
+% %
+% %\centerline{\includegraphics[scale=.6]{pictures/topic-model}}
+% %
+% %
+% %\slide{Topic Models: LDA}
+% %
+% %LDA reverses the generative process to find the hidden structure that is likely to have generated the observed documents (essentially using the co-occurrence of words across documents)
+% %
+% %
+% %Topic models add:
+% %\ita
+% %\itm A \textit{probabilistic} view of the relationship between W (observed word), Z (per-word topic assignment) and $\theta$ (per-document topic proportions)
+% %\itm Topics = distribution over a fixed vocabulary
+% %\itm Full statistical framework for learning most aspects of the relationship
+% %\itz
+% %
+% %\slide{Topic Models: LDA}
+% %
+% %But:
+% %\ita
+% %\itm topic models take away substantive control: you do not get to assert what the topics \textit{mean}
+% %\itm they return only one single clustering
+% %\itz
+% 
+% %\slide{Applications: Policy Agenda}
+% 
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Interpretation}
+% 
+% Topic assignment measurement process is modeled  (yay!)
+% 
+% Topic meaning is no longer under your control (boo!)
+% 
+% Topic modeling is (mostly) \textit{exploratory} rather than \textit{confirmatory}
+% 
+% Upshot:
+% \ita
+% \itm \textit{You} have to make the case that your topic model is capturing the topic you want to be capturing and not others.
+% \itm Topic \textit{number} is now an open question
+% \itz
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{What is this topic anyway?}
+% 
+% \centerline{\includegraphics[scale=.8]{pictures/topic-words}}
+% 
+% {\footnotesize (Quinn et al. 2010)}
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{How is it related to others topics?}
+% 
+% \centerline{\includegraphics[scale=.55]{pictures/topic-clustering}}
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{and other schemes?}
+% 
+% \centerline{\includegraphics[scale=.5]{pictures/other-schemes}}
+% 
 %
 %\slide{Variations: Expressed Agenda Model}
 %
@@ -1650,39 +1750,39 @@ Upshot:
 %Goal: estimate the topics in the data (all Senate press releases), assign press releases to their likely topic, and measure attention  Senators dedicate to estimated topics.
 %
 
-\end{frame}
-\begin{frame}[t]\frametitle{Topic Models: How \textit{many} topics?}
-
-{\small
-\begin{quote}
-The results presented in this paper [\ldots] assume there are 43 topics present in the data. I varied the number of assumed topics from only five topics, up to 85 different topics. Assuming too few topics resulted in distinct issues being lumped together, whereas too many topics results in several clusters referring to the same issues. \textsl{During my tests, 43 issues represented a decent middle ground.}
-(Grimmer 2010, p.12)
-\end{quote}
-}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Nested topics?}
-
-\centerline{\includegraphics[scale=.8]{pictures/nested-topics-nuclear}}
-
-from Jacobi et al (2014) -- Hierarchical Dirichlet Process models models \textit{do} enforce nested topics
-
-\end{frame}
-\begin{frame}[t]\frametitle{A troubling tension}
-
-There are two natural metrics for evaluating topic models (or any other kind of computer assisted text analysis)
-\ita
-\itm Statistical performance, e.g. held-out likelihood
-\itm Substantive usefulness, e.g. topic coherence
-\itz
-Experiments by Chang et al. (2009), using
-\ita
-\itm word intrusion (which word does not belong?)
-\itm topic intrusion (which topic does not belong?)
-\itz
-suggest that these are robustly \textit{negatively} correlated.
-
-
+% \end{frame}
+% \begin{frame}[t]\frametitle{Topic Models: How \textit{many} topics?}
+% 
+% {\small
+% \begin{quote}
+% The results presented in this paper [\ldots] assume there are 43 topics present in the data. I varied the number of assumed topics from only five topics, up to 85 different topics. Assuming too few topics resulted in distinct issues being lumped together, whereas too many topics results in several clusters referring to the same issues. \textsl{During my tests, 43 issues represented a decent middle ground.}
+% (Grimmer 2010, p.12)
+% \end{quote}
+% }
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Nested topics?}
+% 
+% \centerline{\includegraphics[scale=.8]{pictures/nested-topics-nuclear}}
+% 
+% from Jacobi et al (2014) -- Hierarchical Dirichlet Process models models \textit{do} enforce nested topics
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{A troubling tension}
+% 
+% There are two natural metrics for evaluating topic models (or any other kind of computer assisted text analysis)
+% \ita
+% \itm Statistical performance, e.g. held-out likelihood
+% \itm Substantive usefulness, e.g. topic coherence
+% \itz
+% Experiments by Chang et al. (2009), using
+% \ita
+% \itm word intrusion (which word does not belong?)
+% \itm topic intrusion (which topic does not belong?)
+% \itz
+% suggest that these are robustly \textit{negatively} correlated.
+% 
+% 
 
 %\slide{Labeling topics}
 %
@@ -1728,84 +1828,88 @@ suggest that these are robustly \textit{negatively} correlated.
 %%%%%%%%%%%%%%
 
 
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Variations}
+% 
+% There have been a huge number of variations on and extensions of the basic topic model
+% \ita
+% \itm Airoldi et al. 2011 Table 1 provide references for 33!
+% \itz
+% I'll briefly mention two variations of interest to political science:
+% \ita
+% \itm Dynamic topic models
+% \itm Structural topic models (\url{http://structuraltopicmodel.com})
+% \itz
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Dynamic Topic Models (1)}
+% 
+% Words `drift' from topic to topic over time
+% 
+% \centerline{\includegraphics[scale=.8]{pictures/blei-dynamic}}
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Dynamic Topic Models (1)}
+% 
+% \centerline{\includegraphics[scale=.7]{pictures/dynamics}}
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Dynamic Topic Models (2)}
+% 
+% Alternatively (Quinn et al 2010) document topic proportions `drift' over time
+% \ita
+% \itm To track a smoothly moving policy agenda (congressional speeches from 1997-2004)
+% \itz
+% 
+% \centerline{\includegraphics[scale=.5]{pictures/defence-topic-quinn}}
+% 
+% ~\\
+% Note:
+% \ita
+% \itm It's not clear you can have both types of dynamics!
+% \itz
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Structural Topic Models}
+% 
+% \centerline{\includegraphics[scale=.6]{pictures/stm-graphical-model}}
+% 
+% Covariates for topics proportions and on topic words
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Structural Topic Models}
+% 
+% Think SEM/Multilevel measurement models for text\ldots
+% 
+% Some history of modeling topic proportions:
+% \ita
+% \itm LDA: Topic proportions are \textit{nearly} a priori independent
+% \itm CTM `Correlated Topic Model': Topic proportions can be correlated via a Normal distribution in the space of topic proportion logits
+% \itm STM `Structural Topic Model': Topic proportion correlations are regressions on covariates
+% \itz
+% 
+% Covariates are intended to facilitate interpretation/explanation (also provide measurement bias)
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Structural Topic Models}
+% 
+% \centerline{\includegraphics[scale=.8]{pictures/stm-clerics}}
+% 
+% \end{frame}
+% \begin{frame}[t]\frametitle{Wrapping up}
+% 
+% \centerline{\includegraphics[scale=1.5]{pictures/compromise.png}}
+% 
+% 
+% \end{frame}
 
-\end{frame}
-\begin{frame}[t]\frametitle{Variations}
-
-There have been a huge number of variations on and extensions of the basic topic model
-\ita
-\itm Airoldi et al. 2011 Table 1 provide references for 33!
-\itz
-I'll briefly mention two variations of interest to political science:
-\ita
-\itm Dynamic topic models
-\itm Structural topic models (\url{http://structuraltopicmodel.com})
-\itz
-
-\end{frame}
-\begin{frame}[t]\frametitle{Dynamic Topic Models (1)}
-
-Words `drift' from topic to topic over time
-
-\centerline{\includegraphics[scale=.8]{pictures/blei-dynamic}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Dynamic Topic Models (1)}
-
-\centerline{\includegraphics[scale=.7]{pictures/dynamics}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Dynamic Topic Models (2)}
-
-Alternatively (Quinn et al 2010) document topic proportions `drift' over time
-\ita
-\itm To track a smoothly moving policy agenda (congressional speeches from 1997-2004)
-\itz
-
-\centerline{\includegraphics[scale=.5]{pictures/defence-topic-quinn}}
-
-~\\
-Note:
-\ita
-\itm It's not clear you can have both types of dynamics!
-\itz
-
-\end{frame}
-\begin{frame}[t]\frametitle{Structural Topic Models}
-
-\centerline{\includegraphics[scale=.6]{pictures/stm-graphical-model}}
-
-Covariates for topics proportions and on topic words
-
-\end{frame}
-\begin{frame}[t]\frametitle{Structural Topic Models}
-
-Think SEM/Multilevel measurement models for text\ldots
-
-Some history of modeling topic proportions:
-\ita
-\itm LDA: Topic proportions are \textit{nearly} a priori independent
-\itm CTM `Correlated Topic Model': Topic proportions can be correlated via a Normal distribution in the space of topic proportion logits
-\itm STM `Structural Topic Model': Topic proportion correlations are regressions on covariates
-\itz
-
-Covariates are intended to facilitate interpretation/explanation (also provide measurement bias)
-
-\end{frame}
-\begin{frame}[t]\frametitle{Structural Topic Models}
-
-\centerline{\includegraphics[scale=.8]{pictures/stm-clerics}}
-
-\end{frame}
-\begin{frame}[t]\frametitle{Wrapping up}
-
-\centerline{\includegraphics[scale=1.5]{pictures/compromise.png}}
-
-
-\end{frame}
 \begin{frame}[t]\frametitle{Lab Time}
 
 \centerline{\includegraphics[scale=.8]{pictures/hieroglyphic-keyboard-cm}}
+
+\end{frame}
+\end{document}
 
 
 %
@@ -1860,8 +1964,7 @@ Covariates are intended to facilitate interpretation/explanation (also provide m
 %
 %
 %
-\end{frame}
-\end{document}
+%\end{frame}
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%

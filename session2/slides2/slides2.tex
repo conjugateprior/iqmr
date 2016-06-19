@@ -43,7 +43,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{Computer-assisted content analysis}
-\author{Will Lowe ~~Princeton University\\James Lo ~~ University of Southern California}
+\author{Will Lowe ~~Princeton University \\ James Lo ~~ University of Southern California}
 \date{Part 2}
 \begin{document}
 
@@ -72,125 +72,154 @@ Session 2:
 \ita
 \itm Document classification
 \ita
+\itm The direct approach to classification
 \itm The indirect approach to classification
 \itm Evaluation and interpretation
-\itm Evaluation for the lazy
-\itm The direct approach to classification
+\itm Topic models
 \itz
 \itz
 
 Session 3: Scaling Models
 
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Text as Data}
-
-\centerline{\includegraphics[scale=.9]{pictures/grimmerovreview.pdf}}
-\centerline{\footnotesize Source: Grimmer and Stewart (2013)}
 
 
+%\begin{frame}[t,fragile]\frametitle{Text as Data}
+%\centerline{\includegraphics[scale=.7]{pictures/grimmerovreview.pdf}}
+%\centerline{\footnotesize Source: Grimmer and Stewart (2013)}
+%\end{frame}
 
 
 %%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%
 
 
-\end{frame}
 \begin{frame}[t,fragile]\frametitle{Classification Approaches when Categories are Known}
+
+We often want to read text to put them into categories
 
 {\bf Examples:}
 
-Are campaign advertisements positive or negative?
+\begin{enumerate}
+\item Are campaign advertisements positive or negative?
+\item What policy areas do newspaper editorials cover?
+\item Are international statements belligerent or peaceful?
+\item Do court letters liberal or conservative?
+\item Is this email spam?
+\end{enumerate}
 
-What  policy areas do newspaper editorials cover?
-
-Are international statements belligerent or peaceful?
-
-Do court letters represent liberal or conservative positions?
-
-What language is this article written in?
-
-Is this email spam?
 
 \end{frame}
+
+
+
+\begin{frame}[t,fragile]\frametitle{Classification}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.2]{pictures/classification.png}}
+\centerline{\normalsize For classification, each document belongs to a single cluster}
+\end{frame}
+
+\begin{frame}[t,fragile]\frametitle{Topic Models}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.4]{pictures/LDA.png}}
+\centerline{\normalsize In LDA, each document can contain multiple topics}
+\end{frame}
+
+
 \begin{frame}[t,fragile]\frametitle{Classification Approaches when Categories are Known}
 
-Yesterday we talked how to do this using a dictionary approach.
+{\bf Yesterday:} Classification using dictionary approach.
 
-An alternative is supervised machine learning methods:
+An alternative is \textbf{supervised machine learning} methods:
 \begin{enumerate}
 
 \item coders categorize a set of documents by hand
 \item the algorithm ``learns'' how to sort the documents in categories
 \item  characteristics of training set are used  to assign new documents to categories.
 \end{enumerate}
-
-
+\ita
+\itm Naive Bayes, Maximum Entropy, Support Vector Machines, Neural Networks, Bagging, Boosting, $\ldots$
+\itz
 \end{frame}
+
 \begin{frame}[t,fragile]\frametitle{Classification Approaches when Categories are Known}
 
-Assume that each document has a \textit{single} topic Z
-
 Let $\theta_k$ be the \textit{probability} that Z=k for each document
-
-Assume that (some) topic labels are observed
-
+\ita
+\itm Words are denoted $\{W\}$
+\itm Each document has a \textit{single} topic Z
+\itm Some topic labels are observed
+\itm We essentially want $P(Z \mid \{W\}) = \theta_{z|w}$
+\itz
+\vfill
+Supervised machine learning
+\ita
+\itm Tries to give good predictions of observed Y given X
+\itm Naive Bayes, Maximum Entropy, Support Vector Machines, Neural Networks, Bagging, Boosting, $\ldots$
+\itz
+\end{frame}
 
 
 %We can \textit{choose} a style of model\\
 %~\\
-
 %\centerline{\includegraphics[scale=.7]{pictures/classification-plate}~~~~~~~~~
 %\includegraphics[scale=.7]{pictures/classification-plate2}}
 
 %\centerline{Discriminative Style ~~~~~~~~~~~~~~~~ Generative Style}
 
 
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Classification Approaches}
 
-Much of machine learning, computational linguistics, and AI deals with classification problems
+%\begin{frame}[t,fragile]\frametitle{Classification Approaches}
+%Much of machine learning, computational linguistics, and AI deals with classification problems
+%Methods:
+%\ita
+%\itm Naive Bayes, Maximum Entropy, Support Vector Machines, Neural Networks, Bagging, Boosting, $\ldots$
+%\itm We only touch on the issues here\ldots
+%\itz
+%\end{frame}
 
-Methods:
-\ita
-\itm Naive Bayes, Maximum Entropy, Support Vector Machines, Neural Networks, Bagging, Boosting, $\ldots$
-\itm We only touch on the issues here\ldots
-\itz
+%\begin{frame}[t,fragile]\frametitle{Classification approaches}
+%In the simple framework of yesterday
+%\ita
+%\itm $Z$ is the true category of a document
+%\itm $\theta$ is be the posterior probability that a document is a particular category
+%\itz
+%\end{frame}
 
-\end{frame}
+
 \begin{frame}[t,fragile]\frametitle{Classification approaches}
-
-In the simple framework of yesterday
-\ita
-\itm $Z$ is the true category of a document
-\itm $\theta$ is be the posterior probability that a document is a particular category
-\itz
-
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Classification approaches}
-
 As before, we have two approaches
 \ita
-\itm Discriminative: Model $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ directly
-\itm Generative: Model $P(\{W\} \mid Z, \beta)$ and $P(Z)=\theta_z$, then get $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ via Bayes theorem
+%\itm Discriminative: Model $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ directly
+%\itm Generative: Model $P(\{W\} \mid Z, \beta)$ and $P(Z)=\theta_z$, then get $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ via Bayes theorem
+\itm Discriminative: Model $P(Z \mid \{W\}) = \theta_{z|w}$ directly
+\itm Generative: Model $P(\{W\} \mid Z)$ and $P(Z)=\theta_z$, then get $P(Z \mid \{W\}) = \theta_{z|w}$ via Bayes theorem
 \itz
-
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Generative vs discriminative training}
-
-\centerline{\includegraphics[scale=.4]{pictures/unsupervised-classification} \hfill \includegraphics[scale=.4]{pictures/supervised-classification}}
-
-Naive Bayes \hfill Maximum Entropy, etc...
-
 \vfill
-
+\textbf{Bayes theorem} is about inverse probabilities
+\ita
+%\itm Suppose you know $P(\{W\} \mid Z)$
+%\itm We can (sometimes) say something about $P(Z \mid \{W\} )$
+\itm $P(A | B) = \frac{P(B | A) P(A)}{P(B)}$
+\itm If $P(\{W\} \mid Z)$ known, estimate $P(Z \mid \{W\} )$
+\itz
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Generative vs discriminative testing}
 
-\centerline{\includegraphics[scale=.4]{pictures/unsupervised-classification-test} \hfill \includegraphics[scale=.4]{pictures/supervised-classification-test}}
 
-Naive Bayes \hfill Maximum Entropy, etc...
 
-\end{frame}
+
+%\begin{frame}[t,fragile]\frametitle{Generative vs discriminative training}
+%\centerline{\includegraphics[scale=.4]{pictures/unsupervised-classification} \hfill \includegraphics[scale=.4]{pictures/supervised-classification}}
+%Naive Bayes \hfill Maximum Entropy, etc...
+%\vfill
+%\end{frame}
+
+%\begin{frame}[t,fragile]\frametitle{Generative vs discriminative testing}
+%\centerline{\includegraphics[scale=.4]{pictures/unsupervised-classification-test} \hfill \includegraphics[scale=.4]{pictures/supervised-classification-test}}
+%Naive Bayes \hfill Maximum Entropy, etc...
+%\end{frame}
+
+
 \begin{frame}[t,fragile]\frametitle{Either way\ldots}
 
 Desirable classification outcome:
@@ -209,61 +238,72 @@ $D_N$ & 0.45 & 0.55\\ \bottomrule
 where $\theta_{z|w} = P(Z=z \mid \{W\})$
 
 \end{frame}
+
+
 \begin{frame}[t,fragile]\frametitle{The Basic Steps}
-
 \begin{enumerate}
-
 \item Construct a training set
-
 (a) create a coding scheme\\
 (b) select documents (ideally randomly sampled)
-
 \item Apply the supervised learning method to learn features of a training set and infer labels
-
-\item Validate and classify remaining documents
-
+\item Validate and classify remaining documents\\
 \end{enumerate}
-
+We will do this in the lab together with NY Times titles
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Indirect approach: Naive Bayes}
 
-Background:
+
+\begin{frame}[t,fragile]\frametitle{An Applied Example: Affirmative Action}
+Evans et al. (2007) apply naive Bayes to legal text
 \ita
-\itm Amicus Curiae (friend of the court) briefs are submitted to an appellate court
-\itm They usually present a legal argument for or against one of the parties to a case
-\itm Amicus Curiae can be submitted by any group that feels that it has a stake in the case
+\itm Affirmative action programs at university level
+\itz
+Examine Amicus Curiae briefs sent to appellate court
+\ita
+\itm Can words tell us direction of AC brief?
+\itm Are the briefs liberal or conservative?
 \itz
 
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Affirmative action}
-
-Evans et al. use cases about the constitutionality of `affirmative action' programs at university level
-\ita
-\itm Regents of the University of California vs. Bakke (1978)
-\itm Grutter vs Bollinger, Lehman, Shields, and the Regents of the University of Michigan (2003)
-\itm Gratz and Hamacher vs Bollinger, Lehman, Shields and the Regents of the University of Michigan (2003)
-\itz
-The arguments are as much \textsl{political} (state vs federal rights, social welfare, constitutional interpretation) as they are \textsl{legal}
 
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Affirmative Action}
 
-This work uses document classification to answer two questions
-\ita
-\itm To what extent can the \textsl{direction} of an AC brief be predicted on the basis of its words?
-\itm What can we learn about \textsl{language} of each side of the case?
-\itz
 
-\end{frame}
+
+%\begin{frame}[t,fragile]\frametitle{Indirect approach: Naive Bayes}
+%Background:
+%\ita
+%\itm Amicus Curiae (friend of the court) briefs are submitted to an appellate court
+%\itm They usually present a legal argument for or against one of the parties to a case
+%\itm Amicus Curiae can be submitted by any group that feels that it has a stake in the case
+%\itz
+%\end{frame}
+%\begin{frame}[t,fragile]\frametitle{Affirmative action}
+%Evans et al. use cases about the constitutionality of `affirmative action' programs at university level
+%\ita
+%\itm Regents of the University of California vs. Bakke (1978)
+%\itm Grutter vs Bollinger, Lehman, Shields, and the Regents of the University of Michigan (2003)
+%\itm Gratz and Hamacher vs Bollinger, Lehman, Shields and the Regents of the University of Michigan (2003)
+%\itz
+%The arguments are as much \textsl{political} (state vs federal rights, social welfare, constitutional interpretation) as they are \textsl{legal}
+%\end{frame}
+%\begin{frame}[t,fragile]\frametitle{Affirmative Action}
+%This work uses document classification to answer two questions
+%\ita
+%\itm To what extent can the \textsl{direction} of an AC brief be predicted on the basis of its words?
+%\itm What can we learn about \textsl{language} of each side of the case?
+%\itz
+%\end{frame}
+
+
 \begin{frame}[t,fragile]\frametitle{Naive Bayes}
 
 \textsl{Naive Bayes} is a relatively old ($\sim$1975)  classification method
 
-Suppose you had to guess  whether document $j$ is liberal (Z=`Lib') or conservative (Z=`Con') based on its word profile $\{W\}_j$.
+Want to guess if document $j$ is liberal/conservative based on its word profile $\{W\}_j$.
 
 Probability can be derived by applying Bayes theorem:
 
 \begin{align*}
+P(A | B) &= \frac{P(B | A) P(A)}{P(B)}\\
 P(Z=\text{`Lib'} \mid \{W\}_j) &~=~ \frac{P(\{W\}_j \mid Z=\text{`Lib'})~P(Z=\text{`Lib'})}{P(\{W\}_j)}
 \end{align*}
 
@@ -288,16 +328,18 @@ Given a representative training set, estimating $P(Z=L)$ is easy:
 
 Estimating the probability that a word profile $\{W\}_j$ occurs given that the document is liberal $P(\{W\}_j\mid Z=\text{`Lib'})$ is more challenging, because any one word profile is likely to occur only once.
 
-Solution:
-\ita
-\itm words are assumed to be generated \textit{independently} given the category Z (the `naive' and wrong assumption).
+Assumption: words are assumed to be generated \textit{independently} given the category Z 
 \begin{align*}
-P(\{W\}_j \mid Z=\text{`Lib'}) &~=~ {\prod}_i P(W_i \mid Z=\text{`Lib'})
+P(\{W\}_j \mid Z=\text{`Lib'}) &~=~ {\prod}_i P(W_i \mid Z=\text{`Lib'})\\
+P( \text{`Affirmative Action'} \mid Z=\text{`Lib'}) &~=~ P( \text{`Affirmative'} \mid Z=\text{`Lib'}) \cdot\\
+& ~  P( \text{`Action'} \mid Z=\text{`Lib'})
 \end{align*}
-\itz
-\newpage
+
 
 \end{frame}
+
+
+
 \begin{frame}[t,fragile]\frametitle{Naive Bayes}
 
 With this assumption, we can estimate the probability of observing a word $i$  given that the document is liberal: proportion of word $i$ in liberal training set.
@@ -360,9 +402,10 @@ Last step:  calculate posterior classification  probabilities for a new document
 \end{frame}
 \begin{frame}[t,fragile]\frametitle{Naive Bayes}
 
-Amicus brief from `King County Bar Association' containing 3667 words (File 6019\_al18-utf8.txt) and 4 matches to disciminat*.
+%(File 6019\_al18-utf8.txt)
+Amicus brief from `King County Bar Association' containing 3667 words and 4 matches to disciminat*.
 
-{\footnotesize
+{\scriptsize
 \begin{verbatim}
 that "the state shall not [discriminate] against, or grant preferential treatment
 the lingering effects of racial [discrimination] against minority groups in this
@@ -371,8 +414,9 @@ that "the state shall not [discriminate] against, or grant preferential treatmen
 \end{verbatim}
 }
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Naive Bayes}
 
+
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
 A priori, the probabilities are\ldots
 
 Probability that we observe the word  discriminat* 4 out of 3667 times if the document is liberal:
@@ -382,7 +426,6 @@ Probability that we observe the word  discriminat* 4 out of 3667 times if the do
 [1] 0.1930602
 \end{verbatim}
 }
-
 Probability that we observe the word  discriminat* 4 out of 3667 times if the document is conservative:
 {\small
 \begin{verbatim}
@@ -390,17 +433,16 @@ Probability that we observe the word  discriminat* 4 out of 3667 times if the do
 [1] 0.004188261
 \end{verbatim}
 }
-
 Logged probability ratio = 3.83
-
 \newpage
-
 \end{frame}
+
+
 \begin{frame}[t,fragile]\frametitle{Naive Bayes}
 
 Conclusion: Seeing 4 instances of discriminat* gives the posterior classification probabilities
 \ita
-\itm $\theta_\text{liberal}$ = 0.979
+\itm $\theta_\text{liberal} = \frac{0.193}{0.193+0.004}$ = 0.979
 \itm $\theta_\text{conservative}$ =  1-0.979=0.021
 \itz
 
@@ -408,24 +450,20 @@ This is \textit{quite} confident
 \ita
 \itm \ldots but other words will be less loaded or push the other way
 \itz
-
-
-
-
-
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Evaluating Classifiers: Accuracy, Precision and Recall}
-
-How can we evaluate how good a supervised classifier works?
-
-Use the confusion matrix (training set versus machine)
 
 
-\end{frame}
+
+%\begin{frame}[t,fragile]\frametitle{Evaluating Classifiers: Accuracy, Precision and Recall}
+%How can we evaluate how good a supervised classifier works?
+%Use the confusion matrix (training set versus machine)
+%\end{frame}
+
+
 \begin{frame}[t,fragile]\frametitle{Evaluating Classifiers: Accuracy, Precision and Recall}
 
 \begin{center}
-\scalebox{0.7}{
+\scalebox{0.8}{
 \begin{tabular}{llcc}
 \toprule
 &&\multicolumn{2}{c}{Machine}\\
@@ -450,33 +488,28 @@ Recall ($Z_{training}$=Liberal) = 40/(40+10) = 0.80
 
 Recall ($Z_{training}$=Cons) = 60/(40+60) = 0.60
 
-\newpage
-
-\centerline{\includegraphics[scale=.9]{pictures/bolinger}}
-
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Trading off precision and recall}
-
-
-\centerline{\includegraphics[scale=.4]{pictures/roc-curves}}
-
-(King and Zeng, 2001)
+%\newpage
+%\centerline{\includegraphics[scale=.9]{pictures/bolinger}}
 
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Evaluation}
 
-All classification models have a secret extra parameter: the \textit{threshold}
 
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Distinctive Words}
+%\begin{frame}[t,fragile]\frametitle{Trading off precision and recall}
+%\centerline{\includegraphics[scale=.4]{pictures/roc-curves}}
+%(King and Zeng, 2001)
+%\end{frame}
+%\begin{frame}[t,fragile]\frametitle{Evaluation}
+%All classification models have a secret extra parameter: the \textit{threshold}
+%\end{frame}
 
-Detecting different rhetorical styles of liberal and conservative groups:
 
-``Liberal groups use language emphasizing the impact of affirmative action polices, while conservative words indicate concern over legal-constitutional limits on administrative procedure'' (Evans et al. 2007, p. 1029)
+%\begin{frame}[t,fragile]\frametitle{Distinctive Words}
+%Detecting different rhetorical styles of liberal and conservative groups:
+%``Liberal groups use language emphasizing the impact of affirmative action polices, while conservative words indicate concern over legal-constitutional limits on administrative procedure'' (Evans et al. 2007, p. 1029)
+%\newpage
+%\end{frame}
 
-\newpage
-
-\centerline{\includegraphics[scale=.6]{pictures/words-evans}}
+%\centerline{\includegraphics[scale=.6]{pictures/words-evans}}
 %
 %\slide{Refresher on $\chi^2$}
 %
@@ -525,372 +558,220 @@ Detecting different rhetorical styles of liberal and conservative groups:
 %\newpage
 %\centerline{\includegraphics[scale=.9]{pictures/words-evans}}
 
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Compare and Contrast}
-
-Bara et al. (2007) abortion debate with a thematic dictionary
-\begin{center}
-\includegraphics[scale=.4]{pictures/bara-diffs}
-\end{center}
-
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Vocabulary Usage}
-
-We can use known Z to characterize vocabulary usage directly, if we're careful\ldots
-
-Monroe et al. (2008) compare different measures of `partisan vocabulary' in abortion debates
-\ita
-\itm Simple frequencies will be misleading
-\itm They settle for Laplace regularized odds-ratios
-\itz
-
-\newpage
 
 
-\centerline{\includegraphics[scale=.1]{pictures/fightin0}}
-
-{\footnotesize Difference of proportions: could result in lack of overall semantic validity due to the overemphasis on high-frequency words, unclear which words matter (Monroe et al. 2009).}
-
-\newpage
-\centerline{\includegraphics[scale=.1]{pictures/fightin1}}
-
-{\footnotesize An additional prior means that words whose partisanship is not clear will receive partisan contrasts that are exactly zero. Identifying important words is now easier (Monroe et al. 2009).}
-
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Lexical Instability}
-
-\centerline{\includegraphics[scale=.1]{pictures/fightin2}}
-
-%%%%%%%%%
-
-\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Evaluation case study}
-%
-%For large numbers of categories, evaluation -- even constructing a reliable confusion matrix -- can be tiresome
-%
-%For automated classifiers only, a lazy method is possible (King and Lowe, 2003)
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Evaluation case study: events}
-%
-%Russian artillery south of the Chechen
-%capital Grozny blasted Chechen
-%positions overnight before falling silent
-%at dawn, witnesses said on Tuesday.
-%
-%\noindent
-%Israel said on Tuesday it sent
-%humanitarian aid to
-%Colombia where a massive
-%earthquake last week
-%killed at least 938 people and injured 400.
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Event data extraction}
-%
-%
-%\mkred{Russian artillery}$^{\,\mathsf{S}}$ south of the Chechen
-%capital
-%Grozny \mkgreen{blasted}$^{\,\mathsf{223}}$ \mkblue{Chechen
-%positions}$^{\,\mathsf{T}}$ overnight before falling silent
-%at dawn, witnesses said on Tuesday.
-%
-%\noindent
-%\mkred{Israel}$^{\,\mathsf{S}}$ said on Tuesday it \mkgreen{sent
-%humanitarian aid}$^{\,\mathsf{073}}$ to
-%\mkblue{Colombia}$^{\,\mathsf{T}}$ where a \mkred{massive
-%earthquake}$^{\,\mathsf{S}}$ last week
-%\mkgreen{killed}$^{\,\mathsf{222}}$ at least \mkblue{938~
-%people}$^{\,\mathsf{T}}$ and injured 400.
-%~\\
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Event data extraction}
-%
-%
-%\mkred{Russian artillery}$^{\,\mathsf{S}}$ south of the Chechen
-%capital
-%Grozny \mkgreen{blasted}$^{\,\mathsf{223}}$ \mkblue{Chechen
-%positions}$^{\,\mathsf{T}}$ overnight before falling silent
-%at dawn, witnesses said on Tuesday.
-%
-%\noindent
-%\mkred{Israel}$^{\,\mathsf{S}}$ said on Tuesday it \mkgreen{sent
-%humanitarian aid}$^{\,\mathsf{073}}$ to
-%\mkblue{Colombia}$^{\,\mathsf{T}}$ where a \mkred{massive
-%earthquake}$^{\,\mathsf{S}}$ last week
-%\mkgreen{killed}$^{\,\mathsf{222}}$ at least \mkblue{938~
-%people}$^{\,\mathsf{T}}$ and injured 400.
-%~\\
-%{\large
+%\begin{frame}[t,fragile]\frametitle{Compare and Contrast}
+%Bara et al. (2007) abortion debate with a thematic dictionary
 %\begin{center}
-%\texttt{20010901 RUS CHE 223}\\
-%\texttt{20020804 ISR COL 073}\\
-%\texttt{20020804 --- COL 222}
+%\includegraphics[scale=.4]{pictures/bara-diffs}
 %\end{center}
-%}
 %\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Dyadic event data (Serbia-Bosnia)}
-%
-%\begin{center}
-%{\footnotesize
-%\begin{tabular}{rrr} \toprule
-%Week       & Code & Description \\ \midrule
-%1995-07-11 & 211 & SEIZE POSSESSION \\
-%& 212 & ARREST PERSON \\
-%& 223 & MILITARY ENGAGEMENT \\ \midrule
-%1995-07-12 & 211 & SEIZE POSSESSION \\
-%& 223 & MILITARY ENGAGEMENT \\
-%& 173 & SPECIF THREAT \\
-%& 191 & CANCEL EVENT \\
-%& 211 & SEIZE POSSESSION \\
-%& 095 & PLEAD \\
-%& 111 & TURN DOWN \\
-%& 212 & ARREST PERSON \\
-%& 081 & MAKE AGREEMENT \\
-%& 023 & NEUTRAL COMMENT \\
-%& 032 & VISIT \\
-%& 031 & MEET \\ \bottomrule
-%\end{tabular}
-%}
-%\end{center}
-%
+
+%\begin{frame}[t,fragile]\frametitle{Vocabulary Usage}
+%We can use known Z to characterize vocabulary usage directly, if we're careful\ldots
+%Monroe et al. (2008) compare different measures of `partisan vocabulary' in abortion debates
+%\ita
+%\itm Simple frequencies will be misleading
+%\itm They settle for Laplace regularized odds-ratios
+%\itz
 %\newpage
-%
+%\centerline{\includegraphics[scale=.1]{pictures/fightin0}}
+%{\footnotesize Difference of proportions: could result in lack of overall semantic validity due to the overemphasis on high-frequency words, unclear which words matter (Monroe et al. 2009).}
+%\newpage
+%\centerline{\includegraphics[scale=.1]{pictures/fightin1}}
+%{\footnotesize An additional prior means that words whose partisanship is not clear will receive partisan contrasts that are exactly zero. Identifying %important words is now easier (Monroe et al. 2009).}
 %\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Scaled dyadic event data}
-%
-%\begin{center}
-%{\footnotesize
-%\begin{tabular}{rrr} \toprule
-%Week       & Code & Score [-10,10) \\ \midrule
-%1995-07-11 & 211 & -9.2 \\
-%& 212 & -9.0 \\
-%& 223 & -10.0 \\ \midrule
-%1995-07-12 & 211 & -9.2 \\
-%& 223 & -10.0 \\
-%& 173 & -7.0 \\
-%& 191 & -2.2 \\
-%& 211 & -9.2 \\
-%& 095 & 1.2 \\
-%& 111 & -4.0  \\
-%& 212 & -9.0 \\
-%& 081 & 6.5 \\
-%& 023 & -0.2 \\
-%& 032 & 1.9 \\
-%& 031 & 1.0 \\ \bottomrule
-%\end{tabular}
-%}
-%\end{center}
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{The human elements}
-%
-%\textit{Coders} read newswire and extract events\\ \mkgrey{(e.g. GEDS projects, Swisspeace)}
-%
-%\textit{Experts} assign scores to event types\\
-%\mkgrey{(e.g. Goldstein 1995, Shellman 2004)}
-%
-%\textit{Analysts} aggregate and infer conflict dynamics\\ \mkgrey{(Goldstein \& Pevehouse 1997, Pevehouse \& Goldstein 1999)}
 
-%\slide{(Really) old problems}
-%
-%Equivalences:
-%\ita
-%\itm \textbf{-10} $\approx$ 1 mil. action = 2 demands = 5 accusations
-%\itz
-%Cancellations:
-%\ita
-%\itm ~~\textbf{0}~~ $\approx$ 1 demo + 1 agreement = 1 decline to comment
-%\itz
-%More reports made bad things worse?
-%
-%~\\
-%(see also Yonamine, 2012 for a discussion)
-%%Are these numbers right? (Bond et al. 2003, Shellman 2004)
-%
-%\slide{Prescription? Just use the counts}
-%
-%Well ok, but\ldots
-%\ita
-%\itm Univariate count data analysis can be tricky %\pause
-%\itm Time series count data analysis is \textit{always} tricky %\pause
-%\itm Multivariate time series count data analysis is
-%an \textit{open statistical problem}
-%\itz
-%
-%\slide{Scaling, event data style}
-%~\\
-%\centerline{\includegraphics[scale=1]{smoky-room}}
-%\vfill
-%\centerline{\color{gray}(Goldstein 1995, Bond et al. 2003, Shellman 2004)}
-%
-%
-%
-%\slide{Alternative: Distinguish reporting}
-%
-%\centerline{\includegraphics[scale=.95]{fatn}}
-%
-%\slide{\ldots from what is reported}
-%
-%\centerline{\includegraphics[scale=.95]{fatav}}
-%
 
+%\begin{frame}[t,fragile]\frametitle{Lexical Instability}
+%\centerline{\includegraphics[scale=.1]{pictures/fightin2}}
 %\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Evaluating an event data system}
-%
-%Two aspects of event type evaluation\\ \mkgrey{(King and Lowe 2003)}:
-%\ita
-%\itm If machine says it's a use of force, is it really?\\
-%{(Precision / specificity)}
-%\itm If it's a use of force, will the machine say it is? \\
-%{(Recall / sensitivity)}
-%\itz
-%
-%~\\
-%{\large
-%\centerline{$P(T \mid M=\text{"223"})$ ~~~vs.~~~ $P(M \mid T=\text{"223"})$}
-%}
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Evaluating precision}
-%
-%To estimate $P(T \mid M)$
-%\ita
-%\itm 1. Run the machine over all news leads
-%\itm 2. Select an equal number of examples from each machine assigned category M
-%\itm 3. Identify their true event type T
-%\itz
-%
-%Boring (code 711 leads from >150 event types sampled from $P(M)$) but straightforward
-%
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Evaluating recall}
-%
-%We need a gold standard T, but\ldots
-%
-%\textrm{``of the 45,000 events coded coded by
-%the VRA Reader from news leads on the former Yugoslavia, it found
-%10,605 neutral comments but only 4 apologies and 35 threats of
-%military attack.''}
-%
-%\vfill
-%Coders might have to wade through $\sim$2500 comments to find an apology and $\sim$ 300 comments to find a threat of force.
-%
-%and we're lazy\ldots
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Solution}
-%
-%Stratified sampling
-%\ita
-%\itm Choose events according to what category the machine put them in
-%\itm -- this is biased!
-%\itm Correct for the bias
-%\itz
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Recall from precision plus computation}
-%{\large
-%\begin{align*}
-%P(M\mid T)   & = \frac{P(T\mid M)P(M)}{P(T)}
-%\end{align*}
-%}
-%\pause
-%P(M) is just the event type \textit{tabulation}
-%\ita
-%\itm \ldots run the machine on all 45,000 leads
-%\itz \pause
-%P(T) is a normalizing constant.
-%
-%
-%%\slide{Targeted evaluation}
-%%
-%%For many applications we don't require few mistakes
-%%\ita
-%%\itm \ldots just few mistakes \textit{about conflict and cooperation levels}
-%%\itz
-%%
-%%\pause
-%%So we evaluate in terms of \textit{expected Goldstein scores}
-%%{\large
-%%\begin{equation*}
-%%  g_i = E[G_{j|i}]=\sum_{j=1}^J G_{j|i}\,P(M=j \mid T=i),
-%%\end{equation*}
-%%}
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Undergrads vs. the machine}
-%
-%{\small
-%\begin{center}
-%\begin{tabular}{r|llll|llll}
-%& \multicolumn{4}{c}{All Codes} & \multicolumn{4}{c}{WEIS Codes} \\
-%& $M$ & $U^{(1)}$ & $U^{(2)}$ & $U^{(3)}$ & $M$ & $U^{(1)}$ & $U^{(2)}$ & $U^{(3)}$ \\
-%$w=1$    &     &     &     &       &      &     &     & \\
-%detailed    & .26 & .32 & .23 & .26   &  \textbf{.25} & \textbf{.44} & \textbf{.25} & \textbf{.37} \\
-%aggregate   & .55 & .55 & .39 & .48   &  \textbf{.62} & \textbf{.62} & \textbf{.48} & \textbf{.62} \\
-%&     &     &     &       &      &     &     &  \\
-%$w=P(t)$    &     &     &     &      &      &     &    & \\
-%detailed    & .52 & .48 & .35 & .42   &  .55 & .64 & .35 & .68 \\
-%aggregate   & .65 & .70 & .53 & .64   &  .70 & .72 & .56 & .65 \\
-%&     &     &     &       &      &     &     &  \\
-%$w=1/\sqrt{P(t)}$&&       &     &       &      &     &     & \\
-%detailed    & .36 & .44 & .33 & .41   &  .37 & .62 & .34 & .67 \\
-%aggregate   & .59 & .66 & .49 & .62   &  .64 & .68 & .53 & .63 \\
-%&     &     &     &       &      &     &     &  \\
-%\end{tabular}
-%\end{center}
-%}
-%
-%
-%\end{frame}
-%\begin{frame}[t,fragile]\frametitle{Summary}
-%
-%Two points about evaluating machine
-%\ita
-%\itm With a machine classifier we can be lazier than usual when constructing the confusion matrix
-%\itm Stratification allows you choose an evaluation score that reflects the cost of mistakes in the task
-%\itm The `inversion' methods discussed yesterday can be applied here too\ldots
-%\itz
-%
-%\end{frame}
-\begin{frame}[t,fragile]\frametitle{Classification: Good Old Logit}
 
-It is tempting to go with methods we know (disciminative style)
-\begin{eqnarray*}
-\hat{\theta}_{k|w} &=& P(Z=k \mid W_1 \ldots W_V)\\
-&=& \text{logit}^{-1}(\alpha + \beta_1 W_1 + \beta_2 W_2 + \ldots)
-\end{eqnarray*}
 
-This is a bad idea
+
+%\begin{frame}[t,fragile]\frametitle{Classification: Good Old Logit}
+%i%t is tempting to go with methods we know (disciminative style)
+%\begin{eqnarray*}
+%\hat{\theta}_{k|w} &=& P(Z=k \mid W_1 \ldots W_V)\\
+%&=& \text{logit}^{-1}(\alpha + \beta_1 W_1 + \beta_2 W_2 + \ldots)
+%\end{eqnarray*}
+%This is a bad idea
+%\ita
+%\itm Why?
+%\itz
+%\end{frame}
+
+%\begin{frame}[t,fragile]\frametitle{Bad Old Logit}
+%The number of word types V is almost much larger than the number of documents D
+%\ita
+%\itm Many more `cases' than `variables'
+%\itm \textit{and} no constraint on possible solutions
+%\itz
+%We need \textit{serious} regularisation\ldots
+%\end{frame}
+
+
+
+\begin{frame}[t,fragile]\frametitle{Latent Dirichlet Allocation}
+What if documents don't belong to only one category?
 \ita
-\itm Why?
+\itm Each document is a mixture over topics
+\itm Each topic is a mixture over words
+\itz
+Using LDA gives us:
+\ita
+\itm Distribution of words for each topic ($\beta$)
+\itm Proportion of a document in each topic ($\theta$)
+\itz
+Setting up LDA
+\ita
+\itm Still uses bag of words
+\itm Number of topics fixed ex ante
+\itm Topics examined ex post --- unsupervised learning
+\itz
+\end{frame}
+
+
+
+\begin{frame}[t,fragile]\frametitle{Visualizing Topic Models}
+%\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/ldavis.png}}
+\centerline{\normalsize Courtsey of Brandon Stewart}
+\end{frame}
+
+
+\begin{frame}[t,fragile]\frametitle{Latent Dirichlet Allocation Components}
+Given dimensions:
+\ita
+\item \textbf{N} documents, \textbf{J} different topics, \textbf{K} unique words
+\itz
+We want the following matrices:
+\ita
+\item $X = N \times K$ document-term matrix (observed)
+\item $\theta = N \times K$ matrix with row $\theta_i = (\theta_{i1},\ldots,\theta_{iK})$
+  \ita
+  \item $\theta_{ik}$: Proportion of document $i$ allocated to topic $k$
+  \itz
+\item $\beta = K \times J$ matrix with row $\beta_k = (\beta_{k1}, \ldots, \beta_{kJ})$
+  \ita
+  \item $\beta_{kj}$: Probability of using word J, if topic k is chosen
+  \itz
+\item $\alpha$ = K length population prior for $\theta$
+\itz
+Objective function: f(X, $\beta, \theta, \alpha)$
+\end{frame}
+
+
+\begin{frame}[t,fragile]\frametitle{LDA Generative Model}
+When writing a word ($m$) for document $i$:
+\begin{align*}
+\only<1>{
+\text{p}(\theta_i | \alpha) &= \text{Dirichlet}(\alpha) && \text{(Pick potential topics $\theta_i$)}\\
+}
+\text{p}(z_{im} | \theta_i)  &= \text{Multinomial}(1, \theta_i) && \text{ (Pick the topic z to discuss)}\\
+x_{im} | \beta_k, z_{im} &= \text{Multinomial}(1, \beta_k)  && \text{ (Pick a word from topic $z_{im}$) }\\
+\text{p}(\beta_k) &= \text{Dirichlet}(\eta)  && \text{(Prior on topics)}\\
+%\text{p}(\alpha_k) &= \text{Gamma}(\alpha,\beta)  && \text{(Prior on document proportions)}
+\end{align*}
+
+with
+
+p($\beta$, $\theta$, Z, $\alpha$ | X) $\propto$  p($\beta$ | $\eta$) $\cdot$ p($\theta$|$\alpha$) $\cdot$ p(Z | $\theta$) $\cdot$ p(X | $\beta$, Z)
+\end{frame}
+
+
+
+\begin{frame}[t,fragile]\frametitle{Intuition on LDA}
+p($\beta$, $\theta$, Z, $\alpha$ | X) $\propto$  p($\beta$ | $\eta$) $\cdot$ p($\theta$|$\alpha$) $\cdot$ p(Z | $\theta$) $\cdot$ p(X | $\beta$, Z)
+
+Remember rows of $\beta$ and $\theta$ must sum to 1!
+
+p(X | $\beta$, Z): Favors co-occurring words, segregated topics
+\ita
+\item $\beta$ = (0.5,0.5,0,0) vs $\beta$ = (0.25,0.25,0.25,0.25)
+ \itz
+
+p(Z | $\theta$): Higher if $\theta$ is concentrated (i.e. fewer potential topics)
+\ita
+\item $\theta$ = (0.5,0.5, 0, 0) vs. $\theta$ = (0.25, 0.25, 0.25, 0.25) 
 \itz
 
-\end{frame}
-\begin{frame}[t,fragile]\frametitle{Bad Old Logit}
+Joint distribution favors sparse topics, small topic clusters
 
-The number of word types V is almost much larger than the number of documents D
+But data often need a larger number of topics to assign small topic clusters to data
+
+
+\end{frame}
+
+
+%SNTV-MMD: Single nontransferable vote, multimember district
+%More competition within party, as majority-seeking parties run multiple candidates in each district
+% MMM: Mixed member district: PR + single member districts
+
+\begin{frame}[t,fragile]\frametitle{Japanese Campaign Manifestos (Catalinac 2016)}
+Examines the effect of electoral reform
 \ita
-\itm Many more `cases' than `variables'
-\itm \textit{and} no constraint on possible solutions
+\itm Before 1994: SNTV-MMD (more intraparty competition)
+\itm After 1994: Mixed member majoritarian (PR + SMD)
 \itz
-
-We need \textit{serious} regularisation\ldots
-
+LDA on N=7497 candidate manifestos for Diet 1950-2009
+\ita
+\itm Hand transcribed, OCR failed
+\itm More complicated in Japanese
+\itz
+Characterizing campaigns across 50+ years
+\ita
+\itm What do candidates talk about?
+\itm How did electoral reform change incentives?
+\itm Why increasing interest in militaristic foreign action? 
+\itz
 \end{frame}
+
+\begin{frame}[t,fragile]\frametitle{Japanese Manifestos}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jpmanifesto.png}}
+%\centerline{\normalsize In LDA, each document can contain multiple topics}
+\end{frame}
+
+
+\begin{frame}[t,fragile]\frametitle{Japanese Manifesto Topics}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jptopic.png}}
+%\centerline{\normalsize In LDA, each document can contain multiple topics}
+\end{frame}
+
+
+\begin{frame}[t,fragile]\frametitle{Manifesto Content over Time}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jpcontent.png}}
+%\centerline{\normalsize In LDA, each document can contain multiple topics}
+\end{frame}
+
+
+\begin{frame}[t,fragile]\frametitle{Foreign Policy Content}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jpforeign.png}}
+%\centerline{\normalsize In LDA, each document can contain multiple topics}
+\end{frame}
+
+
+
+
 \begin{frame}[t,fragile]\frametitle{Wrapping up}
-
-
-
-Two approaches
+For single category classification
 \ita
 \itm Discriminative: Model $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ directly
 \itm Generative: Model $P(\{W\} \mid Z, \beta)$ and $P(Z)=\theta_z$, then get $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ via Bayes theorem
 \itz
-For pure blackbox efficiency, go for the first!
+For multiple categories
+\ita
+\itm Latent Dirichlet Allocation
+\itm More generally used for discovery of topics
+\itz
+Tomorrow's Lab
+\ita
+\itm Classifying NY Times articles by topic
+\itz
 \end{frame}
 
 \end{document}
@@ -898,672 +779,3 @@ For pure blackbox efficiency, go for the first!
 
 
 
-
-
-
-
-
-
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%\slide{Ideological Position and SVM}
-%
-%Support Vector Machines are the state of the art for classification accuracy (just)
-%\ita
-%\itm Non-statistical (maximum margin) method
-%\itm Computationally demanding
-%\itm Non-intuitive parameterization
-%\itz
-%
-%Question: What are the ideological positions of senators?
-%
-%Yu et al. use the 25 most liberal and 25 most conservative senators (chosen via DNOMINATE scores) to train a SVM classifier to classify senators by their speeches:
-%
-%
-%%\slide{Ideological Position and SVM}
-%
-%%\centerline{\includegraphics[scale=.9]{pictures/yu-5}}
-%
-%\slide{Ideological positions}
-%
-%Up to 94\% correct classification on these 50 senators
-%
-%Only up to 64\% correct classification trained and tested on moderate senators (the middle 50)
-%
-%\slide{A Theory of Moderates (1)}
-%
-%\begin{quotation}
-%``[This is] a new way to think about
-%moderate senators which uncovers a hidden assumption in the spatial representation of
-%ideologies. According to the Poole-Rosenthal approach, the ideological position of
-%members of Congress is identical to their ideal point in a multi-dimensional.
-%But once we
-%fix an ideal point, moderate ideological positions are just as well-defined and precise as
-%``extreme'' positions.''
-%\end{quotation}
-%
-%\slide{A Theory of Moderates (2)}
-%
-%\begin{quotation}
-%``There is, however, a different way to conceptualize moderates. We
-%are not aware of a formal representation of this idea, but it does appear from time to time
-%in popular political discourse. The idea here is that moderate liberals and conservatives
-%do not constitute a separate position, but are simply \textsl{more blurry} versions of their extreme
-%counter-parts.''
-%\end{quotation}
-%
-%\slide{A Theory of Moderates (3)}
-%
-%Predictions:
-%\ita
-%\itm If moderates are `blurry' extremists then a classifier trained on moderate example would do less in classifying both moderates and extremists
-%\itm If moderate is a position, then a classifier trained on moderate example would do very well on moderates and not well on extremists
-%\itz
-%
-%\slide{A Theory of Moderates (4)}
-%
-%\centerline{\includegraphics[scale=.9]{pictures/yu-5}}
-%
-%\slide{A Theory of Moderates}
-%
-%\centerline{Do we believe this?}
-%
-%\slide{}
-%
-%
-%
-%%:RESIDUAL MATERIAL
-%
-%%%%%%%%%%%%%%%%%%%%%%%%
-%%% part 2 %%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%
-%
-%%%%%%% Measurement here
-%
-%
-%\slide{Measurement models}
-%
-%Substantive assumption
-%\begin{quotation}
-%\noindent
-%Unobserved $\theta$ \textsl{causes} observations $W_1, W_2, W_3,\ldots, W_V$
-%\end{quotation}
-% Statistical assumption
-%\begin{quotation}
-%$P(W_1,\ldots, W_V \mid \theta) ~=~ \prod_w^{V} P(W_w \mid {\theta})$
-%\end{quotation}
-%Once $\theta$ is known, variation in $W_1, W_2, W_3,\ldots, W_V$
-%is random.
-%
-%\slide{Measurement models}
-%
-%General Principle:
-%\ita
-%\itm Effects of a common cause will be correlated, until it is conditioned on, or controlled for
-%\itz
-%
-%You've seen this before, e.g
-%\ita
-%\itm good regression models make observations random, conditional on the explanatory variables
-%\itz
-%
-%
-%\slide{Measurement Models}
-%
-%Measurement model:
-%\ita
-%\itm Fit a model of $W_1 \ldots W_V \Leftarrow \theta$\\
-%then \textit{reverse} it to get an estimate of $\theta$
-%\itz
-%Examples:
-%\ita
-%\itm Factor Analysis
-%\itm Latent Class analysis
-%\itm Item Response Theory
-%\itm Structural Equation Models
-%\itz
-%
-%\slide{Measurement Models}
-%
-%Advantage: Requires no information about $Z$s or $\theta$s
-%
-%Disadvantage: Leans heavily on functional and distributional assumptions
-%
-%Let's look at some possible assumptions\ldots
-%
-%\slide{How might $\theta$ affect words?}
-%
-%word prob. depends on \textit{identity} of $\theta$\\
-% (via a category label Z)
-%
-%word prob. depends on the \textsl{magnitude} of $\theta$
-%
-%word prob. depends on the \textsl{distance} of $\theta$ from a point
-%
-%
-%
-%%%%%%%%%%%%%%% scaling %%%%%%%%%%%%%
-%
-%\slide{Of Left and Right}
-%
-%
-%Spatial politics assumptions:
-%\ita
-%\itm Policy preferences are \textit{positions} or \textit{ideal points} on policy \textit{dimensions}
-%\itm There exists a \textit{low-dimensional space} that explains the multitude of positioning information available in observations of politics
-%\itz
-%Take everyday talk about 'left' and 'right' seriously.
-%
-%Political representation is effective -- democratic, legitimate -- if politicians' preferences have the \textsl{right relationship} to citizens' preferences.
-%
-%\slide{Raw Materials of Left and Right}
-%
-%Quantitative positioning information:
-%\ita
-%\itm Votes in a legislature (obvious, but biased)
-%\itm Answers to survey questions (unbiased but only sometimes possible)
-%\itm Structured qualitative analysis of manifestos (e.g. Pellican, Krouwel)
-%\itm Counts of policy promises or assertions in a manifesto or speech (Budget et al.)
-%
-%\itm Frequencies of individual words
-%\itz
-%
-%\slide{Of Left and Right}
-%
-%\begin{center}
-%\includegraphics[scale=.3]{pictures/local-maastricht}
-%\end{center}
-%
-%
-%Keiskompass (see also Wahl-o-mat).
-%
-%
-%\slide{Senate Speeches (Monroe et al.)}
-%
-%\begin{center}
-%\includegraphics[scale=.2]{pictures/senator-ip-monroe-maeda}
-%\end{center}
-%
-%\slide{UK and IE Parties on the Economy}
-%
-%\begin{center}
-%\includegraphics[scale=.25]{pictures/wordscores-uk-ie}
-%\end{center}
-%
-%
-%\slide{2009 IE Budget Debate}
-%
-%\begin{center}
-%\includegraphics[scale=.6]{pictures/clean-snap}
-%\end{center}
-%
-%\slide{Scaling Model (Proksch and Slapin)}
-%
-%Assumptions about $P(W_1\ldots W_V \mid \theta)$
-%\begin{align*}
-%\log  \lambda_{ij} &~=~ \psi_j ~+~ \beta_j\theta_i ~+~  \alpha_i
-%\end{align*}
-%
-%$\theta_i$ is the expressed position of a text
-%
-%\slide{Scaling Model (Proksch and Slapin)}
-%
-%Assumptions about $P(W_1\ldots W_V \mid \theta)$
-%\begin{align*}
-%\log  \lambda_{ij}  &~=~ \psi_j ~+~ \beta_j\theta_i ~+~  \alpha_i
-%\end{align*}
-%
-%$\alpha_i$ is a constant term controlling for document length
-%
-%\slide{Scaling Model (Proksch and Slapin)}
-%
-%Assumptions about $P(W_1\ldots W_V \mid \theta)$
-%\begin{align*}
-%\log  \lambda_{ij}  &~=~ \psi_j ~+~ \beta_j\theta_i ~+~  \alpha_i
-%\end{align*}
-%
-% The \textsl{sign} of $\beta_j$ represents the \textsl{ideological direction} of $W_j$
-%
-%\slide{Scaling Model (Proksch and Slapin)}
-%
-%Assumptions about $P(W_1\ldots W_V \mid \theta)$
-%\begin{align*}
-%\log  \lambda_{ij}  &~=~ \psi_j ~+~ \beta_j\theta_i ~+~  \alpha_i
-%\end{align*}
-%
-% The \textsl{magnitude} of $\beta_j$ represents the \textsl{sensitivity} of the word to ideological differences among speakers or parties
-%
-%\slide{Scaling Model (Proksch and Slapin)}
-%
-%Assumptions about $P(W_1\ldots W_V \mid \theta)$
-%\begin{align*}
-%\log  \lambda_{ij}  &~=~ \psi_j ~+~ \beta_j\theta_i ~+~  \alpha_i
-%\end{align*}
-%
-%$\psi_j$ is a constant term for the word (larger for high frequency words).
-%
-%
-%\slide{Scaling Model (Proksch and Slapin)}
-%\begin{center}
-%\includegraphics[scale=.3]{pictures/log-lambda.pdf}\hfill
-%\includegraphics[scale=.3]{pictures/lambda.pdf}
-%\end{center}
-%
-%The underlying Poisson regression model reflects a \textit{multiplicative} relationship between position and words used
-%
-%\slide{Marginal Effects}
-%
-%British National Party manifesto for 2009 EU elections
-%
-%\slide{Marginal Effects}
-%
-%\footnotesize
-%Immigration is out of control.
-%\normalsize
-%
-%\slide{Marginal Effects}
-%
-%\footnotesize
-%Immigration is out of control.
-%\textbf{Britain's population is now over 60 million and rising, solely due to immigration.}
-%\normalsize
-%
-%\slide{Marginal Effects}
-%
-%\footnotesize
-%Immigration is out of control.
-%Britain's population is now over 60 million and rising, solely due to immigration.
-%\textbf{Not only is Britain increasingly overcrowded but the fact is that a country is the product of its people  and
-%if you change the people you will inevitably change the nature of the country.}
-%\normalsize
-%
-%\slide{Marginal Effects}
-%
-%\footnotesize
-%Immigration is out of control.
-%Britain's population is now over 60 million and rising, solely due to immigration.
-%Not only is Britain increasingly overcrowded but the fact is that a country is the product of its people  and
-%if you change the people you will inevitably change the nature of the country.
-%\textbf{We want Britain to remain - or return to - the way it has traditionally been.}
-%\normalsize
-%
-%\slide{Marginal Effects}
-%
-%\footnotesize
-%Immigration is out of control.
-%Britain's population is now over 60 million and rising, solely due to immigration.
-%Not only is Britain increasingly overcrowded but the fact is that a country is the product of its people  and
-%if you change the people you will inevitably change the nature of the country.
-%We want Britain to remain - or return to - the way it has traditionally been.
-%\textbf{We accept that Britain will always have ethnic minorities and
-%have no problem with this as long as they remain minorities and
-%neither change nor seek to change the fundamental culture and identity of the indigenous peoples of the British Isles.}
-%\normalsize
-%
-%\slide{Marginal Effects}
-%
-%\footnotesize
-%\ldots fundamental culture and identity of the indigenous peoples of the British Isles.
-%\textbf{The current open-door policy and unrestricted uncontrolled immigration is leading to higher crime rates, demand for more housing (driving prices out of the reach of young people), severe strain on the environment, traffic congestion, longer hospital waiting list, lower educational standards, higher income taxes, lower wages, higher unemployment, loss of British identity, a breakdown in community spirit, more restrictive policing, higher council tax rates, a shortage of council homes, higher levels of stress and unhappiness and a more atomized society.}
-%\normalsize
-%
-%\slide{Marginal Effects}
-%
-%~\\
-%Are we getting the point yet?
-%
-%%\itm {sentence counts} (Budge 1994; Elff 2008)
-%
-%\slide{}
-%
-%\begin{center}
-%\includegraphics[scale=.35]{pictures/sp-informativeness.png}
-%\end{center}
-%
-%\slide{Whew!}
-%
-%~\\
-%For the slower version, attend the ECPR Ljubljana Summer School in Methods and Techniques
-%
-%Questions? Feuer frei!
-%
-%
-%
-%\slide{Good Old Logit}
-%
-%It is tempting to go with methods we know (disciminative style)
-%\begin{eqnarray*}
-%\hat{\theta}_k &=& P(Z=k \mid W_1 \ldots W_V)\\
-%         &=& \text{logit}^{-1}(\alpha + \beta_1 W_1 + \beta_2 W_2 + \ldots)
-%\end{eqnarray*}
-%
-%This is a bad idea
-%\ita
-%\itm Why?
-%\itz
-%
-%\slide{Bad Old Logit}
-%
-%The number of word types V is almost much larger than the number of documents D
-%\ita
-%\itm Many more `cases' than `variables'
-%\itm \textit{and} no constraint on possible solutions
-%\itz
-%
-%Options (choose at least one):
-%\ita
-%\itm Move to a generative method based on $\theta \longrightarrow$ W
-%\itm Add constraints on the mapping between W and Z
-%\itz
-%
-%
-%\slide{Evaluation: Accuracy, Precision and Recall}
-%
-%We evaluate using estimates of
-%\begin{align*}
-%\text{P}(\hat{Z}=\text{`petitioner'} \mid Z=\text{`petitioner'}) && \text{Recall}  \\
-%\text{P}(Z=\text{`petitioner'} \mid \hat{Z}=\text{`petitioner'}) && \text{Precision}
-%\end{align*}
-%and
-%\begin{align*}
-%\text{P}(\hat{Z}=\text{`respondent'} \mid Z=\text{`respondent'}) && \text{Recall}  \\
-%\text{P}(Z=\text{`respondent'} \mid \hat{Z}=\text{`respondent'}) && \text{Precision}
-%\end{align*}
-%
-%where $\hat{Z}$ is assigned by \textit{thresholding} $\theta$
-%
-%\slide{Event data extraction}
-%
-%Russian artillery south of the Chechen
-%capital Grozny blasted Chechen
-%positions overnight before falling silent
-%at dawn, witnesses said on Tuesday.
-%
-%\noindent
-%Israel said on Tuesday it sent
-%  humanitarian aid to
-%Colombia where a massive
-%  earthquake last week
-%killed at least 938 people and injured 400.
-%
-%\slide{Event data extraction}
-%
-%
-%\mkred{Russian artillery}$^{\,\mathsf{S}}$ south of the Chechen
-%capital
-%Grozny \mkgreen{blasted}$^{\,\mathsf{223}}$ \mkblue{Chechen
-%positions}$^{\,\mathsf{T}}$ overnight before falling silent
-%at dawn, witnesses said on Tuesday.
-%
-%\noindent
-%\mkred{Israel}$^{\,\mathsf{S}}$ said on Tuesday it \mkgreen{sent
-%  humanitarian aid}$^{\,\mathsf{073}}$ to
-%\mkblue{Colombia}$^{\,\mathsf{T}}$ where a \mkred{massive
-%  earthquake}$^{\,\mathsf{S}}$ last week
-%\mkgreen{killed}$^{\,\mathsf{222}}$ at least \mkblue{938~
-%people}$^{\,\mathsf{T}}$ and injured 400.
-%~\\
-%
-%\slide{Event data extraction}
-%
-%
-%\mkred{Russian artillery}$^{\,\mathsf{S}}$ south of the Chechen
-%capital
-%Grozny \mkgreen{blasted}$^{\,\mathsf{223}}$ \mkblue{Chechen
-%positions}$^{\,\mathsf{T}}$ overnight before falling silent
-%at dawn, witnesses said on Tuesday.
-%
-%\noindent
-%\mkred{Israel}$^{\,\mathsf{S}}$ said on Tuesday it \mkgreen{sent
-%  humanitarian aid}$^{\,\mathsf{073}}$ to
-%\mkblue{Colombia}$^{\,\mathsf{T}}$ where a \mkred{massive
-%  earthquake}$^{\,\mathsf{S}}$ last week
-%\mkgreen{killed}$^{\,\mathsf{222}}$ at least \mkblue{938~
-%people}$^{\,\mathsf{T}}$ and injured 400.
-%~\\
-%{\large
-%\begin{center}
-%\texttt{20010901 RUS CHE 223}\\
-%\texttt{20020804 ISR COL 073}\\
-%\texttt{20020804 --- COL 222}
-%\end{center}
-%}
-%\slide{Dyadic event data (Serbia-Bosnia)}
-%
-%\begin{center}
-%{\footnotesize
-%\begin{tabular}{rrr} \toprule
-%Week       & Code & Description \\ \midrule
-%1995-07-11 & 211 & SEIZE POSSESSION \\
-% & 212 & ARREST PERSON \\
-% & 223 & MILITARY ENGAGEMENT \\ \midrule
-%1995-07-12 & 211 & SEIZE POSSESSION \\
-% & 223 & MILITARY ENGAGEMENT \\
-% & 173 & SPECIF THREAT \\
-% & 191 & CANCEL EVENT \\
-% & 211 & SEIZE POSSESSION \\
-% & 095 & PLEAD \\
-% & 111 & TURN DOWN \\
-% & 212 & ARREST PERSON \\
-% & 081 & MAKE AGREEMENT \\
-% & 023 & NEUTRAL COMMENT \\
-% & 032 & VISIT \\
-% & 031 & MEET \\ \bottomrule
-%\end{tabular}
-%}
-%\end{center}
-%
-%\newpage
-%
-%\slide{Scaled dyadic event data}
-%
-%\begin{center}
-%{\footnotesize
-%\begin{tabular}{rrr} \toprule
-%Week       & Code & Score [-10,10) \\ \midrule
-%1995-07-11 & 211 & -9.2 \\
-% & 212 & -9.0 \\
-% & 223 & -10.0 \\ \midrule
-%1995-07-12 & 211 & -9.2 \\
-% & 223 & -10.0 \\
-% & 173 & -7.0 \\
-% & 191 & -2.2 \\
-% & 211 & -9.2 \\
-% & 095 & 1.2 \\
-% & 111 & -4.0  \\
-% & 212 & -9.0 \\
-% & 081 & 6.5 \\
-% & 023 & -0.2 \\
-% & 032 & 1.9 \\
-% & 031 & 1.0 \\ \bottomrule
-%\end{tabular}
-%}
-%\end{center}
-%
-%\slide{Summed scaled dyadic event data}
-%
-%\centerline{\includegraphics[scale=.8]{fatsum}}
-%
-%\slide{The human elements}
-%
-%\textit{Coders} read newswire and extract events\\ \mkgrey{(e.g. GEDS projects, Swisspeace)}
-%
-%\textit{Experts} assign scores to event types\\
-%\mkgrey{(e.g. Goldstein 1995, Shellman 2004)}
-%
-%\textit{Analysts} aggregate and infer conflict dynamics\\ \mkgrey{(Goldstein \& Pevehouse 1997, Pevehouse \& Goldstein 1999)}
-%
-%%\slide{(Really) old problems}
-%%
-%%Equivalences:
-%%\ita
-%%\itm \textbf{-10} $\approx$ 1 mil. action = 2 demands = 5 accusations
-%%\itz
-%%Cancellations:
-%%\ita
-%%\itm ~~\textbf{0}~~ $\approx$ 1 demo + 1 agreement = 1 decline to comment
-%%\itz
-%%More reports made bad things worse?
-%%
-%%~\\
-%%(see also Yonamine, 2012 for a discussion)
-%%%Are these numbers right? (Bond et al. 2003, Shellman 2004)
-%%
-%%\slide{Prescription? Just use the counts}
-%%
-%%Well ok, but\ldots
-%%\ita
-%%\itm Univariate count data analysis can be tricky %\pause
-%%\itm Time series count data analysis is \textit{always} tricky %\pause
-%%\itm Multivariate time series count data analysis is
-%%an \textit{open statistical problem}
-%%\itz
-%%
-%%\slide{Scaling, event data style}
-%%~\\
-%%\centerline{\includegraphics[scale=1]{smoky-room}}
-%%\vfill
-%%\centerline{\color{gray}(Goldstein 1995, Bond et al. 2003, Shellman 2004)}
-%%
-%%
-%%
-%%\slide{Alternative: Distinguish reporting}
-%%
-%%\centerline{\includegraphics[scale=.95]{fatn}}
-%%
-%%\slide{\ldots from what is reported}
-%%
-%%\centerline{\includegraphics[scale=.95]{fatav}}
-%%
-%
-%\slide{Evaluating an event data system}
-%
-%Two aspects of event type evaluation\\ \mkgrey{(King and Lowe 2003)}:
-%\ita
-%\itm If machine says it's a use of force, is it really?\\
-%{(Precision / specificity)}
-%\itm If it's a use of force, will the machine say it is? \\
-%{(Recall / sensitivity)}
-%\itz
-%
-%~\\
-%{\large
-%\centerline{$P(T \mid M=\text{"223"})$ ~~~vs.~~~ $P(M \mid T=\text{"223"})$}
-%}
-%
-%\slide{Evaluating precision}
-%
-%To estimate $P(T \mid M)$
-%\ita
-%\itm 1. Run the machine over all news leads
-%\itm 2. Select an equal number of examples from each machine assigned category M
-%\itm 3. Identify their true event type T
-%\itz
-%
-%Boring (code 711 leads from >150 event types sampled from $P(M)$) but straightforward
-%
-%
-%\slide{A problem evaluating recall}
-%
-%We need a gold standard T, but\ldots
-%
-%\textrm{``of the 45,000 events coded coded by
-%the VRA Reader from news leads on the former Yugoslavia, it found
-%10,605 neutral comments but only 4 apologies and 35 threats of
-%military attack.''}
-%
-%\vfill
-%Coders might have to wade through $\sim$2500 comments to find an apology and $\sim$ 300 comments to find a threat of force.
-%
-%and we're lazy (on their behalf)
-%
-%\slide{A solution}
-%{\large
-%\begin{align*}
-% P(M\mid T)   & = \frac{P(T\mid M)P(M)}{P(T)}
-%\end{align*}
-%}
-%\pause
-%P(M) is just the event type \textit{tabulation}
-%\ita
-%\itm \ldots run the machine on all 45,000 leads
-%\itz \pause
-%P(T) is a normalizing constant.
-%
-%
-%
-%\slide{Undergrads vs. the machine}
-%
-%{\small
-%\begin{center}
-%\begin{tabular}{r|llll|llll}
-%            & \multicolumn{4}{c}{All Codes} & \multicolumn{4}{c}{WEIS Codes} \\
-%& $M$ & $U^{(1)}$ & $U^{(2)}$ & $U^{(3)}$ & $M$ & $U^{(1)}$ & $U^{(2)}$ & $U^{(3)}$ \\
-%$w=1$    &     &     &     &       &      &     &     & \\
-%detailed    & .26 & .32 & .23 & .26   &  \textbf{.25} & \textbf{.44} & \textbf{.25} & \textbf{.37} \\
-%aggregate   & .55 & .55 & .39 & .48   &  \textbf{.62} & \textbf{.62} & \textbf{.48} & \textbf{.62} \\
-%            &     &     &     &       &      &     &     &  \\
-%$w=P(t)$    &     &     &     &      &      &     &    & \\
-%detailed    & .52 & .48 & .35 & .42   &  .55 & .64 & .35 & .68 \\
-%aggregate   & .65 & .70 & .53 & .64   &  .70 & .72 & .56 & .65 \\
-%            &     &     &     &       &      &     &     &  \\
-%$w=1/\sqrt{P(t)}$&&       &     &       &      &     &     & \\
-%detailed    & .36 & .44 & .33 & .41   &  .37 & .62 & .34 & .67 \\
-%aggregate   & .59 & .66 & .49 & .62   &  .64 & .68 & .53 & .63 \\
-%            &     &     &     &       &      &     &     &  \\
-%\end{tabular}
-%\end{center}
-%}
-%
-%\newpage
-%
-%\slide{Targeted evaluation}
-%
-%For many applications we don't require few mistakes
-%\ita
-%\itm \ldots just few mistakes \textit{about conflict and cooperation levels}
-%\itz
-%
-%\pause
-%So we evaluate in terms of \textit{expected Goldstein scores}
-%{\large
-%\begin{equation*}
-%  g_i = E[G_{j|i}]=\sum_{j=1}^J G_{j|i}\,P(M=j \mid T=i),
-%\end{equation*}
-%}
-%
-%\slide{Targeted evaluation}
-%
-%\centerline{\includegraphics[scale=.97]{g2cropped}}
-%
-%\slide{Conclusions for event extraction}
-%
-%Automated methods are competitive with human coders
-%\ita
-%\itm time for some pink slips
-%\itz
-%
-%
-%
-%\end{document}

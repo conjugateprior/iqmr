@@ -11,21 +11,26 @@ Lab 3: Scraping and scaling SOTUs
 
 Session 1: TODO
 
-* Get SU NETID and student info
 * Draft preparation notes (also scp etc - monday night session)
-* Send out preparation notes
+
+* Send out preparation notes <- monday night from 7
+
 * Fix references to materials in slide intro
+
 * stemming
-* collocations
-* concordances
-* simil structures  <- in the lab?
+
 * categories
 
 * mechanical turk slides from session 3 into this one.
 
-* an exploratory lab with pictures
-collocs and categories with bara
-replicate a table from bara
+* replicate a table from bara  <<-- 
+
+make student folders
+
+mail james before bedtime
+
+finish scaling slides
+
 
 
 

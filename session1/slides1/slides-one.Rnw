@@ -276,7 +276,9 @@ A couple months ago we weren't expected to win this one, you know that, right? W
 \end{frame}
 
 
-
+\begin{frame}[plain]
+\centerline{\includegraphics[scale=.6]{pictures/spock-detecting-large-quantities-sf}}
+\end{frame}
 
 
 \begin{frame}[t]\frametitle{Scope conditions}

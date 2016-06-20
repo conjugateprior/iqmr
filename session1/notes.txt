@@ -13,23 +13,24 @@ Session 1: TODO
 
 * Draft preparation notes (also scp etc - monday night session)
 
-* Send out preparation notes <- monday night from 7
-
 * Fix references to materials in slide intro
-
-* stemming
-
-* categories
 
 * mechanical turk slides from session 3 into this one.
 
-* replicate a table from bara  <<-- 
+* finish scaling slides
 
-make student folders
 
-mail james before bedtime
+cmp slides with decomposition
+as story about *lots* of logits, patterns of relemph
+BNP manifesto example for logits (psychophysical laws)
 
-finish scaling slides
+multidimensional extension
+what is the dimension? (compare to cca, topic models, and classification)
+unknown dimension + problems
+
+lab: 
+do abortion debate thing
+look at uk manifestos and interpret in ca?
 
 
 

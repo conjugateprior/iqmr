@@ -41,7 +41,7 @@
 \newcommand{\itz}{\end{itemize}}
 \setbeamercolor{itemize item}{fg=lightgray}
 
-\usepackage{bayesnet} %% needs to be installed: ~/Library/texmf/tex/latex/bayesnet
+%\usepackage{bayesnet} %% needs to be installed: ~/Library/texmf/tex/latex/bayesnet
 
 % graphics file in the pics subdirectory please
 \graphicspath{{./pics/}}
@@ -59,8 +59,8 @@
 
 We have a website:
 \ita
-\itm \url{http://conjugateprior.org/teaching/texas/}
-\itm Password: quantext
+\itm \url{FIXME}
+\itm Password: iqmr2016
 \itz
 
 \end{frame}
@@ -120,10 +120,6 @@ by counting (lots of) words\ldots
 
 \end{frame}
 
-\begin{frame}[plain]
-\centerline{\includegraphics[scale=2.5]{pictures/etinarcadiaego}}
-\end{frame}
-
 \begin{frame}[fragile]\frametitle{The transcendental question}
 
 \begin{quote}
@@ -138,6 +134,11 @@ suppressPackageStartupMessages(library(quanteda))
 @
 
 \end{frame}
+
+\begin{frame}[plain]
+\centerline{\includegraphics[scale=2.5]{pictures/etinarcadiaego}}
+\end{frame}
+
 \begin{frame}[t]\frametitle{Big picture}
 
 There is a \textsl{message} or \textit{content} that cannot be \textit{directly} observed, e.g.
@@ -160,39 +161,43 @@ To \textsl{communicate} a message $\theta$ -- to inform, persuade, demand, threa
 
 
 \begin{center}
-\includegraphics[scale=.9]{pictures/gen}
+\includegraphics[scale=.5]{pictures/gen} ~~~~~~~ \includegraphics[scale=.5]{pictures/gen-plate}
 \end{center}
 
 \end{frame}
-\begin{frame}[t,fragile]\frametitle{Communication}
-
-To \textsl{communicate} a message $\theta$ -- to inform, persuade, demand, threaten, a producer (the speaker or writer) \textsl{generates} words of different kinds in different quantities
-
-
-\begin{center}
-\tikz{
-  \node[obs]                            (z) {$\theta$};
-  \node[latent, right=of z, yshift=+1cm] (a) {$w_1$};
-  \node[latent, right=of z, yshift=0cm]    (b) {$w_2$};
-  \node[latent, right=of z, yshift=-1cm] (c) {$w_3$};
-  \edge{z}{a,b,c};
-} ~~ 
-\tikz{
-  \node[obs]                            (z) {$\theta$};
-  \node[latent, right=of z, yshift=0cm] (a) {$w$};
-  \edge{z}{a};
-  \plate{za} {(z)(a)} {$V$} ;
-}
-\end{center}
-
-
-\end{frame}
+% \begin{frame}[t,fragile]\frametitle{Communication}
+% 
+% To \textsl{communicate} a message $\theta$ -- to inform, persuade, demand, threaten, a producer (the speaker or writer) \textsl{generates} words of different kinds in different quantities
+% 
+% %\begin{center}
+% %\includegraphics[scale=.9]{pictures/inf-plate}
+% %\end{center}
+% 
+% 
+% % \begin{center}
+% % \tikz{
+% %   \node[obs]                            (z) {$\theta$};
+% %   \node[latent, right=of z, yshift=+1cm] (a) {$w_1$};
+% %   \node[latent, right=of z, yshift=0cm]    (b) {$w_2$};
+% %   \node[latent, right=of z, yshift=-1cm] (c) {$w_3$};
+% %   \edge{z}{a,b,c};
+% % } ~~ 
+% % \tikz{
+% %   \node[obs]                            (z) {$\theta$};
+% %   \node[latent, right=of z, yshift=0cm] (a) {$w$};
+% %   \edge{z}{a};
+% %   \plate{za} {(z)(a)} {$V$} ;
+% % }
+% % \end{center}
+% 
+% 
+% \end{frame}
 \begin{frame}[t]\frametitle{Communication}
 
-To \textsl{understand} a message the consumer (the hearer, reader, coder) uses those words to \textsl{reconstruct} the message
+To \textit{understand} a message the consumer (the hearer, reader, coder) uses those words to \textsl{reconstruct} the message
 
 \begin{center}
-\includegraphics[scale=.9]{pictures/inf-plate}
+\includegraphics[scale=.5]{pictures/inf-plate}
 \end{center}
 
 
@@ -202,12 +207,19 @@ To \textsl{understand} a message the consumer (the hearer, reader, coder) uses t
 
 This is a stable (Searle, 1995) conventional (Lewis, 1969) but disruptable (Riker, 1996) communication process in which no finite set of words \textsl{uniquely} identifies any content (Quine, 1960; Davidson, 1977)
 
-How to model this without having to solve the problems of linguistics (psychology, politics) first?
+How to model this without having to solve the problems of 
+linguistics (psychology, politics) first?
 
-Rely on: instrumentality, randomness and reflexivity
+Rely on: 
+\ita
+\item instrumentality
+\item reflexivity
+\item randomness
+\itz
+
 
 \end{frame}
-\begin{frame}[t]\frametitle{Instrumentality from `them'}
+\begin{frame}[t]\frametitle{Instrumentality from 'them'}
 
 Language use is as a \textit{form of action} (Wittgenstein, 1953; Austin, 1975; Dawkins and Krebs, 1978)
 
@@ -269,23 +281,19 @@ A couple months ago we weren't expected to win this one, you know that, right? W
 
 \begin{frame}[t]\frametitle{Scope conditions}
 
-Computer-assisted content analysis works best when language usage is \textit{institutionalized} 
+Computer-assisted content analysis works best when language usage is
 \ita
 \itm stable, conventionalized, and instrumental
 \itz
-Implicitly, we always condition on some institution, e.g.
+Implicitly, we usually condition on some institution, e.g.
 \ita
-\itm courts, legislatures, online political persuasion, sports or financial reporting, survey response
+\itm courts, legislatures, online political argument, sports or financial reporting, survey responses
 \itz
 
 \pause
 (Notice that this inevitably creates a comparability problem)
-\pause
 
-In constrast to
-\ita
-\itm conversation, technical manuals
-\itz
+
 %\slide{Modeling}
 %
 %We will make use of formal models of the process from
@@ -303,16 +311,19 @@ In constrast to
 
 \begin{frame}[t]\frametitle{Randomness}
 
-\textit{You} know the content of your beliefs (probably)
-but others only infer them, on the basis of data
-\ita
-\itm c.f. `How do I know what I think until I hear what I say?' (E. M. Forster)
-\itz
-The \textsl{primary data} are often the words you use
+% \textit{You} know the content of your beliefs (probably)
+% but others only infer them, on the basis of data
+% \ita
+% \itm c.f. `How do I know what I think until I hear what I say?' (E. M. Forster)
+% \itz
+% The \textsl{primary data} are often the words you use
 
-You almost never \textit{say exactly the same words twice}, even when you haven't changed your mind.  Hence words are the result of some kind of \textsl{sampling process}.
+You almost never \textit{say exactly the same words twice}, even when you haven't changed your mind about the message.  
 
-We treat this process as \textsl{random} because we don't know or care about all the causes of variation
+\pause 
+Hence words are the result of some kind of \textsl{sampling process}.
+
+We treat this process as \textsl{random} because we don't know or care about all the causes of variation \pause
 \ita
 \itm (and because we're all secretly Bayesians)
 \itz
@@ -347,22 +358,15 @@ We treat this process as \textsl{random} because we don't know or care about all
 load("data/uk-manifs-corpus.RData")
 @
 
-%\begin{center}
-%\includegraphics[scale=1.2]{pictures/obamawordle}
-%\end{center}
-
-
-
-\end{frame}
-\begin{frame}[t]\frametitle{Words as data}
-
 What do we know about words \textit{as data}?
+
+\pause 
 
 They are \textit{difficult}
 \ita
-\itm High dimensional
-\itm Sparsely distributed (with skew)
-\itm Not equally informative
+\item High dimensional
+\item Sparsely distributed (with skew)
+\item Not equally informative
 \itz
 
 
@@ -502,7 +506,7 @@ For large amounts of text summaries are not enough.
 We need a \textit{model} to provide assumptions about 
 \ita
 \item \textit{equivalence}
-\itm \textit{exchangeability}
+\item \textit{exchangeability}
 \itz
 
 %Two words may
@@ -513,7 +517,9 @@ We need a \textit{model} to provide assumptions about
 %\textsl{express} hostility, identity, \ldots & (pragmatics)\\
 %\end{tabular}
 
-The standard set of equivalence assumptions are the `bag of words'.  Specifically:
+The standard set of equivalence assumptions are the `bag of words'.  
+
+Specifically:
 
 \end{frame}
 \begin{frame}[t]\frametitle{Punctuation invariance}
@@ -645,6 +651,14 @@ doc 2 & 0     & 0  & 1 & 1    & 0    & \ldots & \textcolor{gray}{$\theta_\text{d
 %\itz
 
 \end{frame}
+
+\begin{frame}[t]\frametitle{Visualized}
+
+\centerline{\includegraphics[scale=0.4]{pictures/grey-just-rile}}
+
+\end{frame}
+
+
 \begin{frame}[t]\frametitle{What is this content $\theta$?}
 
 What is the content in content analysis?
@@ -862,7 +876,7 @@ Categories are
 
 \end{frame}
 \begin{frame}[plain]
-\centerline{\includegraphics[scale=.4]{pictures/topics2}}
+\centerline{\includegraphics[scale=.3]{pictures/topics2}}
 \end{frame}
 
 \begin{frame}[t]\frametitle{Classical content analysis}
@@ -874,7 +888,7 @@ The word to category mapping $\beta$ is provided by the researcher as a \textit{
 The content of a document $\theta$ is the proportion (or count) of each category
 
 ~\\
-\centerline{\includegraphics[scale=.5]{pictures/new-topics-ca.png}}
+\centerline{\includegraphics[scale=.4]{pictures/new-topics-ca.png}}
 
 \centerline{How content is generated and what we claim to know}
 
@@ -1204,6 +1218,8 @@ Here, a \textit{logged ratio} of two categories
 
 \begin{frame}[t]\frametitle{OK, how do I make such a dictionary?}
 
+Find a suitable tool
+
 Maximise measurement validity
 
 Minimise \textit{measurement error}
@@ -1213,6 +1229,21 @@ Minimise \textit{measurement error}
 (Sell high, buy low)
 
 \end{frame}
+
+\begin{frame}[t]\frametitle{Find a suitable tool}
+
+\href{http://provalisresearch.com/products/content-analysis-software/}{Wordstat}
+
+\href{http://liwc.wpengine.com/}{LIWC} (maybe don't)
+
+\href{http://apb.newmdsx.com/hamlet2.html}{Hamlet}
+
+\href{http://atlasti.com/}{Atlas-ti} (?)
+
+\href{https://github.com/conjugateprior/yoshikoder/releases/tag/v0.6.5}{Yoshikoder}
+
+\end{frame}
+
 \begin{frame}[plain]
 
 \centerline{\includegraphics[scale=.4]{pictures/wickeroth-strategie-der-steine-3-2007}}

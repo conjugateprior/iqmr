@@ -334,19 +334,19 @@ Now the balance of floor time spent saying `relevant' words is even more skewed,
 % \item More generally, where do you see the benefits and/or limitations of applying this specific dictionary? Do you suspect that important terms are omitted? Notice that there is no ``gender politics'' category in the Bara et al. dictionary. Can you think of some terms that might reflect gender politics? Use Yoshikoder to add a gender category and appropriate patterns. Re-apply the dictionary  to the data. Do you find a partisan pattern?
 % \end{itemize}
 
-\newpage
-
-\subsection*{Looking ahead to Lecture 2}
-
-This dictionary-based analysis relied on the intuitions of Bara et al. for its validity.  We can also consider how a completely unsupervised `topic model' would segment these documents into topics and assign them words.  You can find such a model at \url{http://dl.conjugateprior.org/jsLDA/jslda.html}.  
-
-When you load that page it contains a collection of paragraphs from US State of the Union speeches.  In the field marked `Documents URL' you will see `sotu\_small.txt'.  This is the name of the source document that lives on the server.  
-
-Replace that file by typing `abortion\_debate.txt' instead and press the `load' button. In a few moments the separate paragraphs of the abortion debate will appear.
-
-To fit the topic model, set the number of topics and press the button on the top left of the page marked `Run 50 iterations'.  After these have completed the page will update with the new assignments of topics and words.  The split into paragraphs is necessary for the topic model because it relies on cross-document word variation to estimate the mixture of topics each document might contain.  Consequently we need to define document to be a smaller unit to provide enough of information.
-
-Check the words that are most likely to have generated a topic. Do these topics make sense? Is the overlap with Bara's categories?
+% \newpage
+% 
+% \subsection*{Looking ahead to Lecture 2}
+% 
+% This dictionary-based analysis relied on the intuitions of Bara et al. for its validity.  We can also consider how a completely unsupervised `topic model' would segment these documents into topics and assign them words.  You can find such a model at \url{http://dl.conjugateprior.org/jsLDA/jslda.html}.  
+% 
+% When you load that page it contains a collection of paragraphs from US State of the Union speeches.  In the field marked `Documents URL' you will see `sotu\_small.txt'.  This is the name of the source document that lives on the server.  
+% 
+% Replace that file by typing `abortion\_debate.txt' instead and press the `load' button. In a few moments the separate paragraphs of the abortion debate will appear.
+% 
+% To fit the topic model, set the number of topics and press the button on the top left of the page marked `Run 50 iterations'.  After these have completed the page will update with the new assignments of topics and words.  The split into paragraphs is necessary for the topic model because it relies on cross-document word variation to estimate the mixture of topics each document might contain.  Consequently we need to define document to be a smaller unit to provide enough of information.
+% 
+% Check the words that are most likely to have generated a topic. Do these topics make sense? Is the overlap with Bara's categories?
 
 
 \end{document}

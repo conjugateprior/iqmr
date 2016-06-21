@@ -18,10 +18,8 @@
 \definecolor{darkgray}{rgb}{0.5,0.5,0.5}
 \definecolor{darkblue}{rgb}{0.000,0.251,0.502}
 \definecolor{bloodred}{rgb}{0.502,0.000,0.000}
-\definecolor{palered}{rgb}{0.7,0.000,0.000}
 \definecolor{darkgreen}{rgb}{0.000,0.502,0.0}
-\definecolor{verylightgray}{rgb}{0.9,0.9,0.9}
-\definecolor{lightgray}{rgb}{0.75,0.75,0.75}
+\definecolor{verylightgray}{rgb}{0.95,0.95,0.95}
 
 \setbeamerfont{frametitle}{size=\Large,family=\fancy}
 \setbeamercolor{frametitle}{fg=bloodred, bg=verylightgray}
@@ -39,17 +37,15 @@
 \newcommand{\ita}{\begin{itemize}}
 \newcommand{\itm}{\item[]}
 \newcommand{\itz}{\end{itemize}}
-\setbeamercolor{itemize item}{fg=lightgray}
 
 % graphics file in the pics subdirectory please
 \graphicspath{{./pics/}}
 
-\title{Computer-assisted content analysis 2}
-\author{Will Lowe ~~\textcolor{gray}{Princeton University}\\
-        James Lo ~~ \textcolor{gray}{University of Southern California}}
-\date{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Computer-assisted content analysis}
+\author{Will Lowe ~~Princeton University \\ James Lo ~~ University of Southern California}
+\date{Part 2}
 \begin{document}
-
 
 \maketitle
 
@@ -211,9 +207,8 @@ As before, we have two approaches
 
 
 
-
 %\begin{frame}[t,fragile]\frametitle{Generative vs discriminative training}
-%\centerline{\includegraphics[scale=.4]{pictures/unsupervised-classification} \hfill \includegraphics[scale=.4]{pictures/supervised-classification}}
+%\centerline{\includegraphics[scale=.4]{pictures/unsupervised-classification} \hfill \includegraphics[scale=.4]{pictures/supervised-%classification}}
 %Naive Bayes \hfill Maximum Entropy, etc...
 %\vfill
 %\end{frame}
@@ -681,6 +676,13 @@ x_{im} | \beta_k, z_{im} &= \text{Multinomial}(1, \beta_k)  && \text{ (Pick a wo
 with
 
 p($\beta$, $\theta$, Z, $\alpha$ | X) $\propto$  p($\beta$ | $\eta$) $\cdot$ p($\theta$|$\alpha$) $\cdot$ p(Z | $\theta$) $\cdot$ p(X | $\beta$, Z)
+\end{frame}
+
+
+\begin{frame}[t,fragile]\frametitle{Generative vs discriminative training}
+\vspace{2cm}
+\centerline{\includegraphics[scale=.6]{pictures/new-topics-ca.png} }
+\vfill
 \end{frame}
 
 

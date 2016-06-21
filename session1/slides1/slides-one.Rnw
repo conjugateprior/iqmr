@@ -73,11 +73,11 @@ We have a website:
 
 Session 0: How could this possibly work?
 
-Session 1: Dictionary-based `classical' content analysis and topic models
+Session 1: Dictionary-based 'classical' content analysis
 
-Session 2: Classification and evaluation
+Session 2: Classification and topic models
 
-Session 3: Scaling Models
+Session 3: Scaling models
 
 
 \end{frame}
@@ -883,9 +883,9 @@ Categories are
 
 \begin{frame}[t]\frametitle{Classical content analysis}
 
-Every word $W$ has an category $W$ 
+Every word $W$ has an topic $Z$ 
 
-The word to category mapping $\beta$ is provided by the researcher as a \textit{content analysis dictionary}
+The word $W$ to topic $Z$ mapping $\beta$ is provided by the researcher as a \textit{content analysis dictionary}
 
 The content of a document $\theta$ is the proportion (or count) of each category
 
@@ -905,8 +905,11 @@ ECONOMY & +STATE\\
 & age\\
 & ambulance\\
 & assist\\
+& benefit\\
 & \ldots\\
 & -STATE\\
+& assets\\
+& bid\\
 & choice*\\
 & compet*\\
 & constrain*\\
@@ -1000,7 +1003,7 @@ We're usually interested in category proportions per unit (usually document), e.
 
 
 \end{frame}
-\begin{frame}[t]\frametitle{Inference About Content}
+\begin{frame}[t]\frametitle{Inference About content}
 
 Statistically speaking, the three types of measures are
 \ita
@@ -1026,7 +1029,7 @@ Under certain sampling assumptions we can make inferences about a population
 %\end{align*}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Inference About Proportions}
+\begin{frame}[t]\frametitle{Inference About proportions}
 
 Example: in the 2001 Labour manifesto there are 872 matches to Laver and Garry's \textsl{state reg} category
 \ita
@@ -1040,7 +1043,7 @@ The document has 30157 words, so the \textsl{first} proportion is estimated as
 What does this mean?
 
 \end{frame}
-\begin{frame}[t]\frametitle{Inference About Proportions}
+\begin{frame}[t]\frametitle{Inference about proportions}
 
 Think of the party headquarters repeatedly \textsl{drafting} this manifesto
 
@@ -1118,7 +1121,7 @@ Different measures correspond to different choices of $B$.
 %\end{center}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Ratios: How 'New' was New Labour?}
+\begin{frame}[t]\frametitle{Ratios: How new was New Labour?}
 
 Was the Conservative party in 1992 more or less for state intervention than 'New' Labour in 1997?
 
@@ -1133,7 +1136,7 @@ Labour   & 396   & 268      \\ \bottomrule
 \end{center}
 
 \end{frame}
-\begin{frame}[t]\frametitle{Risk Ratios}
+\begin{frame}[t]\frametitle{Risk ratios}
 
 Compute two \textsl{risk ratios}:
 
@@ -1159,7 +1162,7 @@ and 95\% confidence intervals
 %Exponentiate the estimate and endpoints to get an interval for the risk ratio
 %
 \end{frame}
-\begin{frame}[t]\frametitle{Interpreting Risk Ratios}
+\begin{frame}[t]\frametitle{Interpreting risk ratios}
 
 If $RR=1$ then the category occurs at the same rate in labour and conservative manifestos
 
@@ -1170,7 +1173,7 @@ If $RR=.5$ then the conservative manifesto contains \textsl{half} as much \texts
 If the confidence interval for $RR$ contains 1 then we \textsl{no evidence} that \textsl{state reg} and \textsl{market econ} occur at different rates
 
 \end{frame}
-\begin{frame}[t]\frametitle{Risk Ratios}
+\begin{frame}[t]\frametitle{Risk ratios}
 \begin{center}
 \begin{tabular}{rl} \toprule
 & Risk Ratio\\ \midrule
@@ -1937,7 +1940,7 @@ to
 % 
 % \end{frame}
 
-\begin{frame}[t]\frametitle{Lab Time}
+\begin{frame}[t]\frametitle{Lab time}
 
 \centerline{\includegraphics[scale=.8]{pictures/hieroglyphic-keyboard-cm}}
 

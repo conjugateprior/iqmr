@@ -1,5 +1,3 @@
-% Syracuse 2014
-
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[charter]{mathdesign}
@@ -11,8 +9,6 @@
 \usepackage{dcolumn,booktabs} %% for memisc
 \usepackage{graphicx}
 \usepackage{amsmath}
-
-%\usepackage{stitchr} %% make me compile as latex when knitr is not applied
 
 \definecolor{darkblue}{rgb}{0,0,.6} % not really
 \definecolor{other}{rgb}{0,0,.5}
@@ -39,16 +35,16 @@ knitr::opts_chunk$set(error=FALSE,
 options(width=100)
 @
 
-
 Let's take a look at a US Senate debate on partial birth abortion.  As ever, we'll load the texts, make a corpus, then a document term matrix to start off
 <<setup,include=FALSE>>=
 library(quanteda)
-corp <- corpus(textfile("data/abortion-debate-us-senate/*"))
-docvars(corp, "party") <- c(rep("D", 5), rep("R",7))
-summary(corp)
 @
 Then we make a document feature matrix to fit a model to
-<<>>=
+<<warning=FALSE>>=
+corp <- corpus(textfile("data/abortion-debate-us-senate/*"))
+docnames(corp) <- dir("data/abortion-debate-us-senate") ## if you need docnames
+docvars(corp, "party") <- c(rep("D", 5), rep("R",7))
+summary(corp)
 corpdfm <- dfm(corp)
 @
 The \texttt{quanteda} package has a variety of scaling models, but for ease of examination we'll use the \texttt{austin} package instead.  First we'll trim the 
@@ -74,28 +70,31 @@ A little alpha transparency would proabbly help this (or a really big screen).  
 
 Let's take a look those the word positions and see how they line up on the dimension.  Let's plot the slope estimates for some likely looking word stems.  But first we have to extract them from all the other parameters.
 <<get-words,comment=''>>=
-wdparams <- coef(mod, 'poisson')$words ## just take the word parameters
-length(wdparams$beta)
+wds <- mod$words
+betas <- mod$beta
+wparams <- data.frame(word=wds, beta=betas)
+wparams <- wparams[order(wparams$beta), ] ## sort by beta
+nrow(wparams)
 @
-There's quite a few.  Let's choose some likely candidates
+Let's take a quick look at the extremes
 <<>>=
-wds <- c("life", "choice", 
-         "womb", "her", "woman", "health","born","baby",
-         "gruesome","kill")
-mywords <- wdparams[wds,]
-mywords[order(mywords$beta),] ## in left to right order
+head(wparams)
+tail(wparams)
 @
-Do the estimates make sense?  Again, it's easier to see if we plot them, as in Fig.~\ref{wds}.
 
-\begin{figure}[htbp]
+Or we could choose some likely candidates
+<<>>=
+testwords <- c("life", "choice", "womb", "her", "woman", "health",
+               "born", "baby", "gruesome", "kill")
+samp <- subset(wparams, word %in% testwords)
+samp
+@
+or plot just these
 \begin{center}
 <<plot-words-again>>=
-dotchart(mywords$beta, rownames(mywords),pch=19)
+dotchart(samp$beta, samp$word, pch=19)
 @
-\caption{A chart of word slopes (sensitivity to ideological position) for the word stems.}
-\label{wds}
 \end{center}
-\end{figure}
 
 If we were being thorough about these words we'd check they do what we think they do by looking by looking at them in all their contexts, as we did in lab 1.
 
@@ -114,7 +113,7 @@ cor(catheta, mod$theta)
 @
 Basically the same, and it's much quicker to fit too\ldots
 
-The \texttt{summary} method is pretty comprehensive, though you'll probably want to read some of Greenacre 2007 to make the most of it.
+The \texttt{summary} method is pretty comprehensive, though you'll probably want to read some of Greenacre 2007 to mwds <- mod$wordsake the most of it.
 <<eval=FALSE>>=
 summary(mod2)
 @
@@ -129,7 +128,5 @@ If you want to see a biplot of all the words and documents, then
 plot(mod2)
 @
 but be warned.  It's big\ldots  You may want to read the help page to see how to only show some elements, or to change the colors.
-
-
 
 \end{document}

@@ -209,8 +209,18 @@ CDU-2002  &    20 & 20 &      14 & 15 & 18        &      7& \ldots
 }
 \end{center}
 
+\end{frame}
+
+
+\begin{frame}[t]\frametitle{Back to the (contingency) table}
+
+How to connect the rates of each word in a document to $\theta$s (and $\beta$s)
+
+~\\
+\centerline{\includegraphics[scale=0.4]{pictures/scaling.png}}
 
 \end{frame}
+
 \begin{frame}[t]\frametitle{Simple models of count data}
 
 There are two \textit{log-linear models} of any contingency table

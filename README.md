@@ -1,6 +1,6 @@
-# IQMR
+# iqmr
 
-IQMR slides and course materials
+IQMR slides and course materials, slowly morphing into an R package.
 
 * `resources` contains a (free) font you may not have but will need to
   have installed to make the slides compile.
@@ -13,6 +13,17 @@ IQMR slides and course materials
 * To compile the slides, use XeLaTeX. `xelatex` from the command line,
   or just switch the engine in TeXShop, or whatever you use.
 
+## TODO
+
+* Make Bara data a corpus for quanteda
+* Make election manifestos a corpus for quanteda
+* Use the Bara debate html to show how to extract things from web pages
+
+* add a wrapper function so we don't have to call them vignettes
+
+* write conversion script for Rnw to Rmd -> DONE
+* translate existing slides to Rmd -> DONE minus headers
+* extract header to rmarkdown template -> after dinner
 
 
-*Will Lowe 2016*
+*Will Lowe 2017*

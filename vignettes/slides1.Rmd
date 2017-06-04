@@ -1,0 +1,1287 @@
+---
+title: "Computer Assisted Content Analysis (1)"
+author: "Will Lowe"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::beamer_presentation:
+    keep_tex: true
+    latex_engine: xelatex
+    template: rmarkdownbeamertemplate.tex
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Practicalities: Materials
+
+We have a website:
+ 
+* [http://ec2-52-207-214-68.compute-1.amazonaws.com:8787](http://ec2-52-207-214-68.compute-1.amazonaws.com:8787)
+* Password: iqmr2016
+ 
+
+## Labs
+
+\centerline{\includegraphics[scale=0.17]{pictures/milgram-subject}}
+
+ 
+## Menu
+
+Session 0: How could this possibly work?
+
+Session 1: Dictionary-based 'classical' content analysis
+
+Session 2: Classification and topic models
+
+Session 3: Scaling models
+
+
+ 
+## Focus
+
+Assumptions
+
+Mechanics (in Lab)
+
+Interpretation
+
+Pitfalls
+
+
+
+```{r setup,include=FALSE}
+knitr::opts_chunk$set(error=FALSE, 
+                      comment='',
+                      background='gray98')
+```
+
+ 
+## Topics
+How to learn about
+ 
+* party platforms
+* legislative agendas
+* parliamentary debates
+* bloggers
+* presidents
+* international terrorists
+ 
+by counting (lots of) words...
+
+ 
+
+## The transcendental question
+
+
+> What are the *conditions for the possibility* of learning about these 
+> things by counting words
+
+. . .
+
+how could this possibly work?
+
+```{r echo=FALSE}
+suppressPackageStartupMessages(library(quanteda))
+```
+
+ 
+
+## 
+\centerline{\includegraphics[scale=2.5]{pictures/etinarcadiaego}}
+ 
+
+## Big picture
+
+There is a *message* or *content* that cannot be *directly* observed, e.g.
+ 
+* The topic of my lecture, my position on a political issue, the importance of defence issues to a some political party.
+ 
+and *behaviour*, including *linguistic behaviour*, e.g.
+ 
+* yelling, muttering, cursing, lecturing
+ 
+which *can* be directly observed.
+
+. . .
+
+Focus on the *expressed message* and the *words*...
+
+ 
+## Communication
+
+To *communicate* a message $\theta$ -- to inform, persuade, demand, threaten, a producer (the speaker or writer) *generates* words of different kinds in different quantities
+
+
+\begin{center}
+\includegraphics[scale=.5]{pictures/gen} ~~~~~~~ \includegraphics[scale=.5]{pictures/gen-plate}
+\end{center}
+
+ 
+## Communication
+
+To *understand* a message the consumer (the hearer, reader, coder) uses those words to *reconstruct* the message
+
+\begin{center}
+\includegraphics[scale=.5]{pictures/inf-plate}
+\end{center}
+
+
+
+ 
+## Communication
+
+This is a stable (Searle, 1995) conventional (Lewis, 1969) but disruptable (Riker, 1996) communication process in which no finite set of words *uniquely* identifies any content (Quine, 1960; Davidson, 1977)
+
+How to model this without having to solve the problems of 
+linguistics (psychology, politics) first?
+
+Rely on: 
+ 
+* instrumentality
+* reflexivity
+* randomness
+ 
+
+
+ 
+## Instrumentality from 'them'
+
+Language use is as a *form of action* (Wittgenstein, 1953; Austin, 1975; Dawkins and Krebs, 1978)
+
+Note the distinction between
+ 
+* '$W$ means $X$'
+* versus
+* '$W$ is used to mean $X$'
+ 
+
+## Instrumentality from us
+
+The secret of quantitative political text analysis:
+ 
+* we aren't actually interested in words W
+ 
+* that's for linguists...
+ 
+* we aren't actually interested in what's in your head $\theta$
+ 
+* that's for psychologists...
+
+* **except** as they help explain things we are interested in.  They are *just data*.
+ 
+
+ 
+## Reflexivity
+
+Politicians are often nice enough to talk as if they really do communicate this way
+
+
+> My theme here has, as it were, four heads. [...] The first is articulated by the word ''opportunity'' [...] the second is expressed by the word ''choice'' [...] the third theme is summed up by the word ''strength'' [and] my fourth theme is expressed well by the word ''renewal''
+> (M. Thatcher, 1979)
+
+[2, 7, 2, 8] in 4431 words
+
+
+## Reflexivity
+
+Or maybe just one theme...
+
+> A couple months ago we weren't expected to win this one, you know that, right? We weren't... Of course if you listen to the pundits, we weren't expected to win too much. And now we're winning, winning, winning the country -- and soon the country is going to start winning, winning, winning.
+
+
+## 
+\centerline{\includegraphics[scale=.6]{pictures/spock-detecting-large-quantities-sf}}
+ 
+
+
+## Scope conditions
+
+Computer-assisted content analysis works best when language usage is
+ 
+* stable, conventionalized, and instrumental
+ 
+Implicitly, we usually condition on some institution, e.g.
+ 
+* courts, legislatures, online political argument, sports or financial reporting, survey responses
+ 
+. . .
+
+(Notice that this inevitably creates a comparability problem)
+
+## Randomness
+
+
+You almost never *say exactly the same words twice*, even when you haven't changed your mind about the message.  
+
+. . . 
+Hence words are the result of some kind of *sampling process*.
+
+We treat this process as *random* because we don't know or care about all the causes of variation . . .
+ 
+* (and because we're all secretly Bayesians)
+ 
+
+
+ 
+
+## Words as data
+
+```{r echo=FALSE}
+## set up the UK manifestos as a corpus
+#files <- data_frame(name=dir("data/uk-election-manifestos/", pattern = "UK_"))
+#md <- tidyr::separate(files, name, 
+#        c("country", "type", "year", "lang", "party", "txt"), "[\\._]")
+#md$path <- file.path("data/uk-election-manifestos", files$name)
+#corp <- corpus(textfile(md$path))
+#docvars(corp, "party") <- md$party
+#docvars(corp, "year") <- md$year
+load("data/uk-manifs-corpus.RData")
+```
+
+What do we know about words *as data*?
+
+. . . 
+
+They are *difficult*
+ 
+* High dimensional
+* Sparsely distributed (with skew)
+* Not equally informative
+ 
+
+
+ 
+\begin{frame}[t,fragile]\frametitle{Difficult words}
+
+```{r echo=FALSE,results="hide"}
+subcorp <- subset(corp, year %in% c(2010, 2005) & party %in% c('Con', 'Lab', 'LD'))
+dfmsubcorp <- dfm(subcorp) 
+tab <- table(0==as.vector(dfmsubcorp["UK_natl_2010_en_Lab.txt",]))
+tab1 <- table(1==as.vector(dfmsubcorp["UK_natl_2010_en_Lab.txt",]))
+tab5 <- table(as.vector(dfmsubcorp["UK_natl_2010_en_Lab.txt",]) >= 5)
+```
+Example: Labour party (2010) manifesto compared to other parties in two elections
+
+. . .
+
+\begin{tabular}{ll}
+High D. & \Sexpr{ncol(dfmsubcorp)} word types in two elections \\
+          & (adult native english speakers know $\sim$20-35,000) \\
+Sparse & Of these, Labour only uses \Sexpr{tab[2]}  
+  (\Sexpr{round(100*tab[2]/sum(tab), 2)}\%)\\
+Skewed &  Of these \Sexpr{tab1[2]} 
+  (\Sexpr{round(100*tab1[2]/sum(tab1), 2)}\%) words appear exactly once,\\
+&  and \Sexpr{tab5[2]} (\Sexpr{round(100*tab5[2]/sum(tab5), 2)}\%) appear <5 times
+\end{tabular}
+
+## Difficult words
+
+Words are not like your other data...
+
+Zipf-Mandelbrot law (a pareto distribution in disguise)
+$$
+P(w_i) \propto 1/{r_i^\alpha}
+$$
+where $r_i$ is the frequency *rank* of word i and $\alpha\approx 1$
+
+Very fat tailed...
+
+
+## 
+
+```{r echo=FALSE,fig.height=4}
+csums <- sort(colSums(dfmsubcorp), decreasing=TRUE)
+par(mfrow=c(1,2))
+plot(csums, xlab="Rank", ylab="Count", pch=20, col="gray")
+plot(csums, xlab="Log rank", ylab="Log count", log="xy", pch=20, col="gray")
+par(mfrow=c(1,1))
+```
+
+
+
+ 
+
+## Dealing with difficult words
+
+Frequency is inversely proportional to substantive interestingness
+
+```{r t0,include=FALSE}
+library(xtable)
+options(xtable.floating = FALSE, latex.environments="center") ## not in a float
+```
+
+Bottom 10:
+
+
+\begin{center}
+{\footnotesize
+```{r t1,echo=FALSE,results='asis'}
+tbl <- as.matrix(topfeatures(dfmsubcorp, decreasing=FALSE))
+colnames(tbl) <- "Count"
+print(autoformat(xtable(tbl)), booktabs=TRUE, latex.environments="center")
+```
+}\end{center}
+
+## Dealing with difficult words
+
+\centerline{Top 10}
+
+\begin{center}
+{\footnotesize
+```{r t2,echo=FALSE,results='asis'}
+tbl <- as.matrix(topfeatures(dfmsubcorp))
+colnames(tbl) <- "Count"
+print(autoformat(xtable(tbl)), booktabs=TRUE)
+```
+}\end{center}
+
+
+ 
+
+## Dealing with difficult words
+
+\centerline{Top 10 minus the 'standard' stopwords}
+
+{\footnotesize
+\begin{center}
+```{r t3,echo=FALSE,results='asis'}
+tbl <- as.matrix(topfeatures(dfmsubcorp[,!(colnames(dfmsubcorp) %in% stopwords("english"))]))
+colnames(tbl) <- "Count"
+print(autoformat(xtable(tbl)), booktabs=TRUE)
+```
+\end{center}
+}
+
+ 
+
+## Dealing with difficult words
+
+Removing stopwords, while standard in computer science, is not necessarily better... 
+
+Example:
+ 
+* Standard collections contain, 'him', 'his', 'her' and 'she'.
+* Words you'd want to keep when analyzing a abortion debates.
+ 
+ 
+
+## Dealing with difficult words
+
+For large amounts of text summaries are not enough. 
+
+We need a *model* to provide assumptions about 
+ 
+* *equivalence*
+* *exchangeability*
+ 
+
+
+The standard set of equivalence assumptions are the 'bag of words'.  
+
+Specifically:
+
+ 
+## Punctuation invariance
+
+> As I look ahead I am filled with foreboding.  Like the Roman I seem to see 'the river Tiber flowing with much blood'... ''\\
+> (E. Powell, 1968)
+
+. . .
+
+\begin{center}
+{\small
+\begin{tabular}{ll}\toprule
+index & token\\ \midrule
+1 & as\\
+2 & i\\
+3 & look\\
+4 & ahead\\
+5 & i\\
+6 & am\\
+7 & ...\\ \bottomrule
+\end{tabular}
+~~~~~~~~~~
+\begin{tabular}{ll}\toprule
+index & token\\ \midrule
+1 & like\\
+2 & the\\
+3 & roman\\
+4 & i\\
+5 & seem\\
+6 & to\\
+7 & ...\\ \bottomrule
+\end{tabular}
+}
+\end{center}
+
+
+ 
+## Lexical univocality
+
+\begin{center}
+{\small
+\begin{tabular}{ll}\toprule
+type & count\\ \midrule
+as & 1\\
+i & 2\\
+look & 1\\
+ahead & 1\\
+am & 1\\
+... & ...\\ \bottomrule
+\end{tabular}
+~~~~~~~~~~
+\begin{tabular}{ll}\toprule
+token & count\\ \midrule
+like & 1\\
+the & 1\\
+roman & 1\\
+i & 1\\
+seem & 1\\
+to & 1\\
+... & ...\\ \bottomrule
+\end{tabular}
+}
+\end{center}
+
+ 
+## Order invariance
+
+\begin{center}
+{\small
+\begin{tabular}{rlll}\toprule
+&         & unit    & \\ \midrule
+&         & 'doc' 1 & 'doc' 2 \\ \midrule
+type      & ahead   & 1    & 0 \\
+& am      & 1    & 0 \\
+& as      & 1    & 0 \\
+& i       & 2    & 1 \\
+& like    & 0    & 1\\
+& look    & 1    & 0 \\
+& roman   & 0    & 1 \\
+& seem    & 0    & 1 \\
+& the     & 0    & 1 \\
+& to      & 0    & 1\\
+& ...  & ... & ... \\ \bottomrule
+\end{tabular}
+}
+\end{center}
+
+ 
+## Count data
+
+We have turned a corpus into a *contingency table*.
+ 
+* (Or a term-document / document-term / document-feature matrix, in the lingo)
+ 
+
+. . .
+
+Everything you learned in your categorical data analysis course applies
+ 
+* except that the variables of interest: $\theta$ are *not observed*
+ 
+## What we want
+
+\begin{center}
+{\small
+\begin{tabular}{rllllllllll}\toprule
+      & ahead & am & i & like & look & & \\ \midrule
+doc 1 & 1     & 1  & 2 & 0    & 1    & ... & \textcolor{gray}{$\theta_{doc1}$} \\
+doc 2 & 0     & 0  & 1 & 1    & 0    & ... & \textcolor{gray}{$\theta_\text{doc2}$} \\ \midrule
+      & \textcolor{gray}{$\beta_\text{ahead}$}
+      & \textcolor{gray}{$\beta_\text{am}$}
+      & \textcolor{gray}{$\beta_\text{i}$}
+      & \textcolor{gray}{$\beta_\text{like}$}
+      & \textcolor{gray}{$\beta_\text{look}$} \\ \bottomrule
+\end{tabular}
+}
+\end{center}
+
+## Visualized
+
+\centerline{\includegraphics[scale=0.4]{pictures/grey-just-rile}}
+
+## What is this content $\theta$?
+
+What is the content in content analysis?
+ 
+* Documents are *mixtures of categories*: policy agenda of a speech
+* Documents have *categories*: topic of a press release
+* Documents have *positions*: ideological position of a legal brief
+ 
+
+ 
+
+## 
+
+\centerline{\includegraphics[scale=.3]{pictures/tad-picture}}
+
+ 
+
+## 
+
+\centerline{\includegraphics[scale=.3]{pictures/measurement-validity}}
+
+ 
+
+## Commitment issues
+
+What are we committing to in this quantitative content analysis framework?
+
+Probably less than you think...
+
+Assumptions:
+ 
+* $\theta$ is socially/institutionally constructed: only linguists care about the real thing
+* There are no differences in $\theta$ that make no verbal difference (basically Pragmatism)
+ 
+
+ 
+
+## Theory / measurement separation
+
+Discourse analytic approaches tend to 
+*tightly couple* theory and 'measurement' components
+ 
+* (This is contingent...)
+ 
+We will try as far as possible to separate them...
+ 
+* Our concerns: validity, stability
+* Rely on: transparency, reliability, replicability
+ 
+ 
+
+
+## Statistical models of words: Poisson
+
+Word counts/rates are conditionally Poisson:
+$$ 
+W_j \sim \text{Poisson}(\textcolor{bloodred}{\lambda_{j}})
+$$
+
+Expected $W_{j}$ (and its variance) is $\lambda_{j}$
+
+Models are naturally *multiplicative*.  Rates increase by 10%, decrease by 20% 
+
+. . .
+
+Conditional on what?  Typically on $\theta$
+
+## 
+
+\centerline{\includegraphics[scale=.4]{pictures/geiger-counter}}
+
+
+## Statistical models of words: Multinomial
+
+For fixed document lengths, counts are conditionally Multinomial:
+$$
+W_{1}... W_{V} ~\sim~ \text{Multinomial}(W_{1}... W_{V}; \textcolor{bloodred}{\pi_{1}}...\textcolor{bloodred}{\pi_{V}}, N_i)
+$$
+
+Expected $W_{i}$ is $N\pi_{i}$
+
+Covariance of $W_{i}$ and $W_{j}$ is $-N \pi_{i}\pi_{j}$ (budget constraint)
+
+ 
+## 
+
+\centerline{\includegraphics[scale=.6]{pictures/20-sided-die}}
+
+ 
+
+## Implication: Absence is an observation
+
+Don't be fooled...
+ 
+* Statistical models of text deal with *absence* as well as presence: zeros count
+* Absence is informative *to the extent it is surprising*
+* Surprise implies expectations; expectations imply a model.
+ 
+
+## Looking ahead: Modeling strategies
+
+We can model the content of a term-document matrix in several ways
+ 
+* $\theta \longleftarrow \text{words}$: Go for $P(\theta \mid \text{words})$ *directly*
+ 
+* Requires some *observed* $\theta$, and lots of *careful* regression modeling, or manual coding
+ 
+* $\theta \longrightarrow \text{words}$: Get $P(\theta \mid \text{words})$ *indirectly*
+ 
+* Model words as a function of $\theta$, add a prior, and infer $\theta$ using Bayes theorem
+$$
+P(\theta \mid \text{words}) = \frac{P(\text{words} \mid \theta)P(\theta)}{\sum^\theta_k P(\text{words} \mid \theta_k)P(\theta_k)}
+$$
+ 
+## Classical content analysis
+
+*Content* is, or is constructed from, *categories* e.g.
+ 
+* human rights, welfare state, national security
+ 
+Substantively these often have *valence*, e.g.
+ 
+* pro-welfare state vs. anti-welfare state, lots of CMP categories
+ 
+But they are invariably treated as *nominal level* variables
+
+We are typically interested in them for
+ 
+* simple descriptions, making comparisons, tracing temporal dynamics
+ 
+## Talking Like a newspaper
+
+\centerline{\includegraphics[scale=.4]{pictures/gamson-modigliani-frames-opinion}}
+
+Gamson and Modigliani (1989)
+
+
+ 
+## Talking like a candidate
+
+\centerline{\includegraphics[scale=.5]{pictures/kerry-blogs}}
+
+ 
+## Talking like a terrorist
+
+\begin{center}
+\includegraphics[scale=.4]{pictures/binladen}
+\end{center}
+
+ 
+## Talking like the European Commission
+
+\centerline{\includegraphics[scale=.3]{pictures/radulova-frames2}}
+
+
+ 
+## Talking About drugs
+
+\centerline{\includegraphics[scale=.4]{pictures/drugs}}
+
+The Congressional Bills Project website (retrieved 2010)
+
+
+
+ 
+## Classical content analysis
+
+Categories are
+ 
+* equivalence classes over words
+* representable as assignments of a K-valued category membership variable $Z$ to each word
+ 
+
+ 
+## 
+\centerline{\includegraphics[scale=.3]{pictures/topics2}}
+ 
+
+## Classical content analysis
+
+Every word $W$ has an topic $Z$ 
+
+The word $W$ to topic $Z$ mapping $\beta$ is provided by the researcher as a *content analysis dictionary*
+
+The content of a document $\theta$ is the proportion (or count) of each category
+
+. . .
+
+\centerline{\includegraphics[scale=.4]{pictures/new-topics-ca.png}}
+
+\centerline{How content is generated and what we claim to know}
+
+ 
+## Content analysis dictionary
+
+\small
+\begin{tabular}{ll}
+ECONOMY & +STATE\\
+& accommodation\\
+& age\\
+& ambulance\\
+& assist\\
+& benefit\\
+& ...\\
+& -STATE\\
+& assets\\
+& bid\\
+& choice*\\
+& compet*\\
+& constrain*\\
+& ...
+\end{tabular}
+\normalsize
+
+from Laver and Garry's (2000) dictionary
+
+ 
+## As a posterior: P(Z | W)
+
+Dictionary is an explicit and very *certain* statement of $P(Z \mid W)$
+
+\begin{center}
+\begin{tabular}{rlcc} \toprule
+ & Z
+ & state reg & market econ\\ \midrule
+W & \text{age} & 1 & 0 \\
+  & \text{benefit} & 1 & 0 \\
+  & ... & ... & ...\\
+  & \text{assets} & 0 & 1 \\
+  & \text{bid} & 0 & 1\\
+  & ... & ... & ...\\ \bottomrule
+\end{tabular}
+\end{center}
+ 
+
+## ... from a underspecified likelihood
+
+The *only* way this could be true is if the data had been generated like 
+ 
+\begin{center}
+$P(W \mid Z)$
+~\\
+
+\begin{tabular}{rcc} \toprule
+& *state reg* & *market econ* \\ \midrule
+$P(\text{age} \mid \text{Z})$ & a & **0** \\
+$P(\text{benefit} \mid \text{Z})$ & b & **0** \\
+... & ... & ...\\
+$P(\text{assets} \mid  \text{Z})$ & **0** & c \\
+$P(\text{bid}  \mid  \text{Z})$& **0** & d\\
+... & ... & ...\\ \bottomrule
+\end{tabular}
+\end{center}
+
+
+ 
+## ... leading to a posterior over content
+
+Define the category *counts*
+\begin{align*}
+Z_k & = \sum^N_{i} P(Z = k \mid W_i)
+\end{align*}
+and estimate category relative *proportions* using
+\begin{align*}
+\hat{\theta}_k &= \frac{Z_k}{\sum^K_{j} Z_j}
+\end{align*}
+
+(When $\theta$ is a set of multinomial parameters, *and the model assumptions are correct*, this could be a reasonable estimator)
+
+ 
+## Reconstruction
+
+Dictionary-based content analysis was *not* developed this way
+ 
+* Originally (e.g. Stone 1966) there was no probability model at all
+ 
+## Connecting CCA content to politics
+
+We're usually interested in category proportions per unit (usually document), e.g.
+ 
+* *How much* of this document is about national defense?
+* What is the *difference* of aggregated left and aggregated right categories (RILE)
+* How does the *balance* of human rights and national defense change over time?
+ 
+## Inference About content
+
+Statistically speaking, the three types of measures are
+ 
+* a proportion
+* a difference of proportions
+* a ratio of proportions
+ 
+Under certain sampling assumptions we can make inferences about a population
+
+## Inference About proportions
+
+Example: in the 2001 Labour manifesto there are 872 matches to Laver and Garry's *state reg* category
+ 
+* 0.029 (nearly 3\%) of the document's words
+* 0.066 (about 6\%) of words that matched *any* categories
+ 
+The document has 30157 words, so the *first* proportion is estimated as
+
+$$
+\hat{\theta}_\text{*state reg}* & ~=~ 0.029 ~~[0.027, 0.030]
+$$
+What does this mean?
+
+ 
+## Inference about proportions
+
+Think of the party headquarters repeatedly *drafting* this manifesto
+
+The true proportion -- the one suitable to the party's policies -- is fixed but every draft is slightly different
+
+The confidence interval reflects the fact that we expect long manifestos to have more precise information about policy
+
+This interval is computed as if every word was a new (conditionally) independent piece of of information
+
+ 
+## Reporting: Rates
+
+Don't report proportions if you don't need to.
+
+*Rates/ratios* are more intuitive
+
+e.g. the rate of dictionary matches per $B$ words is
+$$
+\lambda_B = \theta B
+$$
+which is a more interpretable proportion,
+e.g.
+ 
+* 29 times per 1000 words
+ 
+Different measures correspond to different choices of $B$.
+
+
+
+
+
+ 
+## Ratios: How new was New Labour?
+
+Was the Conservative party in 1992 more or less for state intervention than 'New' Labour in 1997?
+
+Compare instances of *state reg* and *market econ* in the manifestos
+
+\begin{center}
+\begin{tabular}{lllll}\toprule
+Party & \multicolumn{2}{l}{Counts}  \\ \midrule
+& *state reg*    &    *market econ*  \\
+Conservative  & 320   & 643 \\
+Labour   & 396   & 268      \\ \bottomrule
+\end{tabular}
+\end{center}
+
+ 
+## Risk ratios
+
+Compute two *risk ratios*:
+
+\begin{align*}
+RR_{\text{*state reg}*} & ~=~ \frac{P(\text{*state reg}* \mid \text{cons})}
+{P(\text{*state reg}* \mid \text{lab})}\\
+RR_{\text{*market econ}*} & ~=~ \frac{P(\text{*market econ}* \mid \text{cons})}
+{P(\text{*market econ}* \mid \text{lab})}
+\end{align*}
+and 95% confidence intervals
+
+ 
+## Interpreting risk ratios
+
+If $RR=1$ then the category occurs at the same rate in labour and conservative manifestos
+
+If $RR=2$ then the conservative manifesto contains *twice* as much *state reg* language as the labour manifesto
+
+If $RR=.5$ then the conservative manifesto contains *half* as much *state reg* language as the labour manifesto
+
+If the confidence interval for $RR$ contains 1 then we *no evidence* that *state reg* and *market econ* occur at different rates
+
+ 
+## Risk ratios
+\begin{center}
+\begin{tabular}{rl} \toprule
+& Risk Ratio\\ \midrule
+*market econ* & 1.45 [1.26, 1.67]\\
+*state reg* & 0.49 [0.42, 0.57] \\ \bottomrule
+\end{tabular}
+\end{center}
+
+Conservative manifesto generates *market econ* words 45% more often
+ 
+* 45% = 100(1.45 - 1)%
+ 
+Conservative manifesto only generates 49% as many *state reg* words as Labour.
+
+Equivalently Labour generates them about *twice* as often
+
+ 
+## (Regularised) log ratios
+
+\centerline{\includegraphics[scale=.1]{pictures/fightin1}}
+
+## ... as dependent variable
+
+Example: district vs party focus
+
+~\\
+\centerline{\includegraphics[scale=.4]{pictures/district-party-focus}}
+
+Data: [*district words*, *party words*] (Kellerman & Proksch, MS)
+
+Here, a *logged ratio* of two categories
+
+ 
+## Content as something to explain
+
+\centerline{\includegraphics[scale=.4]{pictures/indep-ref}}
+
+*independence words* $\leftarrow$ audience + offset(doc length)
+
+ 
+
+## OK, how do I make such a dictionary?
+
+Find a suitable tool
+
+Maximise measurement validity
+
+Minimise *measurement error*
+
+. . .
+
+(Sell high, buy low)
+
+
+## Find a suitable tool
+
+
+[http://provalisresearch.com/products/content-analysis-software/](Wordstat)
+
+[http://liwc.wpengine.com/](LIWC) (maybe don't)
+
+[http://apb.newmdsx.com/hamlet2.html](Hamlet)
+
+[http://atlasti.com/]({Atlas-ti) 
+
+[https://github.com/conjugateprior/yoshikoder/releases/tag/v0.6.5](Yoshikoder)
+
+ 
+
+## 
+
+\centerline{\includegraphics[scale=.4]{pictures/wickeroth-strategie-der-steine-3-2007}}
+ 
+
+## The source of measurement error
+
+Measurement error in classical content analysis is primarily failure of *this* assumption:
+\begin{center}
+\begin{tabular}{lcc} \toprule
+& $P(Z=\text{*state reg}*\mid \text W)$ & $P(Z=\text{*market econ}* \mid \text W)$ \\ \midrule
+\text{age} & 1 & 0 \\
+\text{benefit} & 1 & 0 \\
+... & ... & ...\\
+\text{assets} & 0 & 1 \\
+\text{bid} & 0 & 1\\
+... & ... & ...\\ \bottomrule
+\end{tabular}
+\end{center}
+
+
+ 
+## Consequences of measurement error
+
+What are the effects of measurement error in category counts?
+
+
+* Being directly wrong, e.g.
+ 
+* Estimated rates are too *low* (bias)
+* Some of estimates are more biased than others
+ 
+* Being *indirectly* wrong, e.g.
+ 
+* Subtractive or ratio left-right measures are too *centrist*
+ 
+ 
+## Measurement error: example
+
+Assume
+ 
+* a vocabulary of only two words 'benefit' and 'assets'
+* a *subtractive* measure of position: $Z_{\text{*market econ}*} - Z_{\text{*state reg}*}$
+ 
+
+Then we hope that
+\begin{center}
+\begin{tabular}{lcc} \toprule
+& $P(Z=\text{*state reg}*\mid \text W)$ & $P(Z=\text{*market econ}* \mid \text W)$ \\ \midrule
+\text{benefit} & 1 & 0 \\
+\text{assets} & 0 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+ 
+## Measurement error: example
+
+but what if...
+\begin{center}
+\begin{tabular}{rcc} \toprule
+& *state reg* & *market econ* \\ \midrule
+$P(\text{benefit} \mid \text{Z})$ & 0.7 & 0.2 \\
+$P(\text{assets} \mid  \text{Z})$ & 0.3 & 0.8 \\ \bottomrule
+\end{tabular}
+\end{center}
+
+. . .
+
+P(W='asset' | Z=*state reg*) > 0 
+
+so
+
+P(Z=*state reg* | W='asset') < 1
+
+ 
+## Measurement error: example
+
+Assume
+ 
+* $Z_{\text{*market econ}*} = 10$ 
+* $Z_{\text{*state reg}*}=20$ 
+ 
+
+Then the *true* difference is
+$$
+\frac{(10-20)}{(10+20)} = -0.33
+$$
+
+Under perfect measurement this would be realised on average as
+ 
+* 20 'benefit'
+* 10 'assets'
+ 
+## Measurement error: example
+
+Under *imperfect* measurement it is realised on average as
+ 
+* 16 'benefit'
+
+(14 from *state reg* but 2 from *market econ*) 
+
+* 14 'assets'
+
+(8 from *market econ* but 6 from *state reg*)
+ 
+
+ 
+## Measurement error: example
+
+The proportional difference measure is now 
+$$
+\frac{(14-16)}{(14+16)} = -0.07
+$$
+
+Apparently much closer to the centre, but only because of measurement error
+
+. . .
+
+*All* relative measures will have this problem
+
+
+
+
+ 
+## In action (Laver and Garry 2000)
+
+\centerline{\includegraphics[scale=.4]{pictures/lg-shrinkage}}
+ 
+
+## In action with people, not dictionaries
+
+\centerline{\includegraphics[scale=.5]{pictures/slava-rile3}}
+
+ 
+## Attentuation (Mikhaylov et al. 2012)
+
+\centerline{\includegraphics[scale=.4]{pictures/slava-rile}}
+
+ 
+
+
+
+## Solutions: A quasi-theological approach
+
+. . .
+
+\centerline{'Thoughts and prayers'}
+
+\centerline{\includegraphics[scale=.25]{pictures/praying-skeleton}}
+
+ 
+## Solutions: avoid it
+
+An often non-obvious fact about content dictionaries:
+ 
+* *precision*: proportion of words used the way your dictionary assumes
+* *recall*: proportion of words used that way that are in your dictionary
+ 
+*always* trade-off...
+
+ 
+## Aside: precision and recall
+
+Every field reinvents this distinction:
+ 
+* precision and recall
+* specificity and sensitivity
+* users and producer's accuracy
+* type 1 and type 2 error
+* sins of omission and sins of commission
+ 
+
+
+
+
+ 
+## Tools to evaluate items
+
+Keyword in context analyses (KWIC) allow you to scan all contexts of a word
+ 
+* How many of them are the sense or usage you want?
+ 
+
+ 
+
+##
+
+{\tiny
+```{r echo=FALSE,results='asis'}
+kk <- kwic(subcorp, "benefit*", window=5)
+kk <- kk[grepl("2005", kk$docname),]
+xtable(as.data.frame(kk)[1:22,3:5])
+```
+}
+ 
+
+## Measurement error: Confession and forgiveness
+
+Under measurement error
+ 
+* A observed category proportions are generated 
+by a *mixture* of categories
+* The weights for this mixture are the true category proportions
+ 
+Given the error matrix, we can *infer* the true proportions
+
+Intuition
+$$
+{P(W)} = \sum^K_k {P(W \mid Z=k)} P(Z=k)
+$$
+has the form
+$$
+Y = X\theta
+$$
+ 
+## Measurement error: model it
+
+In our previous example
+$$
+\left[\begin{array}{c}0.53 \\0.46\end{array}\right] =
+\left[\begin{array}{cc}0.7 & 0.2 \\0.3 & 0.8\end{array}\right] \left[\begin{array}{c}\theta_1 \\\theta_2\end{array}\right]
+$$
+
+is solved exactly as [0.66, 0.33]
+
+by *inverting* the error matrix
+
+ 
+## Measurement error: model it
+
+Applied to Mikhaylov human error data:
+
+
+{\small
+\centerline{
+\begin{tabular}{rrrr}
+\toprule
+& L & N & R \\
+\midrule
+L & 430 & 188 & 100 \\
+N & 254 & 712 & 193 \\
+R & 41 & 115 & 650 \\
+\bottomrule
+\end{tabular}
+~~~~~$\Longrightarrow$~~~~~
+\begin{tabular}{rrrr}
+\toprule
+& L & N & R \\
+\midrule
+L & 0.59 & 0.19 & 0.11 \\
+N & 0.35 & 0.70 & 0.20 \\
+R & 0.06 & 0.11 & 0.69 \\
+\bottomrule
+\end{tabular}
+}
+}
+
+Implication:
+
+If [L, N, R] were [20, 0, 10] we would *expect* to see about [13, 9, 8]
+
+
+ 
+## Measurement error: model it
+
+Invert $P(C \mid T)$:
+
+{\small
+\centerline{\begin{tabular}{rrrr}
+\toprule
+& L & N & R \\
+\midrule
+L & 2.00 & -0.50 & -0.16 \\
+N & -1.00 & 1.75 & -0.37 \\
+R & 0.00 & -0.25 & 1.52 \\
+\bottomrule
+\end{tabular}}
+}
+and multiply to get an estimate of the true counts...
+
+Example:
+ 
+* [13, 9, 8] $\longrightarrow$ [20.19, -0.16,  9.98] $\approx$~~ [20, 0, 10]
+
+ 
+## Notes:
+
+Some patterns of measurement error cannot be corrected for...
+
+These results hold *in expectation*.
+ 
+* We are ignoring measurement error *in the error matrix*
+ 
+This is a linear method that may violate prior constraints
+
+. . .
+
+Works for *anything that makes errors* (human or machine)
+
+ 
+## Up next
+
+Topic models, e.g. Latent Dirichlet Allocation (Blei et al.) we
+ 
+* Build this idea into a complete model
+* *infer* rather than assert the relationship between W and Z by learning $\beta$.
+ 
+. . .
+
+From
+
+\centerline{\includegraphics[scale=.3]{pictures/new-topics-ca.png}}
+
+to
+
+\centerline{\includegraphics[scale=.3]{pictures/lda-flat}}
+
+## Lab time
+
+\centerline{\includegraphics[scale=.8]{pictures/hieroglyphic-keyboard-cm}}
+
+
+
+
+
+
+
+
+
+

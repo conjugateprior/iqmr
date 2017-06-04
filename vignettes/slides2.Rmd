@@ -1,0 +1,541 @@
+---
+title: "Computer Assisted Content Analysis (2)"
+author: "Will Lowe"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::beamer_presentation:
+    keep_tex: true
+    latex_engine: xelatex
+    template: rmarkdownbeamertemplate.tex
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Menu 
+Session 1: Classical Content Analysis
+
+Session 2:
+ 
+* Document classification
+ 
+* The direct approach to classification
+* The indirect approach to classification
+* Evaluation and interpretation
+* Topic models
+ 
+ 
+
+Session 3: Scaling Models
+
+ 
+
+
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Classification Approaches when Categories are Known}
+
+We often want to read text to put them into categories
+
+{\bf Examples:}
+
+\begin{enumerate}
+* Are campaign advertisements positive or negative?
+* What policy areas do newspaper editorials cover?
+* Are international statements belligerent or peaceful?
+* Do court letters liberal or conservative?
+* Is this email spam?
+\end{enumerate}
+
+
+ 
+
+
+
+\begin{frame}[t,fragile]\frametitle{Classification}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.2]{pictures/classification.png}}
+\centerline{\normalsize For classification, each document belongs to a single cluster}
+ 
+
+\begin{frame}[t,fragile]\frametitle{Topic Models}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.4]{pictures/LDA.png}}
+\centerline{\normalsize In LDA, each document can contain multiple topics}
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Classification Approaches when Categories are Known}
+
+{\bf Yesterday:} Classification using dictionary approach.
+
+An alternative is **supervised machine learning** methods:
+\begin{enumerate}
+
+* coders categorize a set of documents by hand
+* the algorithm ''learns'' how to sort the documents in categories
+*  characteristics of training set are used  to assign new documents to categories.
+\end{enumerate}
+ 
+* Naive Bayes, Maximum Entropy, Support Vector Machines, Neural Networks, Bagging, Boosting, $...$
+ 
+ 
+
+\begin{frame}[t,fragile]\frametitle{Classification Approaches when Categories are Known}
+
+Let $\theta_k$ be the *probability* that Z=k for each document
+ 
+* Words are denoted $\{W\}$
+* Each document has a *single* topic Z
+* Some topic labels are observed
+* We essentially want $P(Z \mid \{W\}) = \theta_{z|w}$
+ 
+\vfill
+Supervised machine learning
+ 
+* Tries to give good predictions of observed Y given X
+* Naive Bayes, Maximum Entropy, Support Vector Machines, Neural Networks, Bagging, Boosting, $...$
+ 
+ 
+
+
+
+
+
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Classification approaches}
+As before, we have two approaches
+ 
+* Discriminative: Model $P(Z \mid \{W\}) = \theta_{z|w}$ directly
+* Generative: Model $P(\{W\} \mid Z)$ and $P(Z)=\theta_z$, then get $P(Z \mid \{W\}) = \theta_{z|w}$ via Bayes theorem
+ 
+\vfill
+**Bayes theorem** is about inverse probabilities
+ 
+* $P(A | B) = \frac{P(B | A) P(A)}{P(B)}$
+* If $P(\{W\} \mid Z)$ known, estimate $P(Z \mid \{W\} )$
+ 
+ 
+
+
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Either way...}
+
+Desirable classification outcome:
+
+\begin{center}
+\begin{tabular}{lcc}
+& $P(Z='\text{Domestic}'\mid \{W\}_d)$ & $P(Z='\text{Foreign}' \mid \text \{W\}_d)$ \\ \toprule
+$D_1$ & 0.75 & 0.25 \\
+$D_2$ & 0.82 & 0.18 \\
+... & ... & ...\\
+$D_{N-1}$ & 0.02 & 0.98 \\
+$D_N$ & 0.45 & 0.55\\ \bottomrule
+\end{tabular}
+\end{center}
+
+where $\theta_{z|w} = P(Z=z \mid \{W\})$
+
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{The Basic Steps}
+\begin{enumerate}
+* Construct a training set
+(a) create a coding scheme\\
+(b) select documents (ideally randomly sampled)
+* Apply the supervised learning method to learn features of a training set and infer labels
+* Validate and classify remaining documents\\
+\end{enumerate}
+We will do this in the lab together with NY Times titles
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{An Applied Example: Affirmative Action}
+Evans et al. (2007) apply naive Bayes to legal text
+ 
+* Affirmative action programs at university level
+ 
+Examine Amicus Curiae briefs sent to appellate court
+ 
+* Can words tell us direction of AC brief?
+* Are the briefs liberal or conservative?
+ 
+
+
+ 
+
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+*Naive Bayes* is a relatively old ($\sim$1975)  classification method
+
+Want to guess if document $j$ is liberal/conservative based on its word profile $\{W\}_j$.
+
+Probability can be derived by applying Bayes theorem:
+
+\begin{align*}
+P(A | B) &= \frac{P(B | A) P(A)}{P(B)}\\
+P(Z=\text{'Lib'} \mid \{W\}_j) &~=~ \frac{P(\{W\}_j \mid Z=\text{'Lib'})~P(Z=\text{'Lib'})}{P(\{W\}_j)}
+\end{align*}
+
+ 
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+\begin{align*}
+P(Z=\text{'Lib'} \mid \{W\}_j) &~\propto~ P(\{W\}_j \mid Z=\text{'Lib'})~P(Z=\text{'Lib'})
+\end{align*}
+
+We can drop $P(\{W\}_j)$ since it is constant across categories.
+
+Given a representative training set, estimating $P(Z=L)$ is easy:
+
+\begin{align*}
+\hat{P}(Z=\text{'Lib'})&~=~ \frac{\text{\# training docs that are liberal}}
+{\text{\# of training docs}}
+\end{align*}
+
+ 
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+Estimating the probability that a word profile $\{W\}_j$ occurs given that the document is liberal $P(\{W\}_j\mid Z=\text{'Lib'})$ is more challenging, because any one word profile is likely to occur only once.
+
+Assumption: words are assumed to be generated *independently* given the category Z 
+\begin{align*}
+P(\{W\}_j \mid Z=\text{'Lib'}) &~=~ {\prod}_i P(W_i \mid Z=\text{'Lib'})\\
+P( \text{'Affirmative Action'} \mid Z=\text{'Lib'}) &~=~ P( \text{'Affirmative'} \mid Z=\text{'Lib'}) \cdot\\
+& ~  P( \text{'Action'} \mid Z=\text{'Lib'})
+\end{align*}
+
+
+ 
+
+
+
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+With this assumption, we can estimate the probability of observing a word $i$  given that the document is liberal: proportion of word $i$ in liberal training set.
+
+The classifier then chooses the class Z (Liberal or Conservative) with the highest aggregate probability.
+
+Note that every new word adds a bit of information that re-adjusts the conditional probabilities.
+
+\newpage
+
+
+ 
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+
+
+Note that with two classes (here: liberal and conservative)  this has a rather neat interpretation:
+\begin{align*}
+\frac{P(Z=\text{\text{'Lib'}} \mid \{W\}_j)}
+{P(Z=\text{'Con'} \mid \{W\}_j)} = \\
+~~~~~~~~~\prod_i \frac{P(W_i \mid Z=*\text{'Lib'}*)}
+{P(W_i \mid Z=*'Con'*)}\times \frac{P(Z=*\text{'Lib'}*)}{~P(Z=*'Con'*)}
+\end{align*}
+Logging this probability ratio, every new word *adds* a bit of information that pushes the ratio above or below 0
+
+
+
+
+
+ 
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+Example: Naive Bayes with only word class 'discriminat*'.
+{\small
+\begin{align*}
+P(W=\text{'discriminat*'} \mid Z=\text{'Lib'}) & = (26+13)/(20002+18722) \approx 0.001\\
+P(W=\text{'discriminat*'} \mid Z=\text{'Con'}) & = (70+48)/(17368+17698) \approx 0.003
+\end{align*}
+}
+Assume that liberal and conservative supporting briefs are equally likely (true in the training set)
+\begin{align*}
+\frac{P(Z=\text{\text{'Lib'}})}{P(Z=\text{'Con'})} & = 1
+\end{align*}
+
+Last step:  calculate posterior classification  probabilities for a new document (based on occurrence of this word).
+
+ 
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+Amicus brief from 'King County Bar Association' containing 3667 words and 4 matches to disciminat*.
+
+{\scriptsize
+\begin{verbatim}
+that "the state shall not [discriminate] against, or grant preferential treatment
+the lingering effects of racial [discrimination] against minority groups in this
+remedy the effects of societal [discrimination]. Another four Justices (Stevens
+that "the state shall not [discriminate] against, or grant preferential treatment
+\end{verbatim}
+}
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+A priori, the probabilities are...
+
+Probability that we observe the word  discriminat* 4 out of 3667 times if the document is liberal:
+{\small
+\begin{verbatim}
+> dbinom(4, size=3667, prob=0.001007127)
+[1] 0.1930602
+\end{verbatim}
+}
+Probability that we observe the word  discriminat* 4 out of 3667 times if the document is conservative:
+{\small
+\begin{verbatim}
+> dbinom(4, size=3667, prob=0.003365083)
+[1] 0.004188261
+\end{verbatim}
+}
+Logged probability ratio = 3.83
+\newpage
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Naive Bayes}
+
+Conclusion: Seeing 4 instances of discriminat* gives the posterior classification probabilities
+ 
+* $\theta_\text{liberal} = \frac{0.193}{0.193+0.004}$ = 0.979
+* $\theta_\text{conservative}$ =  1-0.979=0.021
+ 
+
+This is *quite* confident
+ 
+* ... but other words will be less loaded or push the other way
+ 
+ 
+
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Evaluating Classifiers: Accuracy, Precision and Recall}
+
+\begin{center}
+\scalebox{0.8}{
+\begin{tabular}{llcc}
+\toprule
+&&\multicolumn{2}{c}{Machine}\\
+\cline{3-4}
+&& Liberal & Conservative \\
+\midrule
+Training Data & Liberal & 40&10\\
+& Conservative &40&60\\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\vspace*{0.5cm}
+
+Accuracy = (40+60)/150 = .66
+
+Precision ($Z_{machine}$=Liberal) = 40/(40+40) = 0.5
+
+Precision ($Z_{machine}$=Cons) = 60/(10+60) = 0.86
+
+Recall ($Z_{training}$=Liberal) = 40/(40+10) = 0.80
+
+Recall ($Z_{training}$=Cons) = 60/(40+60) = 0.60
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Latent Dirichlet Allocation}
+What if documents don't belong to only one category?
+ 
+* Each document is a mixture over topics
+* Each topic is a mixture over words
+ 
+Using LDA gives us:
+ 
+* Distribution of words for each topic ($\beta$)
+* Proportion of a document in each topic ($\theta$)
+ 
+Setting up LDA
+ 
+* Still uses bag of words
+* Number of topics fixed ex ante
+* Topics examined ex post --- unsupervised learning
+ 
+ 
+
+
+
+\begin{frame}[t,fragile]\frametitle{Visualizing Topic Models}
+\centerline{\includegraphics[scale=.27]{pictures/ldavis.png}}
+\centerline{\normalsize Courtsey of Brandon Stewart}
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Latent Dirichlet Allocation Components}
+Given dimensions:
+ 
+* **N** documents, **J** different topics, **K** unique words
+ 
+We want the following matrices:
+ 
+* $X = N \times K$ document-term matrix (observed)
+* $\theta = N \times K$ matrix with row $\theta_i = (\theta_{i1},...,\theta_{iK})$
+   
+  * $\theta_{ik}$: Proportion of document $i$ allocated to topic $k$
+   
+* $\beta = K \times J$ matrix with row $\beta_k = (\beta_{k1}, ..., \beta_{kJ})$
+   
+  * $\beta_{kj}$: Probability of using word J, if topic k is chosen
+   
+* $\alpha$ = K length population prior for $\theta$
+ 
+Objective function: f(X, $\beta, \theta, \alpha)$
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{LDA Generative Model}
+When writing a word ($m$) for document $i$:
+\begin{align*}
+\only<1>{
+\text{p}(\theta_i | \alpha) &= \text{Dirichlet}(\alpha) && \text{(Pick potential topics $\theta_i$)}\\
+}
+\text{p}(z_{im} | \theta_i)  &= \text{Multinomial}(1, \theta_i) && \text{ (Pick the topic z to discuss)}\\
+x_{im} | \beta_k, z_{im} &= \text{Multinomial}(1, \beta_k)  && \text{ (Pick a word from topic $z_{im}$) }\\
+\text{p}(\beta_k) &= \text{Dirichlet}(\eta)  && \text{(Prior on topics)}\\
+\end{align*}
+
+with
+
+p($\beta$, $\theta$, Z, $\alpha$ | X) $\propto$  p($\beta$ | $\eta$) $\cdot$ p($\theta$|$\alpha$) $\cdot$ p(Z | $\theta$) $\cdot$ p(X | $\beta$, Z)
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Generative vs discriminative training}
+\vspace{2cm}
+\centerline{\includegraphics[scale=.6]{pictures/new-topics-ca.png} }
+\vfill
+ 
+
+
+
+\begin{frame}[t,fragile]\frametitle{Intuition on LDA}
+p($\beta$, $\theta$, Z, $\alpha$ | X) $\propto$  p($\beta$ | $\eta$) $\cdot$ p($\theta$|$\alpha$) $\cdot$ p(Z | $\theta$) $\cdot$ p(X | $\beta$, Z)
+
+Remember rows of $\beta$ and $\theta$ must sum to 1!
+
+p(X | $\beta$, Z): Favors co-occurring words, segregated topics
+ 
+* $\beta$ = (0.5,0.5,0,0) vs $\beta$ = (0.25,0.25,0.25,0.25)
+  
+
+p(Z | $\theta$): Higher if $\theta$ is concentrated (i.e. fewer potential topics)
+ 
+* $\theta$ = (0.5,0.5, 0, 0) vs. $\theta$ = (0.25, 0.25, 0.25, 0.25) 
+ 
+
+Joint distribution favors sparse topics, small topic clusters
+
+But data often need a larger number of topics to assign small topic clusters to data
+
+
+ 
+
+
+
+\begin{frame}[t,fragile]\frametitle{Japanese Campaign Manifestos (Catalinac 2016)}
+Examines the effect of electoral reform
+ 
+* Before 1994: SNTV-MMD (more intraparty competition)
+* After 1994: Mixed member majoritarian (PR + SMD)
+ 
+LDA on N=7497 candidate manifestos for Diet 1950-2009
+ 
+* Hand transcribed, OCR failed
+* More complicated in Japanese
+ 
+Characterizing campaigns across 50+ years
+ 
+* What do candidates talk about?
+* How did electoral reform change incentives?
+* Why increasing interest in militaristic foreign action? 
+ 
+ 
+
+\begin{frame}[t,fragile]\frametitle{Japanese Manifestos}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jpmanifesto.png}}
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Japanese Manifesto Topics}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jptopic.png}}
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Manifesto Content over Time}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jpcontent.png}}
+ 
+
+
+\begin{frame}[t,fragile]\frametitle{Foreign Policy Content}
+\vspace{10 mm}
+\centerline{\includegraphics[scale=.27]{pictures/jpforeign.png}}
+ 
+
+
+
+
+\begin{frame}[t,fragile]\frametitle{Wrapping up}
+For single category classification
+ 
+* Discriminative: Model $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ directly
+* Generative: Model $P(\{W\} \mid Z, \beta)$ and $P(Z)=\theta_z$, then get $P(Z \mid \{W\}, \beta) = \theta_{z|w}$ via Bayes theorem
+ 
+For multiple categories
+ 
+* Latent Dirichlet Allocation
+* More generally used for discovery of topics
+ 
+Tomorrow's Lab
+ 
+* Classifying NY Times articles by topic
+ 
+ 
+
+\end{document}
+
+
+
+

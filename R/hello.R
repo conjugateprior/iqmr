@@ -1,6 +1,6 @@
 library(knitr)
 
-conv_rnw <- function(x){
+convert_rnw <- function(x){
   x <- gsub("`", "'", x) # start quotes
   x <- gsub("<<(.*)>>=", '```{r \\1}', x)
   x <- gsub("@", '```', x)
@@ -16,4 +16,7 @@ conv_rnw <- function(x){
   x[!grepl(pattern="^%.*", x)]
 }
 
-  writeLines(x, 'foo.Rmd')
+show_lecture <- function(which=c(1, 2, 3)){
+  w <- match.call(which)
+  RShowDoc(paste0("slides", w), package="iqmr")
+}

@@ -15,12 +15,15 @@ IQMR slides and course materials, slowly morphing into an R package.
 
 ## TODO
 
-* Make election manifestos a corpus for quanteda
-* check code in session 1
-* get better tables
+* Slim down and rejig session 1
+* Add exploratory with quanteda examples
+* Move those to the labs also
+* Beef up precision recall for dictionary material - think down matrix stuff
 
-* add a wrapper function so we don't have to call them vignettes
+* Session 2 - add stm example
+* Check lab still works out 
 
+* Session 3 - add material on scraping - senatorial example
 
 
 *Will Lowe 2017*

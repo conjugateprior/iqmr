@@ -19,8 +19,8 @@
 \setlength{\parindent}{0em}
 
 
-\author{IQMR 2016}
-\title{Lab 1}
+\author{Will Lowe}
+\title{IQMR: Lab 1}
 
 \date{}
 

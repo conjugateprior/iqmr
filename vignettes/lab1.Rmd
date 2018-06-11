@@ -1,0 +1,303 @@
+---
+title: "Lab 1"
+author: "Will Lowe"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction to `quanteda`
+
+### Building a corpus
+
+Let's start by reading in the data from the abortion debate analyzed by Bara et al.  I've concatenated each speaker's contributions into a single file.
+(This is certainly not the only way to think about analyzing this data, but it's what Bara et al. did.)
+
+First load the package
+```{r}
+library(quanteda) # for general text analysis
+library(readtext) # for reading in all kinds of files
+```
+then read in some text files and make a `corpus` from them
+```{r}
+txts <- readtext("data/abortion-debate-by-speaker/*.txt")
+corp <- corpus(txts)
+```
+Corpora get big quickly, so most functions in the package will not show you all the contents of any object.  Call `summary` to get a view of the new corpus object.
+
+It's helpful to add some metadata to the documents, so we can subset them.  Here we'll record the vote of each speaker.
+```{r}
+vote <- c("abs", "abs", "abs", "no", "no", "no", "no",
+          "no", "yes", "yes", "yes", "yes", "yes", "yes",
+          "yes", "yes", "yes", "yes", "yes", "yes", "yes",
+          "yes", "yes", "yes")
+docvars(corp, "vote") <- vote
+summary(corp)
+```
+where `docvars` adds document specific metadata, here the speaker's vote.
+
+The number of words spoken by each speaker might be useful, so we'll add that too, taking it straight out of the the summary
+```{r}
+docvars(corp, "words_spoken") <- summary(corp)$Tokens
+```
+
+If we want to deal with just the docvars we can get them all as a data.frame like this
+```{r}
+dvars <- docvars(corp)
+```
+
+Conversely, if we want to the texts in this corpus object without the docvars we use `texts`.
+Maybe don't do call this if your corpus is even moderately large as it will take while to 
+print to the screen.  To just get the contributions of the (magnificently named) Mr Norman St John-Stevas, we can index into it.  He's the 5th `document'.
+```{r, eval=FALSE}
+texts(corp)[5]
+```
+To see just a few speakers, e.g. the ones that voted against, we can use `subset`
+```{r}
+nocorp <- corpus_subset(corp, vote == "no")
+summary(nocorp)
+```
+or we could use it to remove very short speeches
+```{r eval=FALSE}
+longcorp <- corpus_subset(corp, words_spoken > 50)
+```
+Actually we could use the more flexible `corpus_trim`, like this:
+```{r}
+longcorp <- corpus_trim(corp, what = "documents", min_ntoken = 50)
+```
+
+### Exploring text corpora
+
+First a very gross view of how these legislator are talking in terms of speech complexity.  We'll use an old readabilty measure and a measure of lexical diversity.
+```{r}
+readability <- textstat_readability(corp, "Flesch.Kincaid")
+docvars(corp, "FK") <- readability$Flesch.Kincaid ## add it as a docvar
+subset(docvars(corp), FK > 20) # looking at you Mr Mendelson
+texts(corp)[19] # yes, I mean no, I mean, what?
+```
+
+Let's explore a little more by looking for the key terms in play.  One way to do this is to look for collocations.  We'll look at the top few according to a  `pointwise mutual information' measure (`pmi`).  The function operates on the tokens of the corpus, so we extract them first
+```{r}
+toks <- tokens(corp)
+colls <- textstat_collocations(toks)
+head(colls, 20)
+```
+This is disappointing unsubstantive, but we can work a bit harder by removing
+the stopwords (we'll leave gaps where they were).
+
+If you're feeling adventurous within quanteda, here's a rather complex example that tries to find better ones
+```{r}
+#toks2 <- tokens(corpus_reshape(corp, to = "sentence")) # split to sentences
+toks2 <- tokens_remove(tokens(corp), stopwords(), padding = TRUE)
+toks2 <- tokens_select(toks2, "[a-z]+", valuetype="regex", 
+                       case_insensitive = FALSE, padding = TRUE) 
+coll2 <- textstat_collocations(toks2)
+coll3 <- textstat_collocations(toks2, size = 3) # three word phrases
+```
+
+If we're really serious about collocation hunting, it's probably best to use a dedicated package, e.g. \texttt{phrasemachine}.
+
+But let's get a bit more confirmatory in our text analysis
+
+### Keywords in context
+
+Since this is an abortion debate, let's see the honorable folk talk about mothers and babies. We'll use the `keyword in context' function
+```{r, eval=FALSE}
+kwic(corp, "mother*")
+```
+we might benefit from a bit more local context, so maybe set the window a bit wider  Here are the babies
+```{r, eval=FALSE}
+kwic(corp, "babi*", window = 10)
+```
+you may need to expand your window a bit to see these properly.
+
+Perhaps oddly, there is much less talk of babies than of mothers.
+In this debate, the other major actors are doctors and their professional association, which you can investigate the same way.
+
+The output of kwic is simply a data.frame, so one thing that's often useful is to treat the left and right sides of the kwic as a document (about babies), e.g. like this:
+```{r}
+babes <- kwic(corp, "babi*", window = 10)
+txt <- paste(babes$pre, babes$post, collapse=" ") # make one big string
+```
+This constructed document contains, by definition, all the ways the term was used in the corpus, so you can then examine what sorts of words tend to be used around it, e.g. by using a content analysis dictionary.
+
+As far as I know this was pioneered by the Yoshikoder software, 
+and bears some obvious similarities to the word-embedding analyses that are currently
+fashionable.
+
+Now let's get even more confirmatory, and apply the mapping between words and topics described by Bara et al.'s dictionary to this corpus, in order to replicate their first analysis.
+
+Our first stem will be to create a document feature matrix (\texttt{dfm}), after which dictionary application is straightforward.  But since lots of models require a dfm, we'll linger a little on the steps of the process.
+
+### Constructing a document feature matrix
+
+quanteda makes a basic dfm quite straightforward
+```{r}
+corpdfm <- dfm(corp) # lowercases by default, but nothing more
+dim(corpdfm)
+featnames(corpdfm)[1:40] # really just colnames
+```
+But let's remove some things that aren't (currently) of interest to us
+```{r}
+corpdfm <- dfm(corp, remove=stopwords(), remove_punct=TRUE,
+               remove_numbers=TRUE)
+dim(corpdfm) # a little smaller
+featnames(corpdfm)[1:40]
+```
+We *could* also stem
+```{r}
+stemdfm <- dfm(corp, remove=stopwords(), remove_punct=TRUE,
+               remove_numbers=TRUE, stem=TRUE)
+dim(stemdfm) # about 1000 fewer 'word's
+featnames(stemdfm)[1:40]
+```
+but our dictionary entries aren't stemmed, so let's save `stemdfm` for later.
+
+For modeling, we'll often want to remove the low frequency and idiosyncratic words
+```{r}
+smallcorpdfm <- dfm_trim(corpdfm, min_termfreq = 5, min_docfreq=5)
+dim(smallcorpdfm)
+```
+where `min_count` removes any word that occurs less than 5 times and `min_docfreq` removes any words that occurs any number of times but  in fewer than 5 documents.  That makes things a fair bit smaller.  But again, we don't want to miss dictionary entries.
+
+There's also a `wordcloud` function for viewing the the document feature matrix, but we won't use it because wordclouds are a bit silly.
+
+## Answering questions with text
+
+In the debate the Speaker, Mr Horace King, said he would try to give equal time to both sides of the debate.  (You can read the original debate as `data/abortion-debate-hansard.html`).  Did it happen this way?
+
+It's hard to know whether the debate was persuasive since we do not know the speakers prior beliefs (though we could find out from their previous debates) so let us assume that there was no substantial persuasion.
+We'll assume that no speaker spoke particularly slowly.  These imply that we can proxy speaking time with number of words said.
+
+```{r}
+aggregate(words_spoken ~ vote, data=docvars(corp), FUN = sum)
+```
+It appears that floor time was about two to one yes to no voters.  However, individual no voters did tend to get more time each
+```{r}
+aggregate(words_spoken ~ vote, data = docvars(corp), FUN = median)
+```
+
+### Applying a content analysis dictionary
+
+Let's turn to the content analysis dictionary that Bara used.
+A content analysis dictionary in `quanteda` terms can be made out of a list of vectors of words, like this:
+```{r}
+dictionary(list(medics = c("doctor", "medical", "hospital"),
+                mothers = c("mother", "parents")))
+```
+or imported in the format of some other content analysis program.
+(Quanteda can deal with dictionaries from Wordstat, Yoshikoder, and LIWC).  We'll read the dictionary in Yoshikoder format:
+```{r}
+baradic <- dictionary(file = "data/2007_abortion_dictionary.ykd")
+```
+
+### Replicating a little bit of Bara
+
+With dictionary in hand we can now go \textit{category} counting rather than word counting
+```{r}
+baradfm <- dfm(corp, dictionary = baradic)
+```
+Since this output is not absolutely massive
+```{r}
+dim(baradfm)
+```
+let's force it into a regular R matrix to take a look at the whole thing without being swamped in elements
+```{r}
+dictout <- as.matrix(baradfm)
+dictout
+```
+And recreate some of Bara et al.'s Table 3, repeated below, as a bar plot.
+
+```{r, results="asis"}
+tab <- data.frame(Mean = c(13.59, 7.82, 21.71, 4.61, 32.17, 20.09),
+                  SD = c(2.98, 3.36, 4.73, 2.51, 6.94, 4.86),
+                  row.names = c("advocacy", "legal", "medical", "moral", "procedural", "social" ),
+                  stringsAsFactors = FALSE)
+knitr::kable(t(tab))
+```
+
+```{r}
+emph <- colSums(dictout) ## emphasis
+propemph <- emph / sum(emph)*100 ## relative emphasis as a percentage
+barplot(propemph)
+```
+
+Finally, let's revisit the floortime question but this time counting only vocabulary that Bara et al. thought was substantively relevant.
+```{r}
+relevanttalk <- rowSums(dictout)
+aggregate(relevanttalk ~ docvars(corp, "vote"), FUN=sum)
+```
+Now the balance of floor time spent saying 'relevant' words is even more skewed, 
+at around 3 to 1.
+
+<!-- %' -->
+<!-- %' \subsection*{Abortion Politics in the US} -->
+<!-- %' -->
+<!-- %' Now we will compare this legislative debate with a similar one from the US Senate. This is the debate on the conference report for the Partial-Birth Abortion Ban Act of 2003. -->
+<!-- %' -->
+<!-- %' Import the US speech documents into Yoshikoder, re-do the dictionary analysis -->
+<!-- %' <<>>= -->
+<!-- %' us<-read_ykd_report("usabortion-utf8.csv",drop.total=TRUE) -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Calculate per speaker proportions -->
+<!-- %' <<>>= -->
+<!-- %' usprop<-us/rowSums(us) -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Select Democrats and Republicans -->
+<!-- %' <<>>= -->
+<!-- %' dems<-usprop[grep("DEM",rownames(usprop)),] -->
+<!-- %' reps<-usprop[grep("REP",rownames(usprop)),] -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Calculate average proportions for Dems and Reps -->
+<!-- %' <<>>= -->
+<!-- %' demavg<-apply(dems,2,mean) -->
+<!-- %' repavg<-apply(reps,2,mean) -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Create one object -->
+<!-- %' <<>>= -->
+<!-- %' usres<-rbind(demavg,repavg) -->
+<!-- %' rownames(usres)<-c("Dem","Rep") -->
+<!-- %' @ -->
+<!-- %' and plot it -->
+<!-- %' <<>>= -->
+<!-- %' barplot(usres,beside=T,legend=T,ylim=c(0,0.4)) -->
+<!-- %' @ -->
+<!-- % -->
+<!-- % \begin{itemize} -->
+<!-- % \item Do you find a similar or different distribution of keyword occurrences in the debate categories as defined by Bara et al.? -->
+<!-- % \item Can you find a partisan pattern in the data? To do this, compute averages of the category percentages separately for Democrats and Republicans. -->
+<!-- % \item More generally, where do you see the benefits and/or limitations of applying this specific dictionary? Do you suspect that important terms are omitted? Notice that there is no ``gender politics'' category in the Bara et al. dictionary. Can you think of some terms that might reflect gender politics? Use Yoshikoder to add a gender category and appropriate patterns. Re-apply the dictionary  to the data. Do you find a partisan pattern? -->
+<!-- % \end{itemize} -->
+
+
+<!-- % \subsection*{Party Politics in the UK} -->
+<!-- % -->
+<!-- % Finally, we look at the manifesto policy dictionary constructed by Laver and Garry (2000) and the development of economic policy positions, in particular. First, load the dictionary and the British party manifestos for the elections 1992 to 2010. -->
+<!-- % -->
+<!-- % Our goal is twofold: first, we would like to replicate the result that the Labour Party moved towards a neoliberal economic policy position in 1997 under Tony Blair, and want to examine how stable this move was in the subsequent elections. -->
+<!-- % -->
+<!-- % Open the dictionary file in Excel and calculate the economic policy positions for the parties as follows: -->
+<!-- % \begin{equation*} -->
+<!-- %   \text{ECON} = \frac{\text{ECON}_R - \text{ECON}_L}{\text{ECON}_R + \text{ECON}_L} -->
+<!-- % \end{equation*} -->
+<!-- % where $\text{ECON}_L$ is the total counts in category ``increase role of state in the economy'' and -->
+<!-- % $ECON_R$ is the total counts in category ``reduce role of state in the economy''. -->
+<!-- % \begin{itemize} -->
+<!-- % \item Using Excel, plot the estimates for the parties over time (hint: you may need to re-arrange the data with parties in rows and years in columns).  Can you replicate the rightward move of Labour in 1997? Does Labour stay on the right in subsequent years? -->
+<!-- % \item Following the election in 2010, none of the parties could muster a majority in parliament. Subsequently, the Conservative and Liberal Democratic party formed a coalition government, and Labour went into the opposition. Based on your estimates of economic policy positions derived from the dictionary counts, does this coalition appear sensible from the Liberal Democratic party's perspective? -->
+<!-- % \end{itemize} -->
+

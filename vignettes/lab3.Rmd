@@ -19,11 +19,14 @@ knitr::opts_chunk$set(
 
 ## US Senate Speeches
 
-Let's take a look at a US Senate debate on partial birth abortion.  
+Let's take a look at a US Senate debate on partial birth abortion.
 As always, we'll load the texts, make a corpus, then a document term matrix to start off
 ```{r}
 library(quanteda)
 library(readtext)
+library(dplyr)
+
+library(iqmr)
 ```
 
 <!-- the data is in a folder called "abortion-debate-us-senate" in the 'usual place': -->
@@ -48,7 +51,7 @@ library(readtext)
 
 <!-- ## Different version -->
 
-We'll use the pre-constructed data frame of speaker contributions and make a 
+We'll use the pre-constructed data frame of speaker contributions and make a
 corpus out of it
 ```{r}
 data("df_pba_debate_by_speaker")
@@ -73,23 +76,23 @@ the estimated position can be extracted as if this were a regular fitted model
 preds  <- predict(wfish, interval = "confidence")
 preds
 ```
-Annoyingly we need to extract the (only) element in `preds` (called 'fit') to 
+Annoyingly we need to extract the (only) element in `preds` (called 'fit') to
 get a table of positions and associated uncertainty.
 ```{r}
 # make a data frame from fit matrix and the document variables
-pos <- data.frame(docvars(corpdfm), preds$fit) 
-pos <- pos[order(pos$fit),] 
+pos <- data.frame(docvars(corpdfm), preds$fit)
+pos <- pos[order(pos$fit),]
 ```
-Let's plot these positions.  I'll use `ggplot2`, but you can uncomment the 
+Let's plot these positions.  I'll use `ggplot2`, but you can uncomment the
 base R lines if you prefer those.
 ```{r}
 library(ggplot2)
 library(ggrepel) # for labelling
 theme_set(theme_minimal())
 
-ggplot(pos, aes(x = fit, y = 1:nrow(pos), xmin = lwr, xmax = upr, col = party)) + 
+ggplot(pos, aes(x = fit, y = 1:nrow(pos), xmin = lwr, xmax = upr, col = party)) +
   geom_point() +
-  geom_errorbarh(height = 0) + 
+  geom_errorbarh(height = 0) +
   scale_color_manual(values = c("blue", "red")) +
   scale_y_continuous(labels = pos$speaker, breaks = 1:nrow(pos)) +
   labs(x = "Position", y = "Speaker") +
@@ -101,7 +104,7 @@ We can also get one of those nice `Eiffel Tower' plots that Proksch and Slapin u
 
 Let's extract the word scores for later:
 ```{r}
-wscores <- data.frame(word = wfish$features, 
+wscores <- data.frame(word = wfish$features,
                       score = wfish$beta,
                       offset = wfish$psi)
 ```
@@ -111,14 +114,14 @@ words we think ought to be charged.  Take a moment to make some predictions
 about the scores of these:
 ```{r}
 testwords <- c("life", "choice", "womb", "her", "woman", "health",
-               "born", "baby", "little", "gruesome", "kill", "roe", 
-               "wade", "medical", "her", "his", "child", "religion", 
+               "born", "baby", "little", "gruesome", "kill", "roe",
+               "wade", "medical", "her", "his", "child", "religion",
                "catholic", "doctor", "nurse")
 ```
 
 Now let's see
 ```{r}
-testscores <- wscores %>% 
+testscores <- wscores %>%
   filter(word %in% testwords) %>%
   arrange(score)
 
@@ -129,11 +132,11 @@ If we were Slapin and Proksch we might put all this on one of their Eiffel Tower
 diagrams...
 
 ```{r}
-ggplot(wscores, aes(score, offset, label = word)) + 
-  geom_point(color = "grey", alpha = 0.2) + 
+ggplot(wscores, aes(score, offset, label = word)) +
+  geom_point(color = "grey", alpha = 0.2) +
   geom_text_repel(data = testscores, col = "black") +
   geom_point(data = testscores) +
-  labs(x = "Word score", y = "Offset parameter") + 
+  labs(x = "Word score", y = "Offset parameter") +
   ggtitle("Estimated Word Positions for Selected Debate Vocabulary",
           subtitle = "Note: Offset parameter is roughly proportional to word frequency")
 ```
@@ -141,23 +144,9 @@ ggplot(wscores, aes(score, offset, label = word)) +
 
 If we were being thorough about these words we'd check they do what we think they do by looking by looking at them in all their contexts, as we did before. Try it.
 
-```{r}
-library(ca)
-
-corpdfm2 <- dfm_trim(dfm(corp, remove = stopwords(), 
-                         remove_punct = TRUE, 
-                         stem = TRUE), 
-                     min_termfreq = 10, min_docfreq = 3)
-ca_mod <- ca(as.matrix(corpdfm2))
+```{r, eval = FALSE}
+View(kwic(corp, "baby", window = 15))
 ```
-
-```{r}
-sort(ca_mod$colcoord[,2], decreasing = FALSE)
-sort(ca_mod$colcoord[,2], decreasing = TRUE)
-plot(ca_mod, what = c("all", "none")) # just speakers
-```
-
-
 
 
 <!-- We can also look at more than one dimension in this data.  For this we'll use the \texttt{ca} package.  You may need use to \texttt{install.package} this first. -->

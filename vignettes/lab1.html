@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Will Lowe" />
+
+<meta name="date" content="2018-06-20" />
+
+<title>Lab 1</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Lab 1</h1>
+<h4 class="author"><em>Will Lowe</em></h4>
+<h4 class="date"><em>2018-06-20</em></h4>
+
+
+
+<div id="introduction-to-quanteda" class="section level2">
+<h2>Introduction to <code>quanteda</code></h2>
+<div id="building-a-corpus" class="section level3">
+<h3>Building a corpus</h3>
+<p>Let’s start by reading in the data from the abortion debate analyzed by Bara et al. I’ve concatenated each speaker’s contributions into a single file. (This is certainly not the only way to think about analyzing this data, but it’s what Bara et al. did.)</p>
+<p>First load the package</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(quanteda) <span class="co"># for general text analysis</span>
+<span class="kw">library</span>(readtext) <span class="co"># for reading in all kinds of files</span></code></pre></div>
+<p>then read in some text files and make a <code>corpus</code> from them</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">txts &lt;-<span class="st"> </span><span class="kw">readtext</span>(<span class="st">&quot;data/abortion-debate-by-speaker/*.txt&quot;</span>)
+corp &lt;-<span class="st"> </span><span class="kw">corpus</span>(txts)</code></pre></div>
+<p>Corpora get big quickly, so most functions in the package will not show you all the contents of any object. Call <code>summary</code> to get a view of the new corpus object.</p>
+<p>It’s helpful to add some metadata to the documents, so we can subset them. Here we’ll record the vote of each speaker.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vote &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;abs&quot;</span>, <span class="st">&quot;abs&quot;</span>, <span class="st">&quot;abs&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;no&quot;</span>,
+          <span class="st">&quot;no&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>,
+          <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>,
+          <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;yes&quot;</span>)
+<span class="kw">docvars</span>(corp, <span class="st">&quot;vote&quot;</span>) &lt;-<span class="st"> </span>vote
+<span class="kw">summary</span>(corp)
+<span class="co">#&gt; Corpus consisting of 24 documents:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                             Text Types Tokens Sentences vote</span>
+<span class="co">#&gt;           abs-Dr Horace King.txt   104    177        17  abs</span>
+<span class="co">#&gt;        abs-Mr William Deedes.txt   530   1666        81  abs</span>
+<span class="co">#&gt;          abs-Sir John Hobson.txt   717   3098       128  abs</span>
+<span class="co">#&gt;         no-Mr Kevin McNamara.txt   907   3353       135   no</span>
+<span class="co">#&gt;  no-Mr Norman St John-Stevas.txt   719   2499       118   no</span>
+<span class="co">#&gt;            no-Mr Peter Mahon.txt    57     79         6   no</span>
+<span class="co">#&gt;          no-Mr William Wells.txt   777   2929       140   no</span>
+<span class="co">#&gt;           no-Mrs Jill Knight.txt   761   2626       116   no</span>
+<span class="co">#&gt;            yes-Dr David Owen.txt   583   1808        82  yes</span>
+<span class="co">#&gt;         yes-Dr John Dunwoody.txt   568   2046        81  yes</span>
+<span class="co">#&gt;    yes-Dr Michael Winstanley.txt    49     68         3  yes</span>
+<span class="co">#&gt;          yes-Hon. Sam Silkin.txt    30     34         2  yes</span>
+<span class="co">#&gt;        yes-Miss Joan Vickers.txt   617   2029        91  yes</span>
+<span class="co">#&gt;             yes-Mr Alex Lyon.txt    51     59         3  yes</span>
+<span class="co">#&gt;           yes-Mr Angus Maude.txt   688   2511        93  yes</span>
+<span class="co">#&gt;       yes-Mr Charles Pannell.txt    95    175        11  yes</span>
+<span class="co">#&gt;           yes-Mr David Steel.txt  1157   5240       191  yes</span>
+<span class="co">#&gt;          yes-Mr Edward Lyons.txt   408    854        40  yes</span>
+<span class="co">#&gt;        yes-Mr John Mendelson.txt    48     63         1  yes</span>
+<span class="co">#&gt;              yes-Mr Leo Abse.txt   731   2371        91  yes</span>
+<span class="co">#&gt;           yes-Mr Roy Jenkins.txt   723   2705       101  yes</span>
+<span class="co">#&gt;     yes-Mrs Gwyneth Dunwoody.txt    60     91         4  yes</span>
+<span class="co">#&gt;          yes-Mrs Renée Short.txt   701   2368        90  yes</span>
+<span class="co">#&gt;   yes-Sir Henry Legge-Bourke.txt    68    103         5  yes</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Source: /Users/wlowe/wip/iqmr/vignettes/* on x86_64 by wlowe</span>
+<span class="co">#&gt; Created: Wed Jun 20 16:43:30 2018</span>
+<span class="co">#&gt; Notes:</span></code></pre></div>
+<p>where <code>docvars</code> adds document specific metadata, here the speaker’s vote.</p>
+<p>The number of words spoken by each speaker might be useful, so we’ll add that too, taking it straight out of the the summary</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">docvars</span>(corp, <span class="st">&quot;words_spoken&quot;</span>) &lt;-<span class="st"> </span><span class="kw">summary</span>(corp)<span class="op">$</span>Tokens</code></pre></div>
+<p>If we want to deal with just the docvars we can get them all as a data.frame like this</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dvars &lt;-<span class="st"> </span><span class="kw">docvars</span>(corp)</code></pre></div>
+<p>Conversely, if we want to the texts in this corpus object without the docvars we use <code>texts</code>. Maybe don’t do call this if your corpus is even moderately large as it will take while to print to the screen. To just get the contributions of the (magnificently named) Mr Norman St John-Stevas, we can index into it. He’s the 5th `document’.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">texts</span>(corp)[<span class="dv">5</span>]</code></pre></div>
+<p>To see just a few speakers, e.g. the ones that voted against, we can use <code>subset</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nocorp &lt;-<span class="st"> </span><span class="kw">corpus_subset</span>(corp, vote <span class="op">==</span><span class="st"> &quot;no&quot;</span>)
+<span class="kw">summary</span>(nocorp)
+<span class="co">#&gt; Corpus consisting of 5 documents:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;                             Text Types Tokens Sentences vote words_spoken</span>
+<span class="co">#&gt;         no-Mr Kevin McNamara.txt   907   3353       135   no         3353</span>
+<span class="co">#&gt;  no-Mr Norman St John-Stevas.txt   719   2499       118   no         2499</span>
+<span class="co">#&gt;            no-Mr Peter Mahon.txt    57     79         6   no           79</span>
+<span class="co">#&gt;          no-Mr William Wells.txt   777   2929       140   no         2929</span>
+<span class="co">#&gt;           no-Mrs Jill Knight.txt   761   2626       116   no         2626</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Source: /Users/wlowe/wip/iqmr/vignettes/* on x86_64 by wlowe</span>
+<span class="co">#&gt; Created: Wed Jun 20 16:43:30 2018</span>
+<span class="co">#&gt; Notes:</span></code></pre></div>
+<p>or we could use it to remove very short speeches</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">longcorp &lt;-<span class="st"> </span><span class="kw">corpus_subset</span>(corp, words_spoken <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span>)</code></pre></div>
+<p>Actually we could use the more flexible <code>corpus_trim</code>, like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">longcorp &lt;-<span class="st"> </span><span class="kw">corpus_trim</span>(corp, <span class="dt">what =</span> <span class="st">&quot;documents&quot;</span>, <span class="dt">min_ntoken =</span> <span class="dv">50</span>)</code></pre></div>
+</div>
+<div id="exploring-text-corpora" class="section level3">
+<h3>Exploring text corpora</h3>
+<p>First a very gross view of how these legislator are talking in terms of speech complexity. We’ll use an old readabilty measure and a measure of lexical diversity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">readability &lt;-<span class="st"> </span><span class="kw">textstat_readability</span>(corp, <span class="st">&quot;Flesch.Kincaid&quot;</span>)
+<span class="kw">docvars</span>(corp, <span class="st">&quot;FK&quot;</span>) &lt;-<span class="st"> </span>readability<span class="op">$</span>Flesch.Kincaid ## add it as a docvar
+<span class="kw">subset</span>(<span class="kw">docvars</span>(corp), FK <span class="op">&gt;</span><span class="st"> </span><span class="dv">20</span>) <span class="co"># looking at you Mr Mendelson</span>
+<span class="co">#&gt;                           vote words_spoken       FK</span>
+<span class="co">#&gt; yes-Mr John Mendelson.txt  yes           63 23.40842</span>
+<span class="kw">texts</span>(corp)[<span class="dv">19</span>] <span class="co"># yes, I mean no, I mean, what?</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                                         yes-Mr John Mendelson.txt </span>
+<span class="co">#&gt; &quot;Would the right hon. and learned Gentleman not agree that those of us who support the principle of the Bill can give it Second Reading, but those who have objections of detail would be in a strong position, given the opinion of the House, which finally has to approve it after Committee, to get those Amendments passed?&quot;</span></code></pre></div>
+<p>Let’s explore a little more by looking for the key terms in play. One way to do this is to look for collocations. We’ll look at the top few according to a <code>pointwise mutual information' measure (</code>pmi`). The function operates on the tokens of the corpus, so we extract them first</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">toks &lt;-<span class="st"> </span><span class="kw">tokens</span>(corp)
+colls &lt;-<span class="st"> </span><span class="kw">textstat_collocations</span>(toks)
+<span class="kw">head</span>(colls, <span class="dv">20</span>)
+<span class="co">#&gt;    collocation count count_nested length   lambda        z</span>
+<span class="co">#&gt; 1        it is   196            0      2 3.517543 35.19407</span>
+<span class="co">#&gt; 2       of the   386            0      2 2.001889 30.28499</span>
+<span class="co">#&gt; 3     the bill   211            0      2 3.706171 26.59954</span>
+<span class="co">#&gt; 4       do not    66            0      2 5.047968 25.56264</span>
+<span class="co">#&gt; 5   member for    88            0      2 6.572356 24.32380</span>
+<span class="co">#&gt; 6     there is    79            0      2 3.628474 23.36673</span>
+<span class="co">#&gt; 7    should be    58            0      2 3.787069 22.41424</span>
+<span class="co">#&gt; 8     has been    37            0      2 4.875933 22.01360</span>
+<span class="co">#&gt; 9    those who    33            0      2 5.301837 21.79919</span>
+<span class="co">#&gt; 10      my hon    40            0      2 4.438066 21.72649</span>
+<span class="co">#&gt; 11    would be    56            0      2 3.580214 21.46304</span>
+<span class="co">#&gt; 12   have been    41            0      2 4.434594 21.13694</span>
+<span class="co">#&gt; 13   there are    44            0      2 3.941511 21.09181</span>
+<span class="co">#&gt; 14     i think    59            0      2 4.110880 20.35290</span>
+<span class="co">#&gt; 15  think that    63            0      2 4.280665 19.77100</span>
+<span class="co">#&gt; 16      may be    41            0      2 4.070389 19.48431</span>
+<span class="co">#&gt; 17      i have    71            0      2 2.753165 19.33246</span>
+<span class="co">#&gt; 18     that it    91            0      2 2.359524 19.07135</span>
+<span class="co">#&gt; 19   right hon    28            0      2 4.582672 18.71944</span>
+<span class="co">#&gt; 20     will be    41            0      2 3.422821 18.12931</span></code></pre></div>
+<p>This is disappointing unsubstantive, but we can work a bit harder by removing the stopwords (we’ll leave gaps where they were).</p>
+<p>If you’re feeling adventurous within quanteda, here’s a rather complex example that tries to find better ones</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#toks2 &lt;- tokens(corpus_reshape(corp, to = &quot;sentence&quot;)) # split to sentences</span>
+toks2 &lt;-<span class="st"> </span><span class="kw">tokens_remove</span>(<span class="kw">tokens</span>(corp), <span class="kw">stopwords</span>(), <span class="dt">padding =</span> <span class="ot">TRUE</span>)
+toks2 &lt;-<span class="st"> </span><span class="kw">tokens_select</span>(toks2, <span class="st">&quot;[a-z]+&quot;</span>, <span class="dt">valuetype=</span><span class="st">&quot;regex&quot;</span>, 
+                       <span class="dt">case_insensitive =</span> <span class="ot">FALSE</span>, <span class="dt">padding =</span> <span class="ot">TRUE</span>) 
+coll2 &lt;-<span class="st"> </span><span class="kw">textstat_collocations</span>(toks2)
+coll3 &lt;-<span class="st"> </span><span class="kw">textstat_collocations</span>(toks2, <span class="dt">size =</span> <span class="dv">3</span>) <span class="co"># three word phrases</span></code></pre></div>
+<p>If we’re really serious about collocation hunting, it’s probably best to use a dedicated package, e.g. .</p>
+<p>But let’s get a bit more confirmatory in our text analysis</p>
+</div>
+<div id="keywords-in-context" class="section level3">
+<h3>Keywords in context</h3>
+<p>Since this is an abortion debate, let’s see the honorable folk talk about mothers and babies. We’ll use the `keyword in context’ function</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kwic</span>(corp, <span class="st">&quot;mother*&quot;</span>)</code></pre></div>
+<p>we might benefit from a bit more local context, so maybe set the window a bit wider Here are the babies</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">kwic</span>(corp, <span class="st">&quot;babi*&quot;</span>, <span class="dt">window =</span> <span class="dv">10</span>)</code></pre></div>
+<p>you may need to expand your window a bit to see these properly.</p>
+<p>Perhaps oddly, there is much less talk of babies than of mothers. In this debate, the other major actors are doctors and their professional association, which you can investigate the same way.</p>
+<p>The output of kwic is simply a data.frame, so one thing that’s often useful is to treat the left and right sides of the kwic as a document (about babies), e.g. like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">babes &lt;-<span class="st"> </span><span class="kw">kwic</span>(corp, <span class="st">&quot;babi*&quot;</span>, <span class="dt">window =</span> <span class="dv">10</span>)
+txt &lt;-<span class="st"> </span><span class="kw">paste</span>(babes<span class="op">$</span>pre, babes<span class="op">$</span>post, <span class="dt">collapse=</span><span class="st">&quot; &quot;</span>) <span class="co"># make one big string</span></code></pre></div>
+<p>This constructed document contains, by definition, all the ways the term was used in the corpus, so you can then examine what sorts of words tend to be used around it, e.g. by using a content analysis dictionary.</p>
+<p>As far as I know this was pioneered by the Yoshikoder software, and bears some obvious similarities to the word-embedding analyses that are currently fashionable.</p>
+<p>Now let’s get even more confirmatory, and apply the mapping between words and topics described by Bara et al.’s dictionary to this corpus, in order to replicate their first analysis.</p>
+<p>Our first stem will be to create a document feature matrix (), after which dictionary application is straightforward. But since lots of models require a dfm, we’ll linger a little on the steps of the process.</p>
+</div>
+<div id="constructing-a-document-feature-matrix" class="section level3">
+<h3>Constructing a document feature matrix</h3>
+<p>quanteda makes a basic dfm quite straightforward</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corpdfm &lt;-<span class="st"> </span><span class="kw">dfm</span>(corp) <span class="co"># lowercases by default, but nothing more</span>
+<span class="kw">dim</span>(corpdfm)
+<span class="co">#&gt; [1]   24 3607</span>
+<span class="kw">featnames</span>(corpdfm)[<span class="dv">1</span><span class="op">:</span><span class="dv">40</span>] <span class="co"># really just colnames</span>
+<span class="co">#&gt;  [1] &quot;before&quot;       &quot;i&quot;            &quot;call&quot;         &quot;the&quot;         </span>
+<span class="co">#&gt;  [5] &quot;hon&quot;          &quot;.&quot;            &quot;member&quot;       &quot;for&quot;         </span>
+<span class="co">#&gt;  [9] &quot;roxburgh&quot;     &quot;,&quot;            &quot;selkirk&quot;      &quot;and&quot;         </span>
+<span class="co">#&gt; [13] &quot;peebles&quot;      &quot;(&quot;            &quot;mr&quot;           &quot;david&quot;       </span>
+<span class="co">#&gt; [17] &quot;steel&quot;        &quot;)&quot;            &quot;to&quot;           &quot;move&quot;        </span>
+<span class="co">#&gt; [21] &quot;second&quot;       &quot;reading&quot;      &quot;of&quot;           &quot;bill&quot;        </span>
+<span class="co">#&gt; [25] &quot;may&quot;          &quot;make&quot;         &quot;an&quot;           &quot;announcement&quot;</span>
+<span class="co">#&gt; [29] &quot;so&quot;           &quot;far&quot;          &quot;32&quot;           &quot;right&quot;       </span>
+<span class="co">#&gt; [33] &quot;members&quot;      &quot;seek&quot;         &quot;catch&quot;        &quot;my&quot;          </span>
+<span class="co">#&gt; [37] &quot;eye&quot;          &quot;in&quot;           &quot;this&quot;         &quot;debate&quot;</span></code></pre></div>
+<p>But let’s remove some things that aren’t (currently) of interest to us</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corpdfm &lt;-<span class="st"> </span><span class="kw">dfm</span>(corp, <span class="dt">remove=</span><span class="kw">stopwords</span>(), <span class="dt">remove_punct=</span><span class="ot">TRUE</span>,
+               <span class="dt">remove_numbers=</span><span class="ot">TRUE</span>)
+<span class="kw">dim</span>(corpdfm) <span class="co"># a little smaller</span>
+<span class="co">#&gt; [1]   24 3424</span>
+<span class="kw">featnames</span>(corpdfm)[<span class="dv">1</span><span class="op">:</span><span class="dv">40</span>]
+<span class="co">#&gt;  [1] &quot;call&quot;         &quot;hon&quot;          &quot;member&quot;       &quot;roxburgh&quot;    </span>
+<span class="co">#&gt;  [5] &quot;selkirk&quot;      &quot;peebles&quot;      &quot;mr&quot;           &quot;david&quot;       </span>
+<span class="co">#&gt;  [9] &quot;steel&quot;        &quot;move&quot;         &quot;second&quot;       &quot;reading&quot;     </span>
+<span class="co">#&gt; [13] &quot;bill&quot;         &quot;may&quot;          &quot;make&quot;         &quot;announcement&quot;</span>
+<span class="co">#&gt; [17] &quot;far&quot;          &quot;right&quot;        &quot;members&quot;      &quot;seek&quot;        </span>
+<span class="co">#&gt; [21] &quot;catch&quot;        &quot;eye&quot;          &quot;debate&quot;       &quot;can&quot;         </span>
+<span class="co">#&gt; [25] &quot;help&quot;         &quot;case&quot;         &quot;speaking&quot;     &quot;briefly&quot;     </span>
+<span class="co">#&gt; [29] &quot;cuts&quot;         &quot;across&quot;       &quot;party&quot;        &quot;lines&quot;       </span>
+<span class="co">#&gt; [33] &quot;shall&quot;        &quot;endeavour&quot;    &quot;balance&quot;      &quot;parties&quot;     </span>
+<span class="co">#&gt; [37] &quot;supporters&quot;   &quot;opponents&quot;    &quot;also&quot;         &quot;give&quot;</span></code></pre></div>
+<p>We <em>could</em> also stem</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stemdfm &lt;-<span class="st"> </span><span class="kw">dfm</span>(corp, <span class="dt">remove=</span><span class="kw">stopwords</span>(), <span class="dt">remove_punct=</span><span class="ot">TRUE</span>,
+               <span class="dt">remove_numbers=</span><span class="ot">TRUE</span>, <span class="dt">stem=</span><span class="ot">TRUE</span>)
+<span class="kw">dim</span>(stemdfm) <span class="co"># about 1000 fewer 'word's</span>
+<span class="co">#&gt; [1]   24 2350</span>
+<span class="kw">featnames</span>(stemdfm)[<span class="dv">1</span><span class="op">:</span><span class="dv">40</span>]
+<span class="co">#&gt;  [1] &quot;call&quot;      &quot;hon&quot;       &quot;member&quot;    &quot;roxburgh&quot;  &quot;selkirk&quot;  </span>
+<span class="co">#&gt;  [6] &quot;peebl&quot;     &quot;mr&quot;        &quot;david&quot;     &quot;steel&quot;     &quot;move&quot;     </span>
+<span class="co">#&gt; [11] &quot;second&quot;    &quot;read&quot;      &quot;bill&quot;      &quot;may&quot;       &quot;make&quot;     </span>
+<span class="co">#&gt; [16] &quot;announc&quot;   &quot;far&quot;       &quot;right&quot;     &quot;seek&quot;      &quot;catch&quot;    </span>
+<span class="co">#&gt; [21] &quot;eye&quot;       &quot;debat&quot;     &quot;can&quot;       &quot;help&quot;      &quot;case&quot;     </span>
+<span class="co">#&gt; [26] &quot;speak&quot;     &quot;briefli&quot;   &quot;cut&quot;       &quot;across&quot;    &quot;parti&quot;    </span>
+<span class="co">#&gt; [31] &quot;line&quot;      &quot;shall&quot;     &quot;endeavour&quot; &quot;balanc&quot;    &quot;support&quot;  </span>
+<span class="co">#&gt; [36] &quot;oppon&quot;     &quot;also&quot;      &quot;give&quot;      &quot;qualifi&quot;   &quot;opposit&quot;</span></code></pre></div>
+<p>but our dictionary entries aren’t stemmed, so let’s save <code>stemdfm</code> for later.</p>
+<p>For modeling, we’ll often want to remove the low frequency and idiosyncratic words</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">smallcorpdfm &lt;-<span class="st"> </span><span class="kw">dfm_trim</span>(corpdfm, <span class="dt">min_termfreq =</span> <span class="dv">5</span>, <span class="dt">min_docfreq=</span><span class="dv">5</span>)
+<span class="kw">dim</span>(smallcorpdfm)
+<span class="co">#&gt; [1]  24 494</span></code></pre></div>
+<p>where <code>min_count</code> removes any word that occurs less than 5 times and <code>min_docfreq</code> removes any words that occurs any number of times but in fewer than 5 documents. That makes things a fair bit smaller. But again, we don’t want to miss dictionary entries.</p>
+<p>There’s also a <code>wordcloud</code> function for viewing the the document feature matrix, but we won’t use it because wordclouds are a bit silly.</p>
+</div>
+</div>
+<div id="answering-questions-with-text" class="section level2">
+<h2>Answering questions with text</h2>
+<p>In the debate the Speaker, Mr Horace King, said he would try to give equal time to both sides of the debate. (You can read the original debate as <code>data/abortion-debate-hansard.html</code>). Did it happen this way?</p>
+<p>It’s hard to know whether the debate was persuasive since we do not know the speakers prior beliefs (though we could find out from their previous debates) so let us assume that there was no substantial persuasion. We’ll assume that no speaker spoke particularly slowly. These imply that we can proxy speaking time with number of words said.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(words_spoken <span class="op">~</span><span class="st"> </span>vote, <span class="dt">data=</span><span class="kw">docvars</span>(corp), <span class="dt">FUN =</span> sum)
+<span class="co">#&gt;   vote words_spoken</span>
+<span class="co">#&gt; 1  abs         4941</span>
+<span class="co">#&gt; 2   no        11486</span>
+<span class="co">#&gt; 3  yes        22525</span></code></pre></div>
+<p>It appears that floor time was about two to one yes to no voters. However, individual no voters did tend to get more time each</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(words_spoken <span class="op">~</span><span class="st"> </span>vote, <span class="dt">data =</span> <span class="kw">docvars</span>(corp), <span class="dt">FUN =</span> median)
+<span class="co">#&gt;   vote words_spoken</span>
+<span class="co">#&gt; 1  abs         1666</span>
+<span class="co">#&gt; 2   no         2626</span>
+<span class="co">#&gt; 3  yes         1331</span></code></pre></div>
+<div id="applying-a-content-analysis-dictionary" class="section level3">
+<h3>Applying a content analysis dictionary</h3>
+<p>Let’s turn to the content analysis dictionary that Bara used. A content analysis dictionary in <code>quanteda</code> terms can be made out of a list of vectors of words, like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dictionary</span>(<span class="kw">list</span>(<span class="dt">medics =</span> <span class="kw">c</span>(<span class="st">&quot;doctor&quot;</span>, <span class="st">&quot;medical&quot;</span>, <span class="st">&quot;hospital&quot;</span>),
+                <span class="dt">mothers =</span> <span class="kw">c</span>(<span class="st">&quot;mother&quot;</span>, <span class="st">&quot;parents&quot;</span>)))
+<span class="co">#&gt; Dictionary object with 2 key entries.</span>
+<span class="co">#&gt; - [medics]:</span>
+<span class="co">#&gt;   - doctor, medical, hospital</span>
+<span class="co">#&gt; - [mothers]:</span>
+<span class="co">#&gt;   - mother, parents</span></code></pre></div>
+<p>or imported in the format of some other content analysis program. (Quanteda can deal with dictionaries from Wordstat, Yoshikoder, and LIWC). We’ll read the dictionary in Yoshikoder format:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baradic &lt;-<span class="st"> </span><span class="kw">dictionary</span>(<span class="dt">file =</span> <span class="st">&quot;data/2007_abortion_dictionary.ykd&quot;</span>)</code></pre></div>
+</div>
+<div id="replicating-a-little-bit-of-bara" class="section level3">
+<h3>Replicating a little bit of Bara</h3>
+<p>With dictionary in hand we can now go  counting rather than word counting</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">baradfm &lt;-<span class="st"> </span><span class="kw">dfm</span>(corp, <span class="dt">dictionary =</span> baradic)</code></pre></div>
+<p>Since this output is not absolutely massive</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(baradfm)
+<span class="co">#&gt; [1] 24  6</span></code></pre></div>
+<p>let’s force it into a regular R matrix to take a look at the whole thing without being swamped in elements</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dictout &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(baradfm)
+dictout
+<span class="co">#&gt;                                  features</span>
+<span class="co">#&gt; docs                              incoming.txt.advocacy incoming.txt.legal</span>
+<span class="co">#&gt;   abs-Dr Horace King.txt                              3                  0</span>
+<span class="co">#&gt;   abs-Mr William Deedes.txt                          36                 11</span>
+<span class="co">#&gt;   abs-Sir John Hobson.txt                            36                 22</span>
+<span class="co">#&gt;   no-Mr Kevin McNamara.txt                           68                 38</span>
+<span class="co">#&gt;   no-Mr Norman St John-Stevas.txt                    63                 26</span>
+<span class="co">#&gt;   no-Mr Peter Mahon.txt                               1                  0</span>
+<span class="co">#&gt;   no-Mr William Wells.txt                            61                 24</span>
+<span class="co">#&gt;   no-Mrs Jill Knight.txt                             49                 29</span>
+<span class="co">#&gt;   yes-Dr David Owen.txt                              42                  5</span>
+<span class="co">#&gt;   yes-Dr John Dunwoody.txt                           42                 23</span>
+<span class="co">#&gt;   yes-Dr Michael Winstanley.txt                       1                  2</span>
+<span class="co">#&gt;   yes-Hon. Sam Silkin.txt                             0                  0</span>
+<span class="co">#&gt;   yes-Miss Joan Vickers.txt                          39                 10</span>
+<span class="co">#&gt;   yes-Mr Alex Lyon.txt                                1                  2</span>
+<span class="co">#&gt;   yes-Mr Angus Maude.txt                             38                 16</span>
+<span class="co">#&gt;   yes-Mr Charles Pannell.txt                          5                  0</span>
+<span class="co">#&gt;   yes-Mr David Steel.txt                             87                 76</span>
+<span class="co">#&gt;   yes-Mr Edward Lyons.txt                            10                 10</span>
+<span class="co">#&gt;   yes-Mr John Mendelson.txt                           6                  0</span>
+<span class="co">#&gt;   yes-Mr Leo Abse.txt                                47                 14</span>
+<span class="co">#&gt;   yes-Mr Roy Jenkins.txt                             45                 27</span>
+<span class="co">#&gt;   yes-Mrs Gwyneth Dunwoody.txt                        1                  0</span>
+<span class="co">#&gt;   yes-Mrs Renée Short.txt                            28                 52</span>
+<span class="co">#&gt;   yes-Sir Henry Legge-Bourke.txt                      0                  0</span>
+<span class="co">#&gt;                                  features</span>
+<span class="co">#&gt; docs                              incoming.txt.medical incoming.txt.moral</span>
+<span class="co">#&gt;   abs-Dr Horace King.txt                             0                  0</span>
+<span class="co">#&gt;   abs-Mr William Deedes.txt                         28                 14</span>
+<span class="co">#&gt;   abs-Sir John Hobson.txt                           65                  9</span>
+<span class="co">#&gt;   no-Mr Kevin McNamara.txt                          95                  8</span>
+<span class="co">#&gt;   no-Mr Norman St John-Stevas.txt                   50                 32</span>
+<span class="co">#&gt;   no-Mr Peter Mahon.txt                              1                  1</span>
+<span class="co">#&gt;   no-Mr William Wells.txt                           73                 21</span>
+<span class="co">#&gt;   no-Mrs Jill Knight.txt                            62                 21</span>
+<span class="co">#&gt;   yes-Dr David Owen.txt                             68                  8</span>
+<span class="co">#&gt;   yes-Dr John Dunwoody.txt                          65                  9</span>
+<span class="co">#&gt;   yes-Dr Michael Winstanley.txt                      0                  0</span>
+<span class="co">#&gt;   yes-Hon. Sam Silkin.txt                            0                  1</span>
+<span class="co">#&gt;   yes-Miss Joan Vickers.txt                         54                  4</span>
+<span class="co">#&gt;   yes-Mr Alex Lyon.txt                               2                  1</span>
+<span class="co">#&gt;   yes-Mr Angus Maude.txt                            48                 23</span>
+<span class="co">#&gt;   yes-Mr Charles Pannell.txt                         7                  0</span>
+<span class="co">#&gt;   yes-Mr David Steel.txt                           119                 56</span>
+<span class="co">#&gt;   yes-Mr Edward Lyons.txt                           40                  4</span>
+<span class="co">#&gt;   yes-Mr John Mendelson.txt                          0                  0</span>
+<span class="co">#&gt;   yes-Mr Leo Abse.txt                               44                 12</span>
+<span class="co">#&gt;   yes-Mr Roy Jenkins.txt                            46                  9</span>
+<span class="co">#&gt;   yes-Mrs Gwyneth Dunwoody.txt                       0                  0</span>
+<span class="co">#&gt;   yes-Mrs Renée Short.txt                           80                  6</span>
+<span class="co">#&gt;   yes-Sir Henry Legge-Bourke.txt                     0                  0</span>
+<span class="co">#&gt;                                  features</span>
+<span class="co">#&gt; docs                              incoming.txt.procedural</span>
+<span class="co">#&gt;   abs-Dr Horace King.txt                               23</span>
+<span class="co">#&gt;   abs-Mr William Deedes.txt                            87</span>
+<span class="co">#&gt;   abs-Sir John Hobson.txt                             144</span>
+<span class="co">#&gt;   no-Mr Kevin McNamara.txt                            125</span>
+<span class="co">#&gt;   no-Mr Norman St John-Stevas.txt                     112</span>
+<span class="co">#&gt;   no-Mr Peter Mahon.txt                                 8</span>
+<span class="co">#&gt;   no-Mr William Wells.txt                             128</span>
+<span class="co">#&gt;   no-Mrs Jill Knight.txt                               62</span>
+<span class="co">#&gt;   yes-Dr David Owen.txt                                71</span>
+<span class="co">#&gt;   yes-Dr John Dunwoody.txt                             86</span>
+<span class="co">#&gt;   yes-Dr Michael Winstanley.txt                         3</span>
+<span class="co">#&gt;   yes-Hon. Sam Silkin.txt                               6</span>
+<span class="co">#&gt;   yes-Miss Joan Vickers.txt                           107</span>
+<span class="co">#&gt;   yes-Mr Alex Lyon.txt                                  0</span>
+<span class="co">#&gt;   yes-Mr Angus Maude.txt                              100</span>
+<span class="co">#&gt;   yes-Mr Charles Pannell.txt                           16</span>
+<span class="co">#&gt;   yes-Mr David Steel.txt                              177</span>
+<span class="co">#&gt;   yes-Mr Edward Lyons.txt                              30</span>
+<span class="co">#&gt;   yes-Mr John Mendelson.txt                             9</span>
+<span class="co">#&gt;   yes-Mr Leo Abse.txt                                 103</span>
+<span class="co">#&gt;   yes-Mr Roy Jenkins.txt                              148</span>
+<span class="co">#&gt;   yes-Mrs Gwyneth Dunwoody.txt                          5</span>
+<span class="co">#&gt;   yes-Mrs Renée Short.txt                              90</span>
+<span class="co">#&gt;   yes-Sir Henry Legge-Bourke.txt                        4</span>
+<span class="co">#&gt;                                  features</span>
+<span class="co">#&gt; docs                              incoming.txt.social</span>
+<span class="co">#&gt;   abs-Dr Horace King.txt                            1</span>
+<span class="co">#&gt;   abs-Mr William Deedes.txt                        25</span>
+<span class="co">#&gt;   abs-Sir John Hobson.txt                          72</span>
+<span class="co">#&gt;   no-Mr Kevin McNamara.txt                         71</span>
+<span class="co">#&gt;   no-Mr Norman St John-Stevas.txt                  35</span>
+<span class="co">#&gt;   no-Mr Peter Mahon.txt                             2</span>
+<span class="co">#&gt;   no-Mr William Wells.txt                          47</span>
+<span class="co">#&gt;   no-Mrs Jill Knight.txt                           85</span>
+<span class="co">#&gt;   yes-Dr David Owen.txt                            51</span>
+<span class="co">#&gt;   yes-Dr John Dunwoody.txt                         70</span>
+<span class="co">#&gt;   yes-Dr Michael Winstanley.txt                     0</span>
+<span class="co">#&gt;   yes-Hon. Sam Silkin.txt                           0</span>
+<span class="co">#&gt;   yes-Miss Joan Vickers.txt                        76</span>
+<span class="co">#&gt;   yes-Mr Alex Lyon.txt                              0</span>
+<span class="co">#&gt;   yes-Mr Angus Maude.txt                           58</span>
+<span class="co">#&gt;   yes-Mr Charles Pannell.txt                        6</span>
+<span class="co">#&gt;   yes-Mr David Steel.txt                           89</span>
+<span class="co">#&gt;   yes-Mr Edward Lyons.txt                          27</span>
+<span class="co">#&gt;   yes-Mr John Mendelson.txt                         0</span>
+<span class="co">#&gt;   yes-Mr Leo Abse.txt                              69</span>
+<span class="co">#&gt;   yes-Mr Roy Jenkins.txt                           34</span>
+<span class="co">#&gt;   yes-Mrs Gwyneth Dunwoody.txt                      7</span>
+<span class="co">#&gt;   yes-Mrs Renée Short.txt                          78</span>
+<span class="co">#&gt;   yes-Sir Henry Legge-Bourke.txt                    6</span></code></pre></div>
+<p>And recreate some of Bara et al.’s Table 3, repeated below, as a bar plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tab &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Mean =</span> <span class="kw">c</span>(<span class="fl">13.59</span>, <span class="fl">7.82</span>, <span class="fl">21.71</span>, <span class="fl">4.61</span>, <span class="fl">32.17</span>, <span class="fl">20.09</span>),
+                  <span class="dt">SD =</span> <span class="kw">c</span>(<span class="fl">2.98</span>, <span class="fl">3.36</span>, <span class="fl">4.73</span>, <span class="fl">2.51</span>, <span class="fl">6.94</span>, <span class="fl">4.86</span>),
+                  <span class="dt">row.names =</span> <span class="kw">c</span>(<span class="st">&quot;advocacy&quot;</span>, <span class="st">&quot;legal&quot;</span>, <span class="st">&quot;medical&quot;</span>, <span class="st">&quot;moral&quot;</span>, <span class="st">&quot;procedural&quot;</span>, <span class="st">&quot;social&quot;</span> ),
+                  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">t</span>(tab))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">advocacy</th>
+<th align="right">legal</th>
+<th align="right">medical</th>
+<th align="right">moral</th>
+<th align="right">procedural</th>
+<th align="right">social</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean</td>
+<td align="right">13.59</td>
+<td align="right">7.82</td>
+<td align="right">21.71</td>
+<td align="right">4.61</td>
+<td align="right">32.17</td>
+<td align="right">20.09</td>
+</tr>
+<tr class="even">
+<td>SD</td>
+<td align="right">2.98</td>
+<td align="right">3.36</td>
+<td align="right">4.73</td>
+<td align="right">2.51</td>
+<td align="right">6.94</td>
+<td align="right">4.86</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">emph &lt;-<span class="st"> </span><span class="kw">colSums</span>(dictout) ## emphasis
+propemph &lt;-<span class="st"> </span>emph <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(emph)<span class="op">*</span><span class="dv">100</span> ## relative emphasis as a percentage
+<span class="kw">barplot</span>(propemph)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Finally, let’s revisit the floortime question but this time counting only vocabulary that Bara et al. thought was substantively relevant.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">relevanttalk &lt;-<span class="st"> </span><span class="kw">rowSums</span>(dictout)
+<span class="kw">aggregate</span>(relevanttalk <span class="op">~</span><span class="st"> </span><span class="kw">docvars</span>(corp, <span class="st">&quot;vote&quot;</span>), <span class="dt">FUN=</span>sum)
+<span class="co">#&gt;   docvars(corp, &quot;vote&quot;) relevanttalk</span>
+<span class="co">#&gt; 1                   abs          576</span>
+<span class="co">#&gt; 2                    no         1398</span>
+<span class="co">#&gt; 3                   yes         2861</span></code></pre></div>
+<p>Now the balance of floor time spent saying ‘relevant’ words is even more skewed, at around 3 to 1.</p>
+<!-- %' -->
+<!-- %' \subsection*{Abortion Politics in the US} -->
+<!-- %' -->
+<!-- %' Now we will compare this legislative debate with a similar one from the US Senate. This is the debate on the conference report for the Partial-Birth Abortion Ban Act of 2003. -->
+<!-- %' -->
+<!-- %' Import the US speech documents into Yoshikoder, re-do the dictionary analysis -->
+<!-- %' <<>>= -->
+<!-- %' us<-read_ykd_report("usabortion-utf8.csv",drop.total=TRUE) -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Calculate per speaker proportions -->
+<!-- %' <<>>= -->
+<!-- %' usprop<-us/rowSums(us) -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Select Democrats and Republicans -->
+<!-- %' <<>>= -->
+<!-- %' dems<-usprop[grep("DEM",rownames(usprop)),] -->
+<!-- %' reps<-usprop[grep("REP",rownames(usprop)),] -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Calculate average proportions for Dems and Reps -->
+<!-- %' <<>>= -->
+<!-- %' demavg<-apply(dems,2,mean) -->
+<!-- %' repavg<-apply(reps,2,mean) -->
+<!-- %' @ -->
+<!-- %' -->
+<!-- %' Create one object -->
+<!-- %' <<>>= -->
+<!-- %' usres<-rbind(demavg,repavg) -->
+<!-- %' rownames(usres)<-c("Dem","Rep") -->
+<!-- %' @ -->
+<!-- %' and plot it -->
+<!-- %' <<>>= -->
+<!-- %' barplot(usres,beside=T,legend=T,ylim=c(0,0.4)) -->
+<!-- %' @ -->
+<!-- % -->
+<!-- % \begin{itemize} -->
+<!-- % \item Do you find a similar or different distribution of keyword occurrences in the debate categories as defined by Bara et al.? -->
+<!-- % \item Can you find a partisan pattern in the data? To do this, compute averages of the category percentages separately for Democrats and Republicans. -->
+<!-- % \item More generally, where do you see the benefits and/or limitations of applying this specific dictionary? Do you suspect that important terms are omitted? Notice that there is no ``gender politics'' category in the Bara et al. dictionary. Can you think of some terms that might reflect gender politics? Use Yoshikoder to add a gender category and appropriate patterns. Re-apply the dictionary  to the data. Do you find a partisan pattern? -->
+<!-- % \end{itemize} -->
+<!-- % \subsection*{Party Politics in the UK} -->
+<!-- % -->
+<!-- % Finally, we look at the manifesto policy dictionary constructed by Laver and Garry (2000) and the development of economic policy positions, in particular. First, load the dictionary and the British party manifestos for the elections 1992 to 2010. -->
+<!-- % -->
+<!-- % Our goal is twofold: first, we would like to replicate the result that the Labour Party moved towards a neoliberal economic policy position in 1997 under Tony Blair, and want to examine how stable this move was in the subsequent elections. -->
+<!-- % -->
+<!-- % Open the dictionary file in Excel and calculate the economic policy positions for the parties as follows: -->
+<!-- % \begin{equation*} -->
+<!-- %   \text{ECON} = \frac{\text{ECON}_R - \text{ECON}_L}{\text{ECON}_R + \text{ECON}_L} -->
+<!-- % \end{equation*} -->
+<!-- % where $\text{ECON}_L$ is the total counts in category ``increase role of state in the economy'' and -->
+<!-- % $ECON_R$ is the total counts in category ``reduce role of state in the economy''. -->
+<!-- % \begin{itemize} -->
+<!-- % \item Using Excel, plot the estimates for the parties over time (hint: you may need to re-arrange the data with parties in rows and years in columns).  Can you replicate the rightward move of Labour in 1997? Does Labour stay on the right in subsequent years? -->
+<!-- % \item Following the election in 2010, none of the parties could muster a majority in parliament. Subsequently, the Conservative and Liberal Democratic party formed a coalition government, and Labour went into the opposition. Based on your estimates of economic policy positions derived from the dictionary counts, does this coalition appear sensible from the Liberal Democratic party's perspective? -->
+<!-- % \end{itemize} -->
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

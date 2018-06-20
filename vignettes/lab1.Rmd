@@ -30,51 +30,112 @@ library(readtext) # for reading in all kinds of files
 ```
 then read in some text files and make a `corpus` from them
 ```{r}
-txts <- readtext("data/abortion-debate-by-speaker/*.txt")
-corp <- corpus(txts)
+data("corpus_bara_speaker")
 ```
-Corpora get big quickly, so most functions in the package will not show you all the contents of any object.  Call `summary` to get a view of the new corpus object.
+`corpus` are somewhat compex objects, designed for holding very large amounts 
+of text.  Here are the basics:
 
-It's helpful to add some metadata to the documents, so we can subset them.  Here we'll record the vote of each speaker.
+To get a basic summary of the texts and document variables
 ```{r}
-vote <- c("abs", "abs", "abs", "no", "no", "no", "no",
-          "no", "yes", "yes", "yes", "yes", "yes", "yes",
-          "yes", "yes", "yes", "yes", "yes", "yes", "yes",
-          "yes", "yes", "yes")
-docvars(corp, "vote") <- vote
 summary(corp)
 ```
-where `docvars` adds document specific metadata, here the speaker's vote.
+Those word and sentence counts come from the `ntype`, (vocabulary size)
+`ntoken` (word count), and `nsentence` (sentence count)
+functions.
 
-The number of words spoken by each speaker might be useful, so we'll add that too, taking it straight out of the the summary
+To extract the 13th speaker's contribution
 ```{r}
-docvars(corp, "words_spoken") <- summary(corp)$Tokens
+corp[13]
 ```
+Notice that this is a named character vector.  (`corp[13:14]` would also work).
 
-If we want to deal with just the docvars we can get them all as a data.frame like this
+To get all the texts
+```{r, eval = FALSE}
+texts(corp)
+```
+but maybe don't, or assign it to something, else it'll splurge into your console for a while.
+
+To pull out one of the docvars, you can treat the corpus as if it has document
+variables as columns.  Here are just the speaker voting decisions 
+```{r}
+corp[,'vote']
+```
+(`corp[['vote']]` also works, if you prefer to get a one column data frame).
+
+To get the lot of them as a data frame
 ```{r}
 dvars <- docvars(corp)
 ```
 
-Conversely, if we want to the texts in this corpus object without the docvars we use `texts`.
-Maybe don't do call this if your corpus is even moderately large as it will take while to 
-print to the screen.  To just get the contributions of the (magnificently named) Mr Norman St John-Stevas, we can index into it.  He's the 5th `document'.
-```{r, eval=FALSE}
-texts(corp)[5]
-```
-To see just a few speakers, e.g. the ones that voted against, we can use `subset`
+To get just *some* of the documents there is a subset command that looks
+to the document variables to say which documents should be kept.  Here are all
+the speakers that voted 'no' at the end of the debate and said more than 100
+words during it
 ```{r}
-nocorp <- corpus_subset(corp, vote == "no")
-summary(nocorp)
+no_corp <- corpus_subset(corp, vote == "no" & ntoken(corp) > 100)
 ```
-or we could use it to remove very short speeches
-```{r eval=FALSE}
-longcorp <- corpus_subset(corp, words_spoken > 50)
-```
-Actually we could use the more flexible `corpus_trim`, like this:
+(Goodbye Mr Mahon)
+
+Finally, it's sometimes convenient to be able to switch between thinking 
+sets of documents to sets of paragraphs, or even
+sentences.
 ```{r}
-longcorp <- corpus_trim(corp, what = "documents", min_ntoken = 50)
+para_corp <- corpus_reshape(corp, to = "paragraphs") # or "sentences"
+head(summary(para_corp)) # Just the top few lines
 ```
+Happily we can always reverse this process by changing `to` back to "documents".
+
+<!-- ```{r} -->
+<!-- txts <- readtext("data/abortion-debate-by-speaker/*.txt") -->
+<!-- corp <- corpus(txts) -->
+<!-- ``` -->
+<!-- Corpora get big quickly, so most functions in the package will not show you all the contents of any object.  Call `summary` to get a view of the new corpus object. -->
+
+<!-- It's helpful to add some metadata to the documents, so we can subset them.  Here we'll record the vote of each speaker. -->
+<!-- ```{r} -->
+<!-- vote <- c("abs", "abs", "abs", "no", "no", "no", "no", -->
+<!--           "no", "yes", "yes", "yes", "yes", "yes", "yes", -->
+<!--           "yes", "yes", "yes", "yes", "yes", "yes", "yes", -->
+<!--           "yes", "yes", "yes") -->
+<!-- docvars(corp, "vote") <- vote -->
+<!-- summary(corp) -->
+<!-- ``` -->
+<!-- where `docvars` adds document specific metadata, here the speaker's vote. -->
+
+
+
+<!-- Conversely, if we want to the texts in this corpus object without the docvars we use `texts`. -->
+<!-- Maybe don't do call this if your corpus is even moderately large as it will take while to  -->
+<!-- print to the screen.  To just get the contributions of the (magnificently named) Mr Norman St John-Stevas, we can index into it.  He's the 5th `document'. -->
+<!-- ```{r, eval=FALSE} -->
+<!-- texts(corp)[5] -->
+<!-- ``` -->
+<!-- To see just a few speakers, e.g. the ones that voted against, we can use `subset` -->
+<!-- ```{r} -->
+<!-- nocorp <- corpus_subset(corp, vote == "no") -->
+<!-- summary(nocorp) -->
+<!-- ``` -->
+<!-- or we could use it to remove very short speeches -->
+<!-- ```{r eval=FALSE} -->
+<!-- longcorp <- corpus_subset(corp, words_spoken > 50) -->
+<!-- ``` -->
+<!-- Actually we could use the more flexible `corpus_trim`, like this: -->
+<!-- ```{r} -->
+<!-- longcorp <- corpus_trim(corp, what = "documents", min_ntoken = 50) -->
+<!-- ``` -->
+
+dd <- dfm(corp,remove_punct = TRUE, remove = stopwords("english"))
+textstat_frequency(dd), 
+    n = 20, groups = "vote")
+
+plot(hclust(textstat_dist(dd, method = "hamming"))) # nope
+
+# aggregate rows
+dfm(corp, remove_punct = TRUE, remove = stopwords("english"), groups = "vote")
+# delete aggregate columns
+# dict <- ...
+dfm(corp, remove_punct = TRUE, remove = stopwords("english"), dictionary = dict)
+
 
 ### Exploring text corpora
 

@@ -176,7 +176,7 @@ kw_mother <- kwic(corpus_bara_speaker, "mother*", window = 10)  # 10 words eithe
 head(kw_mother)
 ```
 KWICs can get quite large, but if you want to see it all
-```{r}
+```{r, eval = FALSE}
 View(kw_mother)
 ```
 will open a browser with the whole thing.

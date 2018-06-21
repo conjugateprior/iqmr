@@ -2,7 +2,10 @@
 title: "Lab 1"
 author: "Will Lowe"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 7 
 vignette: >
   %\VignetteIndexEntry{Lab 1}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,6 +29,7 @@ Let's start by reading in the data from the abortion debate analyzed by Bara et 
 First load the package
 ```{r}
 library(quanteda) # for general text analysis
+library(quanteda.dictionaries)
 library(readtext) # for reading in all kinds of files
 library(dplyr)
 
@@ -140,9 +144,7 @@ Happily we can always reverse this process by changing `to` back to "documents".
 <!-- dfm(corp, remove_punct = TRUE, remove = stopwords("english"), dictionary = dict) -->
 
 Let's explore a little more by looking for the key terms in play.  
-One way to do this is to look for collocations.  
-The collocation finder functions operates on the tokens of the corpus, 
-so we extract them first
+One way to do this is to look for collocations.  The collocation finder functions operates on the tokens of the corpus, so we extract them first
 ```{r}
 toks <- tokens(corpus_bara_speaker)
 colls <- textstat_collocations(toks)
@@ -204,7 +206,7 @@ Now let's get even more confirmatory, and apply the mapping between words and
 topics described by Bara et al.'s dictionary to this corpus, in order to 
 replicate their first analysis.
 
-Our first stem will be to create a document feature matrix (\texttt{dfm}), after 
+Our first stem will be to create a document feature matrix (`dfm`), after 
 which dictionary application is straightforward.  But since lots of models require 
 a dfm, we'll linger a little on the steps of the process.
 

@@ -2,7 +2,10 @@
 title: "Lab 3"
 author: "Will Lowe"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 7 
 vignette: >
   %\VignetteIndexEntry{Lab 3}
   %\VignetteEngine{knitr::rmarkdown}
@@ -83,14 +86,15 @@ get a table of positions and associated uncertainty.
 pos <- data.frame(docvars(corpdfm), preds$fit)
 pos <- pos[order(pos$fit),]
 ```
-Let's plot these positions.  I'll use `ggplot2`, but you can uncomment the
-base R lines if you prefer those.
+Let's plot these positions.  I'll use `ggplot2`
 ```{r}
 library(ggplot2)
 library(ggrepel) # for labelling
 theme_set(theme_minimal())
 
-ggplot(pos, aes(x = fit, y = 1:nrow(pos), xmin = lwr, xmax = upr, col = party)) +
+ggplot(pos, aes(x = fit, y = 1:nrow(pos), 
+                xmin = lwr, xmax = upr, 
+                col = party)) +
   geom_point() +
   geom_errorbarh(height = 0) +
   scale_color_manual(values = c("blue", "red")) +

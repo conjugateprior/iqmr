@@ -27,6 +27,9 @@ First load the package
 ```{r}
 library(quanteda) # for general text analysis
 library(readtext) # for reading in all kinds of files
+library(dplyr)
+
+library(iqmr)
 ```
 then read in some text files and make a `corpus` from them
 ```{r}
@@ -37,34 +40,34 @@ of text.  Here are the basics:
 
 To get a basic summary of the texts and document variables
 ```{r}
-summary(corp)
+summary(corpus_bara_speaker)
 ```
 Those word and sentence counts come from the `ntype`, (vocabulary size)
 `ntoken` (word count), and `nsentence` (sentence count)
 functions.
 
-To extract the 13th speaker's contribution
+To extract the 12th speaker's contribution
 ```{r}
-corp[13]
+corpus_bara_speaker[12]
 ```
-Notice that this is a named character vector.  (`corp[13:14]` would also work).
+Notice that this is a named character vector.  (`corpus_bara_speaker[13:14]` would also work).
 
 To get all the texts
 ```{r, eval = FALSE}
-texts(corp)
+texts(corpus_bara_speaker)
 ```
 but maybe don't, or assign it to something, else it'll splurge into your console for a while.
 
 To pull out one of the docvars, you can treat the corpus as if it has document
 variables as columns.  Here are just the speaker voting decisions 
 ```{r}
-corp[,'vote']
+corpus_bara_speaker[,'vote']
 ```
-(`corp[['vote']]` also works, if you prefer to get a one column data frame).
+(`corpus_bara_speaker[['vote']]` also works, if you prefer to get a one column data frame).
 
 To get the lot of them as a data frame
 ```{r}
-dvars <- docvars(corp)
+dvars <- docvars(corpus_bara_speaker)
 ```
 
 To get just *some* of the documents there is a subset command that looks
@@ -72,7 +75,7 @@ to the document variables to say which documents should be kept.  Here are all
 the speakers that voted 'no' at the end of the debate and said more than 100
 words during it
 ```{r}
-no_corp <- corpus_subset(corp, vote == "no" & ntoken(corp) > 100)
+no_corp <- corpus_subset(corpus_bara_speaker, vote == "no" & ntoken(corpus_bara_speaker) > 100)
 ```
 (Goodbye Mr Mahon)
 
@@ -80,7 +83,7 @@ Finally, it's sometimes convenient to be able to switch between thinking
 sets of documents to sets of paragraphs, or even
 sentences.
 ```{r}
-para_corp <- corpus_reshape(corp, to = "paragraphs") # or "sentences"
+para_corp <- corpus_reshape(corpus_bara_speaker, to = "paragraphs") # or "sentences"
 head(summary(para_corp)) # Just the top few lines
 ```
 Happily we can always reverse this process by changing `to` back to "documents".
@@ -124,100 +127,107 @@ Happily we can always reverse this process by changing `to` back to "documents".
 <!-- longcorp <- corpus_trim(corp, what = "documents", min_ntoken = 50) -->
 <!-- ``` -->
 
-dd <- dfm(corp,remove_punct = TRUE, remove = stopwords("english"))
-textstat_frequency(dd), 
-    n = 20, groups = "vote")
+<!-- dd <- dfm(corp,remove_punct = TRUE, remove = stopwords("english")) -->
+<!-- textstat_frequency(dd),  -->
+<!--     n = 20, groups = "vote") -->
 
-plot(hclust(textstat_dist(dd, method = "hamming"))) # nope
+<!-- plot(hclust(textstat_dist(dd, method = "hamming"))) # nope -->
 
-# aggregate rows
-dfm(corp, remove_punct = TRUE, remove = stopwords("english"), groups = "vote")
-# delete aggregate columns
-# dict <- ...
-dfm(corp, remove_punct = TRUE, remove = stopwords("english"), dictionary = dict)
+<!-- # aggregate rows -->
+<!-- dfm(corp, remove_punct = TRUE, remove = stopwords("english"), groups = "vote") -->
+<!-- # delete aggregate columns -->
+<!-- # dict <- ... -->
+<!-- dfm(corp, remove_punct = TRUE, remove = stopwords("english"), dictionary = dict) -->
 
-
-### Exploring text corpora
-
-First a very gross view of how these legislator are talking in terms of speech complexity.  We'll use an old readabilty measure and a measure of lexical diversity.
+Let's explore a little more by looking for the key terms in play.  
+One way to do this is to look for collocations.  
+The collocation finder functions operates on the tokens of the corpus, 
+so we extract them first
 ```{r}
-readability <- textstat_readability(corp, "Flesch.Kincaid")
-docvars(corp, "FK") <- readability$Flesch.Kincaid ## add it as a docvar
-subset(docvars(corp), FK > 20) # looking at you Mr Mendelson
-texts(corp)[19] # yes, I mean no, I mean, what?
-```
-
-Let's explore a little more by looking for the key terms in play.  One way to do this is to look for collocations.  We'll look at the top few according to a  `pointwise mutual information' measure (`pmi`).  The function operates on the tokens of the corpus, so we extract them first
-```{r}
-toks <- tokens(corp)
+toks <- tokens(corpus_bara_speaker)
 colls <- textstat_collocations(toks)
 head(colls, 20)
 ```
-This is disappointing unsubstantive, but we can work a bit harder by removing
-the stopwords (we'll leave gaps where they were).
-
-If you're feeling adventurous within quanteda, here's a rather complex example that tries to find better ones
+This is disappointing unsubstantive, but if we work a bit harder we can get better
+results.  First we'll remove those stopwords (leaving gaps where they were).
 ```{r}
-#toks2 <- tokens(corpus_reshape(corp, to = "sentence")) # split to sentences
-toks2 <- tokens_remove(tokens(corp), stopwords(), padding = TRUE)
-toks2 <- tokens_select(toks2, "[a-z]+", valuetype="regex", 
-                       case_insensitive = FALSE, padding = TRUE) 
-coll2 <- textstat_collocations(toks2)
-coll3 <- textstat_collocations(toks2, size = 3) # three word phrases
+toks2 <- tokens_remove(toks, stopwords(), padding = TRUE)
 ```
+Now rerun the function, maintaining the capitalization
+```{r}
+coll2 <- textstat_collocations(toks2, tolower = FALSE, size = 2)
+head(coll2, 20)
+```
+We can also ask for three word collocations
+```{r}
+coll3 <- textstat_collocations(toks2, tolower = FALSE, size = 3)
+head(coll3, 30)
+```
+If we're *really* serious about collocation hunting, it's probably best to use a dedicated package.
 
-If we're really serious about collocation hunting, it's probably best to use a dedicated package, e.g. \texttt{phrasemachine}.
-
-But let's get a bit more confirmatory in our text analysis
+Let's get a bit more confirmatory in our text analysis
 
 ### Keywords in context
 
-Since this is an abortion debate, let's see the honorable folk talk about mothers and babies. We'll use the `keyword in context' function
-```{r, eval=FALSE}
-kwic(corp, "mother*")
-```
-we might benefit from a bit more local context, so maybe set the window a bit wider  Here are the babies
-```{r, eval=FALSE}
-kwic(corp, "babi*", window = 10)
-```
-you may need to expand your window a bit to see these properly.
-
-Perhaps oddly, there is much less talk of babies than of mothers.
-In this debate, the other major actors are doctors and their professional association, which you can investigate the same way.
-
-The output of kwic is simply a data.frame, so one thing that's often useful is to treat the left and right sides of the kwic as a document (about babies), e.g. like this:
+Since this is an abortion debate, let's see the honorable folk talk about 
+mothers and babies. We'll use the `keyword in context' function
 ```{r}
-babes <- kwic(corp, "babi*", window = 10)
+kw_mother <- kwic(corpus_bara_speaker, "mother*", window = 10)  # 10 words either side of every instance
+head(kw_mother)
+```
+KWICs can get quite large, but if you want to see it all
+```{r}
+View(kw_mother)
+```
+will open a browser with the whole thing.
+
+There is much less talk of babies than of mothers.
+In this debate, the other major actors are doctors and their 
+professional association, which you can investigate the same way.
+
+The output of `kwic` is simply a data frame, so one thing that's often useful 
+is to treat the left and right sides of the kwic as a document (about babies), 
+e.g. like this:
+```{r}
+babes <- kwic(corpus_bara_speaker, "babi*", window = 10)
 txt <- paste(babes$pre, babes$post, collapse=" ") # make one big string
 ```
-This constructed document contains, by definition, all the ways the term was used in the corpus, so you can then examine what sorts of words tend to be used around it, e.g. by using a content analysis dictionary.
+This constructed document contains, by definition, all the ways the term was 
+used in the corpus, so you can then examine what sorts of words tend to be used 
+around it, e.g. by using a content analysis dictionary.
 
 As far as I know this was pioneered by the Yoshikoder software, 
-and bears some obvious similarities to the word-embedding analyses that are currently
-fashionable.
+and bears some obvious similarities to the word-embedding analyses that are 
+currently fashionable.
 
-Now let's get even more confirmatory, and apply the mapping between words and topics described by Bara et al.'s dictionary to this corpus, in order to replicate their first analysis.
+Now let's get even more confirmatory, and apply the mapping between words and 
+topics described by Bara et al.'s dictionary to this corpus, in order to 
+replicate their first analysis.
 
-Our first stem will be to create a document feature matrix (\texttt{dfm}), after which dictionary application is straightforward.  But since lots of models require a dfm, we'll linger a little on the steps of the process.
+Our first stem will be to create a document feature matrix (\texttt{dfm}), after 
+which dictionary application is straightforward.  But since lots of models require 
+a dfm, we'll linger a little on the steps of the process.
 
 ### Constructing a document feature matrix
 
 quanteda makes a basic dfm quite straightforward
 ```{r}
-corpdfm <- dfm(corp) # lowercases by default, but nothing more
+corpdfm <- dfm(corpus_bara_speaker) # lowercases by default, but not much more
 dim(corpdfm)
 featnames(corpdfm)[1:40] # really just colnames
 ```
 But let's remove some things that aren't (currently) of interest to us
 ```{r}
-corpdfm <- dfm(corp, remove=stopwords(), remove_punct=TRUE,
-               remove_numbers=TRUE)
-dim(corpdfm) # a little smaller
+corpdfm <- dfm(corpus_bara_speaker, 
+               remove = stopwords(), 
+               remove_punct = TRUE,
+               remove_numbers = TRUE)
+dim(corpdfm) # a bit smaller
 featnames(corpdfm)[1:40]
 ```
 We *could* also stem
 ```{r}
-stemdfm <- dfm(corp, remove=stopwords(), remove_punct=TRUE,
+stemdfm <- dfm(corpus_bara_speaker, remove=stopwords(), remove_punct=TRUE,
                remove_numbers=TRUE, stem=TRUE)
 dim(stemdfm) # about 1000 fewer 'word's
 featnames(stemdfm)[1:40]
@@ -231,22 +241,26 @@ dim(smallcorpdfm)
 ```
 where `min_count` removes any word that occurs less than 5 times and `min_docfreq` removes any words that occurs any number of times but  in fewer than 5 documents.  That makes things a fair bit smaller.  But again, we don't want to miss dictionary entries.
 
-There's also a `wordcloud` function for viewing the the document feature matrix, but we won't use it because wordclouds are a bit silly.
+There's also a `wordcloud` function for viewing the the document feature matrix, 
+but we won't use it because wordclouds are silly.
 
 ## Answering questions with text
 
-In the debate the Speaker, Mr Horace King, said he would try to give equal time to both sides of the debate.  (You can read the original debate as `data/abortion-debate-hansard.html`).  Did it happen this way?
+In the debate the Speaker, Mr Horace King, said he would try to give equal time to both sides of the debate.  Did it happen this way?
 
-It's hard to know whether the debate was persuasive since we do not know the speakers prior beliefs (though we could find out from their previous debates) so let us assume that there was no substantial persuasion.
-We'll assume that no speaker spoke particularly slowly.  These imply that we can proxy speaking time with number of words said.
-
+It's hard to know whether the debate was persuasive since we do not know the speakers prior beliefs (though we could find out from their previous debates) so let us assume that there was no substantial persuasion and we'll assume that no speaker spoke particularly slowly.  
+These imply that we can proxy speaking time with number of words said, 
+and side with final vote.
 ```{r}
-aggregate(words_spoken ~ vote, data=docvars(corp), FUN = sum)
+df <- docvars(corpus_bara_speaker)
+df$word_count <- ntoken(corpus_bara_speaker)
+df %>%
+  group_by(vote) %>%
+  summarise(floortime = sum(word_count),
+            speakers = length(vote))
 ```
-It appears that floor time was about two to one yes to no voters.  However, individual no voters did tend to get more time each
-```{r}
-aggregate(words_spoken ~ vote, data = docvars(corp), FUN = median)
-```
+Although three quarters of the speakers voted "yes", it seems that floor time was 
+about two to one "yes" to "no" voters.
 
 ### Applying a content analysis dictionary
 
@@ -257,16 +271,19 @@ dictionary(list(medics = c("doctor", "medical", "hospital"),
                 mothers = c("mother", "parents")))
 ```
 or imported in the format of some other content analysis program.
-(Quanteda can deal with dictionaries from Wordstat, Yoshikoder, and LIWC).  We'll read the dictionary in Yoshikoder format:
+(Quanteda can deal with dictionaries from Wordstat, Yoshikoder, and LIWC). 
+We'll read the dictionary in Yoshikoder format:
 ```{r}
-baradic <- dictionary(file = "data/2007_abortion_dictionary.ykd")
+baradic <- dictionary(file = "data/bara-dict-corrected.ykd")
 ```
+
+<!-- baradic_stems <- rapply(baradic, char_wordstem, how = "replace") -->
 
 ### Replicating a little bit of Bara
 
-With dictionary in hand we can now go \textit{category} counting rather than word counting
+With dictionary in hand we can now go *category* counting rather than word counting
 ```{r}
-baradfm <- dfm(corp, dictionary = baradic)
+baradfm <- dfm(corpus_bara_speaker, dictionary = baradic)
 ```
 Since this output is not absolutely massive
 ```{r}
@@ -288,18 +305,28 @@ knitr::kable(t(tab))
 ```
 
 ```{r}
-emph <- colSums(dictout) ## emphasis
-propemph <- emph / sum(emph)*100 ## relative emphasis as a percentage
-barplot(propemph)
+prop_emph <- (dictout / rowSums(dictout))
+tab <- data.frame(Mean = 100 * apply(prop_emph, 2, mean),
+                  SD = 100 * apply(prop_emph, 2, sd),
+                  row.names = c("advocacy", "legal", "medical", "moral", "procedural", "social" ),
+                  stringsAsFactors = FALSE)
 ```
 
-Finally, let's revisit the floortime question but this time counting only vocabulary that Bara et al. thought was substantively relevant.
-```{r}
-relevanttalk <- rowSums(dictout)
-aggregate(relevanttalk ~ docvars(corp, "vote"), FUN=sum)
+```{r, results = "asis"}
+knitr::kable(t(tab))
 ```
-Now the balance of floor time spent saying 'relevant' words is even more skewed, 
-at around 3 to 1.
+
+Finally, let's revisit the floortime question but this time counting only 
+vocabulary that Bara et al. thought was substantively relevant.
+```{r}
+df$relevant_word_count <- rowSums(dictout)
+df %>%
+  group_by(vote) %>%
+  summarise(floortime = sum(relevant_word_count),
+            speakers = length(vote))
+```
+
+Not much change.
 
 <!-- %' -->
 <!-- %' \subsection*{Abortion Politics in the US} -->

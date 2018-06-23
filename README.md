@@ -10,20 +10,10 @@ IQMR slides and course materials, slowly morphing into an R package.
   up `Tex Live Utility`, select the middle `Packages` tab, search for `metropolis` 
   packages in the search window, and right click to install it.
 
-* To compile the slides, use XeLaTeX. `xelatex` from the command line,
-  or just switch the engine in TeXShop, or whatever you use.
+* Slides are in flux.  No need to worry about those.
 
 ## TODO
 
-* Slim down and rejig session 1
-* Add exploratory with quanteda examples
-* Move those to the labs also
 * Beef up precision recall for dictionary material - think down matrix stuff
 
-* Session 2 - add stm example
-* Check lab still works out 
-
-* Session 3 - add material on scraping - senatorial example
-
-
-*Will Lowe 2017*
+*Will Lowe 2018*

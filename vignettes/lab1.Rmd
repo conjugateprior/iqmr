@@ -54,7 +54,8 @@ To extract the 12th speaker's contribution
 ```{r}
 corpus_bara_speaker[12]
 ```
-Notice that this is a named character vector.  (`corpus_bara_speaker[13:14]` would also work).
+Notice that this is a named character vector. (`corpus_bara_speaker[13:14]` 
+would also work).
 
 To get all the texts
 ```{r, eval = FALSE}

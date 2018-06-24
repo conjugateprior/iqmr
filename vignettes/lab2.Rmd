@@ -41,20 +41,22 @@ got topic model going.  Accordingly we'll treat a smaller unit as our documents
 Here are the raw materials
 ```{r}
 library(iqmr)
+
 data("df_pba_debate_by_speaker")
 names(df_pba_debate_by_speaker)
 ```
 we'll make a corpus from them, using the speaker's name as a document identifier
 and we'll also explicitly add the speaker names as a 
-document variable because we'll want them later.
+document variable because we'll want to refer to them later.
 ```{r}
 corp <- corpus(df_pba_debate_by_speaker, 
                text_field = "contributions", 
                docid_field = "speaker")
-docvars(corp, "speaker") <- df_pba_debate_by_speaker$speaker # add a speaker field
+docvars(corp, "speaker") <- df_pba_debate_by_speaker$speaker # add speaker field
+summary(corp)
 ```
 
-Now we'll switch to paragraphs
+Now we'll do the switch to paragraphs
 ```{r}
 para_corp <- corpus_reshape(corp, to = "paragraphs") 
 head(summary(para_corp))
@@ -62,16 +64,18 @@ head(summary(para_corp))
 Notice that the texts now have a numerical identifier added and the other 
 document variables have been duplicated appropriately.
 
-Switching to paragraphs has the risk that documents will get too small (even
-disappear if the paragraph spotting algorithm is imperfect).  Let's 
+Although contributions are probably too big, ironically paragraphs run the risk 
+of being too small (or even
+disappearing if the paragraph spotting algorithm is imperfect).  Let's 
 check
 ```{r}
-table(ntoken(para_corp)) # a few documents with fewer than 5 words
+table(ntoken(para_corp)) # 15 documents with, err, no words
 ```
-OK, we'll trim these tiny documents.  Then we'll make a document term matrix
+so we'll trim these tiny documents.  Then we'll make a document term matrix
 for the topic model to work with
 ```{r}
 para_corp <- corpus_subset(para_corp, ntoken(para_corp) > 2)
+
 para_dfm <- dfm(para_corp,
   remove_punct = TRUE,
   remove = stopwords(), 
@@ -80,10 +84,14 @@ para_dfm <- dfm(para_corp,
 
 To start with we'll fit a 10 topic topic model using the `stm` package
 ```{r, eval = FALSE}
+library(stm)
+
 mod <- stm(para_dfm, K = 10, seed = 12345)
 ```
 <!-- I don't want to verbose = FALSE but I want that effect in the document-->
 ```{r, include = FALSE}
+library(stm)
+
 mod <- stm(para_dfm, K = 10, seed = 12345)
 ```
 Don't forget to set the seed so others can replicate your work.  
@@ -146,7 +154,7 @@ We may reasonably expect that both parties and speakers would prefer to emphasis
 a different set of topics.  We have two options to connect speaker and party
 identifiers to topics.
 
-Frist, we can manually extract the topic proportions
+First, we can manually extract the topic proportions
 from the model and use parts of them as a dependent variable.
 The topic proportions for each document are inside the model object
 ```{r}
@@ -167,6 +175,8 @@ library(lattice)
 lmer_topic1 <- lmer(topic1 ~ (1 | speaker), data = df)
 dotplot(ranef(lmer_topic1, condVar = TRUE))
 ```
+Apparently Cantell and Feinstein are the topic 1 users here, 
+possibly also Mikulski and Nelso, but we're fairly unsure about that.
 
 ## Let STM do both steps
 
@@ -192,30 +202,36 @@ mod2 <- stm(para_dfm, K = 10,
            seed = 12345)
 ```
 
-If we are interested in topics (constitutional) 1 and (gruesome) 8, we could
-examine these relationships like this:
+If we are interested in topics (constitutional) 1 and (gruesome) 8, we can focus
+in on their relationship to party like this:
 ```{r}
 gg <- estimateEffect(c(1,8) ~ party, mod2, docvars(para_dfm))
 summary(gg)
 ```
-Note that here the baseline topic prevalence is Allard (R).
+Note here that the baseline topic prevalence is Allard (R).  By changing the
+numbers in the 'dependent variable' part of the formula first argument
+we can look at as many of the topics as we like.
 
 As always, a plot is nicer
 ```{r}
 plot(gg, "party", labeltype = "prob", model = mod2)
 ```
 From this we can see that Republican speakers use topic 1 somewhat less
-than Democrats, but topic 8 much more.  
+than Democrats, but topic 8 *much* more.  
 
-If you'd like to know whether this is a general republican effect or
-just a quirk of one or two speakers, adjust the model to use speaker as 
-the predictor and follow the steps above.  Try it!
+If you'd like to know whether this is a general Republican thing or
+just a quirk of one or two speakers, adjust the model above to use speaker as 
+the predictor and follow the steps above.
 
 In general you can use any specification you like in the formula, so you 
-don't have to choose individual covariates, as we did here.  
+don't have to choose individual covariates, as we did here.  In particular
+it's often nice to 'control' for time in a smooth fashion.  For example if 
+you have a year variable and enough years you might use `party + s(year)` 
+as the formula, which would allow topic prevalences to move smoothly over time, 
+and the party 'effect' to be estimated against this background.
 
-
-
+Note also that formulae need to know about nesting in data, so `party/speaker` 
+would be the way to express that speakers are in one party only.
 
 <!-- plot(gg, "party", labeltype = "prob", model = mod2) -->
 

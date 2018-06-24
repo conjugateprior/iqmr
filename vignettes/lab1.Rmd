@@ -29,7 +29,6 @@ Let's start by reading in the data from the abortion debate analyzed by Bara et 
 First load the package
 ```{r}
 library(quanteda) # for general text analysis
-library(quanteda.dictionaries)
 library(readtext) # for reading in all kinds of files
 library(dplyr)
 
@@ -81,6 +80,7 @@ the speakers that voted 'no' at the end of the debate and said more than 100
 words during it
 ```{r}
 no_corp <- corpus_subset(corpus_bara_speaker, vote == "no" & ntoken(corpus_bara_speaker) > 100)
+no_corp
 ```
 (Goodbye Mr Mahon)
 
@@ -180,7 +180,7 @@ head(kw_mother)
 ```
 KWICs can get quite large, but if you want to see it all
 ```{r, eval = FALSE}
-View(kw_mother)
+kw_mother
 ```
 will open a browser with the whole thing.
 
@@ -193,7 +193,7 @@ is to treat the left and right sides of the kwic as a document (about babies),
 e.g. like this:
 ```{r}
 babes <- kwic(corpus_bara_speaker, "babi*", window = 10)
-txt <- paste(babes$pre, babes$post, collapse=" ") # make one big string
+txt <- paste(babes$pre, babes$post, collapse = " ") # make one big string
 ```
 This constructed document contains, by definition, all the ways the term was 
 used in the corpus, so you can then examine what sorts of words tend to be used 
@@ -230,8 +230,11 @@ featnames(corpdfm)[1:40]
 ```
 We *could* also stem
 ```{r}
-stemdfm <- dfm(corpus_bara_speaker, remove=stopwords(), remove_punct=TRUE,
-               remove_numbers=TRUE, stem=TRUE)
+stemdfm <- dfm(corpus_bara_speaker, 
+               remove = stopwords(), 
+               remove_punct = TRUE,
+               remove_numbers = TRUE, 
+               stem = TRUE)
 dim(stemdfm) # about 1000 fewer 'word's
 featnames(stemdfm)[1:40]
 ```
@@ -239,7 +242,7 @@ but our dictionary entries aren't stemmed, so let's save `stemdfm` for later.
 
 For modeling, we'll often want to remove the low frequency and idiosyncratic words
 ```{r}
-smallcorpdfm <- dfm_trim(corpdfm, min_termfreq = 5, min_docfreq=5)
+smallcorpdfm <- dfm_trim(corpdfm, min_termfreq = 5, min_docfreq = 5)
 dim(smallcorpdfm)
 ```
 where `min_count` removes any word that occurs less than 5 times and `min_docfreq` removes any words that occurs any number of times but  in fewer than 5 documents.  That makes things a fair bit smaller.  But again, we don't want to miss dictionary entries.
@@ -275,9 +278,9 @@ dictionary(list(medics = c("doctor", "medical", "hospital"),
 ```
 or imported in the format of some other content analysis program.
 (Quanteda can deal with dictionaries from Wordstat, Yoshikoder, and LIWC). 
-We'll read the dictionary in Yoshikoder format:
+We'll use a version of the dictionary that's bundled with the `iqmr` package
 ```{r}
-baradic <- dictionary(file = "data/bara-dict-corrected.ykd")
+data(dict_baraetal)
 ```
 
 <!-- baradic_stems <- rapply(baradic, char_wordstem, how = "replace") -->
@@ -286,7 +289,7 @@ baradic <- dictionary(file = "data/bara-dict-corrected.ykd")
 
 With dictionary in hand we can now go *category* counting rather than word counting
 ```{r}
-baradfm <- dfm(corpus_bara_speaker, dictionary = baradic)
+baradfm <- dfm(corpus_bara_speaker, dictionary = dict_baraetal)
 ```
 Since this output is not absolutely massive
 ```{r}
@@ -300,11 +303,12 @@ dictout
 And recreate some of Bara et al.'s Table 3, repeated below, as a bar plot.
 
 ```{r, results="asis"}
-tab <- data.frame(Mean = c(13.59, 7.82, 21.71, 4.61, 32.17, 20.09),
-                  SD = c(2.98, 3.36, 4.73, 2.51, 6.94, 4.86),
-                  row.names = c("advocacy", "legal", "medical", "moral", "procedural", "social" ),
-                  stringsAsFactors = FALSE)
-knitr::kable(t(tab))
+tab_baraetal <- data.frame(Mean = c(13.59, 7.82, 21.71, 4.61, 32.17, 20.09),
+                           SD = c(2.98, 3.36, 4.73, 2.51, 6.94, 4.86),
+                           row.names = c("advocacy", "legal", "medical", 
+                                         "moral", "procedural", "social" ),
+                           stringsAsFactors = FALSE)
+knitr::kable(t(tab_baraetal))
 ```
 
 ```{r}
@@ -329,7 +333,7 @@ df %>%
             speakers = length(vote))
 ```
 
-Not much change.
+Not much change there.
 
 <!-- %' -->
 <!-- %' \subsection*{Abortion Politics in the US} -->

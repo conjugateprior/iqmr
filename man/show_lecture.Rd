@@ -7,7 +7,7 @@
 show_lecture(which = c(1, 2, 3))
 }
 \arguments{
-\item{which}{Which session's slides to show: Currently 1, 2, or 3}
+\item{which}{Which session's lecture slides to show: Currently 1, 2, or 3}
 }
 \value{
 None

@@ -16,12 +16,12 @@ Suggests: knitr,
     rmarkdown,
     readtext,
     quanteda,
-    quanteda.dictionaries,
     stm,
     ca,
     dplyr,
     lme4,
     lattice,
     ggplot2,
-    ggrepel
+    ggrepel,
+    xtable
 VignetteBuilder: knitr

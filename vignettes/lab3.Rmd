@@ -69,7 +69,13 @@ Now we'll make a document term matrix (what quanteda calls a `dfm`)
 ```{r}
 corpdfm <- dfm(corp)
 ```
-and run a simple one dimensional scaling model on it
+Before we took care to remove a lot of things we though would be confusing.  
+Here let's live dangerously and use all the words.  (The models being fit are
+a lot more constrained than before).  You should check these decisions don't
+affect much.
+
+We'll run a simple one dimensional scaling model, known to 'wordfish' to political
+scientists, and an association model to everone else
 ```{r}
 wfish <- textmodel_wordfish(corpdfm, dir = c(3, 21))
 summary(wfish)
@@ -79,12 +85,15 @@ the estimated position can be extracted as if this were a regular fitted model
 preds  <- predict(wfish, interval = "confidence")
 preds
 ```
-Annoyingly we need to extract the (only) element in `preds` (called 'fit') to
-get a table of positions and associated uncertainty.
+
+Annoyingly we need to work a bit to extract the (only) element in `preds` 
+(called 'fit') to get a table of positions and associated uncertainty, and
+add the speaker information
 ```{r}
 # make a data frame from fit matrix and the document variables
-pos <- data.frame(docvars(corpdfm), preds$fit)
-pos <- pos[order(pos$fit),]
+pos <- data.frame(docvars(corpdfm), preds$fit) %>%
+  arrange(fit)
+pos <- pos[order(pos$fit),] # sort 
 ```
 Let's plot these positions.  I'll use `ggplot2`
 ```{r}
@@ -149,7 +158,7 @@ ggplot(wscores, aes(score, offset, label = word)) +
 If we were being thorough about these words we'd check they do what we think they do by looking by looking at them in all their contexts, as we did before. Try it.
 
 ```{r, eval = FALSE}
-View(kwic(corp, "baby", window = 15))
+kwic(corp, "baby", window = 15)
 ```
 
 

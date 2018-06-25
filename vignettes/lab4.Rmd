@@ -267,7 +267,7 @@ paragraph.
 We can then apply the function to each element of `mes` and stack the results.
 You may like loops, but I tend to do this kind of thing with `lapply` (because
 I am one of *those* sort of people)
-```{r}
+```{r, eval = FALSE}
 turns <- lapply(mes, make_turn) # apply to each element
 debate_turns <- do.call(rbind, turns) # call rbind with allllll the data frames
 ```

@@ -1,0 +1,288 @@
+---
+title: "Lab 4"
+author: "Will Lowe"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 7 
+vignette: >
+  %\VignetteIndexEntry{Lab 4}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Getting text from the web
+
+In previous labs we've used rather tidy data sets.  Let's see how they came to 
+be that way.  Data on the web comes in several forms, some much easier to deal 
+with than others.  
+
+1. regular web pages
+2. irregular web pages, e.g. dashboards pages full of content providing Javascript
+3. regular web pages with blocks of unstructured text 
+   (looking at you Congressional Record)
+4. downloadable files, e.g. excel spreadsheets, PDF, and Word documents
+
+Starting from the bottom:
+
+### Downloadable files
+
+Downloadable files are annoying, but if you don't need much of the structure
+in the documents they are hiding, then the R packages `antiword` and `pdftools`
+have functions that basically grab all the text.  For excel, `readxl` is 
+the one you want.  The first two are built into the 
+`readtext` package, so if you installed that, they will likely be called
+by default.
+
+### Irregular webpages
+
+Irregular web pages are always trouble.  The text is typically not even in the 
+page when it first arrives and is fetched by javascript when you press on buttons.
+The only real solution to these kinds of pages is to be a browser.  The Selenium
+framework does this, and `RSelenium` wraps it up for R.  It takes some 
+installing - consult your friendly local sysadmin.
+
+### Regular web pages but unstructured ('raw') text
+
+For regular web pages that basically throw the text at you in some conventional
+but unstructured manner, e.g. https://www.congress.gov/crec/2003/10/21/modified/CREC-2003-10-21-pt1-PgS12914-2.htm
+which is the first part of the partial birth abortion debate, 
+paragraphs begin with two spaces, quotes five,
+and speaker turns are denoted by capitalizing speaker names, you'll need some deft 
+line-oriented *regular expressions*.  
+
+Base R has these, but you'll do better 
+to move directly to the `stringr` package, and keep http://regex101.com open
+while you craft them.  Here's the fearsome function that processed it.
+Hurry past to the explanation underneath.
+
+```{r, eval = FALSE}
+process_debate_text <- function(txt) {
+  # split into paragraphs
+  para_start <- regex("^[ ]{2}", multiline = TRUE)
+  paras <- unlist(str_split(txt, para_start))
+
+  # replace page break markers w space
+  paras <- str_replace(paras, "[ \\n]*\\[{2}Page [A-Z\\d]+\\]{2}[ \\n]*", " ")
+  paras <- paras[grep("[a-zA-Z]", paras)] # there must be a letter at least
+
+  # normalize quirky punctuation
+  paras <- str_replace(paras, "``", "\"") # Compact exploded left quote marks
+  paras <- str_replace(paras, "''", "\"") # Compact exploded right quote marks
+  paras <- str_replace(paras, "`", "'") # Compact exploded right scare quote
+  paras <- str_replace(paras, "([a-zA-Z0-9])--([a-zA-Z0-9])", "\\1 -- \\2") # explode em-dash
+
+  # In this complex pattern group 1 is the complete match and group 7 is the name
+  speaker_label <- regex("((^The )|(^Mrs. )|(^Mr. )|(^Ms. ))([eA-Z ]{2,}). ")
+  speakers <- str_match(paras, speaker_label)[,7]
+
+  # and remove this metadata from the transcript
+  paras <- str_replace(paras, speaker_label, "")
+
+  quotation <- regex("^[ ]{2}") # indented 2 more spaces in
+  is_quote <- !is.na(str_match(paras, quotation)[,1]) # TRUE if a part of a quotation
+
+  debate <- data.frame(speaker = speakers, text = paras, quote = is_quote,
+                       stringsAsFactors = FALSE)
+  debate <- fill(debate, speaker) # tidyr::fill in speakers for all paragraphs
+
+  debate[!is.na(debate$speaker), ] # the entries for which we have a speaker
+}
+```
+
+If you want to test it out quickly.  Cut and paste it out of the browser
+link above and put it on a file.  Read that file into R and assign the contents
+to some variable and call `process_debate_text` on it.
+
+Alternatively you can pull it off the web with some code that explained more
+below.  (It's in a huge 'pre' node on the web page).
+```{r, eval = FALSE}
+library(rvest)
+
+pt1 <- "https://www.congress.gov/crec/2003/10/21/modified/CREC-2003-10-21-pt1-PgS12914-2.htm"
+txt <- html_text(html_node(read_html(pt1), "pre"))
+deb <- process_debate_text(txt)
+```
+
+Here's some explanation of what the function does, if you've stayed this far.
+
+It takes a blob of text, and splits and replaces until it gets a 
+stream of something like paragraphs.  The regular expression `"^[ ]{2}"` matches
+the beginning of a line then exactly two spaces.  That's what the Congressional
+Record marks paragraphs with, so we split the whole string using that as the 
+delimiter.
+
+The first replacement run through our 'paragraphs' and tries to find the 
+pesky `[[Page A3453]]` page markers,  and replace them with a space.  The next
+line keeps only paragraphs that have at least a letter in them, in an attempt
+to filter out blank lines and other non-alphabetical cruft.  The next few lines
+fix the weird punctuation conventions of the CR, and insert spaces so 
+nothing mistakes words joined with an em-dash, denoted `--` in CR as one word.
+Effectively just insert spaces around it.
+
+The fiercest part is to figure out whether the speaker mentioned at the 
+beginning of a line is the new person talking or someone else being refered 
+to.  Speaker changes are denoted by Mrs, Mr, or The and some capitalized name
+(except for DeWine who gets a small 'e' because the CR hates us.)  That pattern
+traps (using 'groups' - the parentheses) a whole string and some of its parts.
+I keep the capitalized name and a little later delete the whole match, honorific
+and all.
+
+The next part tries to figure out where the quotations are (after we split on 
+two spaces they're now a bit nearer the beginning of each paragraph).
+
+Finally, I take the paragraphs, the speaker names in each (often there are
+none because it's the same speaker talking.) and the quote indicator and
+make them columns of a data frame.  I use `fill` from `tidyr` to fill in all
+the paragraph without a speaker with the one above, recursively, and now
+we've got the basic data.
+
+Phew.
+
+Regrettably many text-analysis using PhDs spend a lot of time doing this 
+sort of thing.  So it's as well to have the tools available and to hone your
+skills early on, in simple projects.  
+
+This particular bit of code took about six hours to get right.  However, it
+should work on all (or at least a good chunk) of the debates of the 
+Congresional Record.  So there's that.  Make good use of it.
+
+The CR is also available in two column PDF documents. I find these vastly 
+harder to get text out of, though ymmv.
+
+### Regular web pages
+
+OK, regular web pages.  These already have structure data, and are perhaps the 
+nicest thing to have to pull text out of.  The UK abortion debate came from
+linked Hansard.  Let's get the text out.  We'll use the excellent `rvest`
+library to navigate the page, and it's rather convenient sublanguage for 
+specifying parts of web pages
+
+```{r, eval = FALSE}
+library(rvest)
+
+page <- "https://api.parliament.uk/historic-hansard/commons/1966/jul/22/medical-termination-of-pregnancy-bill"
+deb <- read_html(page)
+```
+
+Although web pages are text underneath, deb is a parsed web page that understands
+that it's findamentally a branching tree structure.  Since it know this 
+we can avoid all the regular expression shenanigans above and simply ask for 
+'the paragraph contents in red under main heading' ('under' here means 
+'contained by', and I'll use these exchangeably).
+
+If you view the source of that
+page in your browser you'll see the nesting structure fairly clearly.
+And if naked html pages are new to you then you can learn all that's useful for
+current purposes from 
+[W3 Schools](https://www.w3schools.com/html/default.asp).
+
+Web pages have at most two main branches, the 'head' where all the document
+metadata lives, and the 'body' where the text we want usually lives.  
+`deb` shows the two main branches.  
+
+If we examine the page source in a browser it's eventually clear that 
+each speaker's contributions live in a 'div' element that claims to have
+class 'hentry member_contribution'.  Here's the first one, slightly 
+tidied for expository purposes:
+
+```
+<div class='hentry member_contribution' id='S5CV0732P0-03124'>
+  <a name='S5CV0732P0_19660722_HOC_9'>  </a>
+  <blockquote cite='https://api.parliament.uk/historic-hansard/people/dr-horace-king'
+              class='contribution_text entry-content'>
+    <a class='speech-permalink permalink'
+       href='medical-termination-of-pregnancy-bill#S5CV0732P0_19660722_HOC_9' 
+       title='Link to this speech by Dr Horace King' rel='bookmark'>&sect;</a>
+    <cite class='member author entry-title'>
+      <a href="/historic-hansard/people/dr-horace-king" title="Dr Horace King">
+        Mr. Speaker
+      </a>
+    </cite>
+    <p class='first-para'>
+      Before I call the hon. Member for Roxburgh, Selkirk and Peebles 
+      (Mr. David Steel) to move the Second Reading of the Bill, may I make an 
+      announcement. So far, 32 right hon. and hon. Members seek to catch my eye
+      in this debate. Members can help each other and help the case for and 
+      against the Bill by speaking briefly.</p><p>
+      This debate cuts across party lines, so I shall endeavour to 
+      balance the debate, not as between parties, but as between 
+      supporters and opponents of the Bill, and also those who give 
+      qualified support or qualified opposition.
+    </p>
+  </blockquote>
+</div>
+```
+How convenient.  We can get the name of the speaker 'Dr Horace King' and 
+both paragraphs of his contribution from this sub-tree.
+
+So first we'll grab all the hentry thingies 
+wherever they are in the tree and get them back as a list
+```{r, eval = FALSE}
+mes <- html_nodes(deb, "div[class='hentry member_contribution']")
+```
+where `mes` is now a lot of elements quite like the one above.  It is 'nodes'
+because we want all of them.
+
+We can extract the speaker from each one by noting that the name of the
+speaker is inside an 'a' element inside a (in fact the only) 'cite' element,
+appearing as its the attribute 'title'.  
+```{r, eval = FALSE}
+speakers <- html_attr(html_node(mes, "cite a"), "title")
+```
+where "cite a" means in each element of `mes` get the 'a' subtree inside the 
+only 'cite' (hence `html_node`), extract the 'title' attribute from them, and
+return those.  That shoud be a list of speaker names.
+
+Getting the text is a bit easier.  `html_text` takes any number of subtrees
+and removes everything but actual text from them.  Since it appears that
+the only text happening not inside some html element or other is in the 'p'
+elements (paragraphs), then every element of `mes` can be a 
+data frame containing the name of the speaker next to the text of 
+each of his paragraphs, and then stack them up. (The eagle eyed will notice 
+that we used `fill` in the previous example)
+
+Here's a function that will make such a data frame
+```{r, eval = FALSE}
+make_turn <- function(m){
+  data.frame(speaker = html_attr(html_node(m, "cite a"), "title"),
+             text = html_text(html_nodes(m, "p")),
+             stringsAsFactors = FALSE)
+}
+```
+So, for example, the first element of `mes`, which has two paragraphs of text
+from Dr Horace King will, when given to this function, generate a data
+frame with two rows and two columns.  The first column will contain
+Dr King's name twice, and the second column will contain the text of that
+paragraph.
+
+We can then apply the function to each element of `mes` and stack the results.
+You may like loops, but I tend to do this kind of thing with `lapply` (because
+I am one of *those* sort of people)
+```{r}
+turns <- lapply(mes, make_turn) # apply to each element
+debate_turns <- do.call(rbind, turns) # call rbind with allllll the data frames
+```
+
+This final big data frame is just the kind of thing we could give 
+quanteda's `corpus` function.
+
+We can certainly do more tidying up of the actual text than I have done here.
+- inside `make_block` would be the place to do that - but that'll do for now.
+
+As before, all debates in this version of web Hansard are structured like
+this, so you now have a way to pull this sort of information from any
+debate.
+
+
+
+
+

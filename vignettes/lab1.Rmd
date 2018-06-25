@@ -23,13 +23,14 @@ knitr::opts_chunk$set(
 
 ### Building a corpus
 
-Let's start by reading in the data from the abortion debate analyzed by Bara et al.  I've concatenated each speaker's contributions into a single file.
-(This is certainly not the only way to think about analyzing this data, but it's what Bara et al. did.)
+Let's start by reading in the data from the abortion debate analyzed by Bara et al.  
+I've concatenated each speaker's contributions into a single file.
+(This is certainly not the only way to think about analyzing this data, 
+but it's what Bara et al. did.)
 
-First load the package
+First load the quanteda package and some other useful stuff
 ```{r}
 library(quanteda) # for general text analysis
-library(readtext) # for reading in all kinds of files
 library(dplyr)
 
 library(iqmr)

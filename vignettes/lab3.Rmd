@@ -26,7 +26,6 @@ Let's take a look at a US Senate debate on partial birth abortion.
 As always, we'll load the texts, make a corpus, then a document term matrix to start off
 ```{r}
 library(quanteda)
-library(readtext)
 library(dplyr)
 
 library(iqmr)

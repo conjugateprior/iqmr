@@ -4,7 +4,7 @@
 \alias{show_lab}
 \title{Show a lab}
 \usage{
-show_lab(which = c(1, 2, 3))
+show_lab(which)
 }
 \arguments{
 \item{which}{Which lab to show: Currently 1, 2, or 3}

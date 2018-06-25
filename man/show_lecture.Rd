@@ -4,7 +4,7 @@
 \alias{show_lecture}
 \title{Show a set of slides}
 \usage{
-show_lecture(which = c(1, 2, 3))
+show_lecture(which)
 }
 \arguments{
 \item{which}{Which session's lecture slides to show: Currently 1, 2, or 3}

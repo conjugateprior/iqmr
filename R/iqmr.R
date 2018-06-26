@@ -161,7 +161,10 @@ NULL
 #' @export
 #'
 show_lecture <- function(which){
-  utils::RShowDoc(paste0("slides", which), package = "iqmr")
+  slidesname <- paste0("slides", which, ".pdf")
+  utils::browseURL("http://dl.conjugateprior.org/iqmr/", slidesname)
+
+  # utils::RShowDoc(paste0("slides", which), package = "iqmr")
 }
 
 #' Show a lab

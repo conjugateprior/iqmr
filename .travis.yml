@@ -3,7 +3,8 @@
 language: r
 r_packages:
     - covr
-    - pdftoolsdist: trusty
+    - pdftools
+dist: trusty
 addons:
   apt:
     packages:
